@@ -1,0 +1,62 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.1",
+    "signature": "53ba818ed170454e28ce7682cbab980a23fd6d2e"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.1": {
+      "Assignment/1.0.0": {
+        "dependencies": {
+          "Antlr4": "4.6.6"
+        },
+        "runtime": {
+          "Assignment.dll": {}
+        }
+      },
+      "Antlr4/4.6.6": {
+        "dependencies": {
+          "Antlr4.CodeGenerator": "4.6.6",
+          "Antlr4.Runtime": "4.6.6"
+        }
+      },
+      "Antlr4.CodeGenerator/4.6.6": {},
+      "Antlr4.Runtime/4.6.6": {
+        "runtime": {
+          "lib/netstandard1.1/Antlr4.Runtime.dll": {
+            "assemblyVersion": "4.6.0.0",
+            "fileVersion": "4.6.6.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Assignment/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Antlr4/4.6.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tY/E+HhRwf2dkNoKaXhQ0OV7YHbBcgOG51NJQay1PL1vRSraAsV3nW9tZdrXZqKLbyatNZxQEm89eWAAsYIxFg==",
+      "path": "antlr4/4.6.6",
+      "hashPath": "antlr4.4.6.6.nupkg.sha512"
+    },
+    "Antlr4.CodeGenerator/4.6.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XAatmJQbYFZ3GOOOWo+BaJ6760ke4ksqVIrkXnt/b7XgX9ZSYdY3YM0l9SzKr4nRi2X/pvt5kZBoNzDb7bj/aQ==",
+      "path": "antlr4.codegenerator/4.6.6",
+      "hashPath": "antlr4.codegenerator.4.6.6.nupkg.sha512"
+    },
+    "Antlr4.Runtime/4.6.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7Uo2r9WJcaB2QN4rjmNh8yVKfmVF4bPmBs/6B3A1Hwgkk0vbdaMMga31TGoRMVdjkb/HKzhRn4jrA6cHrrrlKQ==",
+      "path": "antlr4.runtime/4.6.6",
+      "hashPath": "antlr4.runtime.4.6.6.nupkg.sha512"
+    }
+  }
+}
