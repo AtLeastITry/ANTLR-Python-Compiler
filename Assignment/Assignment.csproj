@@ -9,4 +9,10 @@
     <PackageReference Include="Antlr4" Version="4.6.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Source\LanguageTest.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

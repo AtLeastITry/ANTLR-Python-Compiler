@@ -1,6 +1,8 @@
 ﻿using Antlr4.Runtime.Misc;
 using Assignment.Abstraction;
 using Assignment.Grammar;
+using Assignment.Implementation.Errors;
+using Assignment.Implementation.Utils;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -10,9 +12,39 @@ namespace Assignment.Implementation
 {
     internal class LanguageVisitor : LanguageBaseVisitor<INode>
     {
+        private readonly SymbolTable _symbolTable = new SymbolTable();
+
         public override INode VisitCompileUnit([NotNull] CompileUnitContext context)
         {
-            return this.Visit(context.expr());
+            var result = new ProgramNode();
+
+            foreach(var expr in context.expr())
+            {
+                result.Body.Add(this.Visit(expr));
+            }
+
+            return result;
+        }
+
+        public override INode VisitVariableDeclarationExpr([NotNull] VariableDeclarationExprContext context)
+        {
+            var name = context.name.Text;
+
+            if (KeyWords.GetRegex().IsMatch(name))
+            {
+                throw new KeywordException($"You cannot use the keyword {name} as an identifier");
+            }
+
+            if (Enum.TryParse(context.type.Text, out DataTypes dataType))
+            {
+                _symbolTable.Add(new Symbol(name, dataType));
+
+                return new DeclarationNode(name);
+            }
+            else
+            {
+                throw new UnsupportedDataTypeException($"The data type: {context.type.Text} is currently unsupported");
+            }
         }
 
         public override INode VisitValueExpr([NotNull] ValueExprContext context)
@@ -20,6 +52,11 @@ namespace Assignment.Implementation
             if (decimal.TryParse(context.value.Text, out decimal value))
             {
                 return new ValueNode(value);
+            }
+            else
+            {
+                if (!_symbolTable.Contains(context.value.Text))
+                    throw new UndefinedVariableException($"Variable \"{context.value.Text}\" has not been defined");
             }
 
             return new ValueNode(context.value.Text);
@@ -49,7 +86,12 @@ namespace Assignment.Implementation
 
         public override INode VisitAssignmentExpr([NotNull] AssignmentExprContext context)
         {
-            return new AssignmentNode(new VariableNode(context.VAR().GetText()), this.Visit(context.right));
+            var name = context.VAR().GetText();
+
+            if (!_symbolTable.Contains(name))
+                throw new UndefinedVariableException($"Variable \"{name}\" has not been defined");
+
+            return new AssignmentNode(new VariableNode(name), this.Visit(context.right));
         }
 
         public override INode VisitUnaryExpr([NotNull] UnaryExprContext context)

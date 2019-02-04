@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Assignment.Implementation
+namespace Assignment.Implementation.Errors
 {
     internal class UnsupportedNodeException : Exception
     {

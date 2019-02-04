@@ -73,6 +73,14 @@ public interface ILanguageVisitor<Result> : IParseTreeVisitor<Result> {
 	Result VisitValueExpr([NotNull] LanguageParser.ValueExprContext context);
 
 	/// <summary>
+	/// Visit a parse tree produced by the <c>variableDeclarationExpr</c>
+	/// labeled alternative in <see cref="LanguageParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVariableDeclarationExpr([NotNull] LanguageParser.VariableDeclarationExprContext context);
+
+	/// <summary>
 	/// Visit a parse tree produced by the <c>parensExpr</c>
 	/// labeled alternative in <see cref="LanguageParser.expr"/>.
 	/// </summary>

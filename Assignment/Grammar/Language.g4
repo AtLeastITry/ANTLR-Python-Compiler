@@ -1,7 +1,7 @@
 grammar Language;
 
 compileUnit
-    :   expr EOF
+    :   expr (EndOfLine expr)* EOF
     ;
 
 expr
@@ -11,7 +11,8 @@ expr
     |   left=expr op=(PLUS|MINUS) right=expr  # infixExpr
 	|   variable=VAR op=AssignOP right=expr   # assignmentExpr 
     |   func=ID LPARA expr RPARA              # funcExpr             
-    |   value=(NUM|VAR)                       # valueExpr                      
+	|	VARIABLEKEYWORD name=VAR 'as' type=(INTERGER|STRING)			  # variableDeclarationExpr
+	|   value=(NUM|VAR)                       # valueExpr
 	;
 NUM :   [0-9]+ ('.' [0-9]+)? ([eE] [+-]? [0-9]+)?;
 PLUS    : '+' ;
@@ -21,6 +22,10 @@ DIV     : '/' ;
 LPARA   : '(' ;
 RPARA   : ')' ;
 AssignOP : ':=' ; 
-VAR     : [a-zA-Z]+ ;
+EndOfLine: ';';
+VAR     : ('a'..'z')+ ;
+INTERGER: 'INTEGER';
+STRING: 'STRING';
+VARIABLEKEYWORD : 'VARIABLE';
 WS  :   [ \t\r\n] -> channel(HIDDEN);
 

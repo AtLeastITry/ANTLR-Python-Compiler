@@ -1,9 +1,8 @@
-﻿using Assignment.Abstraction;
-
-namespace Assignment.Abstraction
+﻿namespace Assignment.Abstraction
 {
     internal interface IASTVisitor<T>
     {
+        T Visit(ProgramNode node);
         T Visit(AdditionNode node);
         T Visit(SubtractionNode node);
         T Visit(MultiplicationNode node);
@@ -13,6 +12,7 @@ namespace Assignment.Abstraction
         T Visit(ValueNode node);
         T Visit(VariableNode node);
         T Visit(AssignmentNode node);
+        T Visit(DeclarationNode node);
         T Visit(INode node);
     }
 }

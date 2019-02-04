@@ -111,6 +111,21 @@ public partial class LanguageBaseListener : ILanguageListener {
 	public virtual void ExitValueExpr([NotNull] LanguageParser.ValueExprContext context) { }
 
 	/// <summary>
+	/// Enter a parse tree produced by the <c>variableDeclarationExpr</c>
+	/// labeled alternative in <see cref="LanguageParser.expr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterVariableDeclarationExpr([NotNull] LanguageParser.VariableDeclarationExprContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>variableDeclarationExpr</c>
+	/// labeled alternative in <see cref="LanguageParser.expr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitVariableDeclarationExpr([NotNull] LanguageParser.VariableDeclarationExprContext context) { }
+
+	/// <summary>
 	/// Enter a parse tree produced by the <c>parensExpr</c>
 	/// labeled alternative in <see cref="LanguageParser.expr"/>.
 	/// <para>The default implementation does nothing.</para>

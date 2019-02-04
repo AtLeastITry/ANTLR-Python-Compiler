@@ -11,23 +11,27 @@ namespace Assignment
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Please enter an infix expression");
-            var expression = Console.ReadLine();
-            byte[] bytes = Encoding.ASCII.GetBytes(expression);
-            var lexer = new LanguageLexer(new AntlrInputStream(new MemoryStream(bytes)));
-            var tokens = new CommonTokenStream(lexer);
-            var parser = new LanguageParser(tokens);
+            string[] files = Directory.GetFiles("./source/");
 
-            try
+            foreach(var file in files)
             {
-                var tree = new LanguageVisitor().VisitCompileUnit(parser.compileUnit());
-                var value = new PostFixVisitor().Visit(tree);
+                var expression = File.ReadAllText(file);
+                byte[] bytes = Encoding.ASCII.GetBytes(expression);
+                var lexer = new LanguageLexer(new AntlrInputStream(new MemoryStream(bytes)));
+                var tokens = new CommonTokenStream(lexer);
+                var parser = new LanguageParser(tokens);
 
-                Console.WriteLine(value);
-            }
-            catch(Exception e)
-            {
-                throw e;
+                try
+                {
+                    var tree = new LanguageVisitor().VisitCompileUnit(parser.compileUnit());
+                    var value = new PostFixVisitor().Visit(tree);
+
+                    Console.WriteLine(value);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
 
             Console.ReadLine();

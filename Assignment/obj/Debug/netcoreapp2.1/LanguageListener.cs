@@ -97,6 +97,19 @@ public interface ILanguageListener : IParseTreeListener {
 	void ExitValueExpr([NotNull] LanguageParser.ValueExprContext context);
 
 	/// <summary>
+	/// Enter a parse tree produced by the <c>variableDeclarationExpr</c>
+	/// labeled alternative in <see cref="LanguageParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterVariableDeclarationExpr([NotNull] LanguageParser.VariableDeclarationExprContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>variableDeclarationExpr</c>
+	/// labeled alternative in <see cref="LanguageParser.expr"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitVariableDeclarationExpr([NotNull] LanguageParser.VariableDeclarationExprContext context);
+
+	/// <summary>
 	/// Enter a parse tree produced by the <c>parensExpr</c>
 	/// labeled alternative in <see cref="LanguageParser.expr"/>.
 	/// </summary>
