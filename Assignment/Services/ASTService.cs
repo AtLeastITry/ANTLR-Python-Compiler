@@ -2,6 +2,7 @@
 using Assignment.Abstraction;
 using Assignment.Grammar;
 using Assignment.Implementation;
+using Assignment.Implementation.Visitors;
 using System;
 using System.IO;
 using System.Text;
@@ -39,6 +40,11 @@ namespace Assignment.Services
             {
                 throw e;
             }
+        }
+
+        public static string VisualiseTree(INode tree, string indent = "")
+        {
+            return new VisualizationVisitor().Visit(tree, indent);
         }
     }
 }

@@ -6,9 +6,9 @@ namespace Assignment.Abstraction
     {
         public ProgramNode()
         {
-            this.Body = new List<INode>();
+            this.Children = new List<INode>();
         }
 
-        public List<INode> Body { get; }
+        public List<INode> Children { get; }
     }
 }

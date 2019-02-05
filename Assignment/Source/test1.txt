@@ -1,0 +1,2 @@
+﻿VARIABLE inttest as INTEGER;
+inttest := (1 + 2) * (3 + 4);
