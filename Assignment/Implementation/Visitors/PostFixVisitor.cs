@@ -10,7 +10,7 @@ namespace Assignment.Implementation
         {
             var sb = new StringBuilder();
 
-            foreach(var line in node.Body)
+            foreach(var line in node.Children)
             {
                 if (line != null)
                     sb.Append($"{this.Visit(line)}{Environment.NewLine}");

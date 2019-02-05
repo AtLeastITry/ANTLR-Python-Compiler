@@ -26,7 +26,10 @@ namespace Assignment.Implementation
                     continue;
                 }
 
-                result.Body.Add(this.Visit(expr));
+                var node = this.Visit(expr);
+
+                if (node != null)
+                    result.Children.Add(node);
             }
 
             return result;
@@ -104,7 +107,7 @@ namespace Assignment.Implementation
                         }
                         else
                         {
-                            throw new IncorrectDataType($"{symbol.Name} was expecting data type of {DataTypes.INTEGER.ToString()}");
+                            throw new IncorrectDataType($"\"{symbol.Name}\" was expecting data type of {DataTypes.INTEGER.ToString()}");
                         }
                         break;
                     case DataTypes.DECIMAL:
@@ -114,7 +117,7 @@ namespace Assignment.Implementation
                         }
                         else
                         {
-                            throw new IncorrectDataType($"{symbol.Name} was expecting data type of {DataTypes.DECIMAL.ToString()}");
+                            throw new IncorrectDataType($"\"{symbol.Name}\" was expecting data type of {DataTypes.DECIMAL.ToString()}");
                         }
                         break;
 
