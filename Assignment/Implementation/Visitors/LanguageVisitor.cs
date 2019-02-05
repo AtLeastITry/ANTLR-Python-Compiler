@@ -75,13 +75,15 @@ namespace Assignment.Implementation
             switch(context.op.Type)
             {
                 case LanguageLexer.PLUS:
-                    return new AdditionNode(this.Visit(context.left), this.Visit(context.right));
+                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.ADDITION);
                 case LanguageLexer.MINUS:
-                    return new SubtractionNode(this.Visit(context.left), this.Visit(context.right));
+                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.SUBTRACTION);
                 case LanguageLexer.MULT:
-                    return new MultiplicationNode(this.Visit(context.left), this.Visit(context.right));
+                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.MULTIPLICATION);
                 case LanguageLexer.DIV:
-                    return new DivisionNode(this.Visit(context.left), this.Visit(context.right));
+                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.DIVISION);
+                case LanguageLexer.POWER:
+                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.POWER);
                 default:
                     throw new UnsupportedNodeException("Node is unsupported");
             }
@@ -124,7 +126,7 @@ namespace Assignment.Implementation
                 }
             }
 
-            return new AssignmentNode(new VariableNode(name), right);
+            return new ExpressionNode(new VariableNode(name), right, Operations.ASSIGNMENT);
         }
 
         public override INode VisitUnaryExpr([NotNull] UnaryExprContext context)

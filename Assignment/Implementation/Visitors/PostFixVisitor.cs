@@ -19,24 +19,25 @@ namespace Assignment.Implementation
             return sb.ToString();
         }
 
-        public string Visit(AdditionNode node)
+        public string Visit(ExpressionNode node)
         {
-            return $"{this.Visit(node.Left)} {this.Visit(node.Right)} +";
-        }
-
-        public string Visit(SubtractionNode node)
-        {
-            return $"{this.Visit(node.Left)} {this.Visit(node.Right)} -";
-        }
-
-        public string Visit(MultiplicationNode node)
-        {
-            return $"{this.Visit(node.Left)} {this.Visit(node.Right)} *";
-        }
-
-        public string Visit(DivisionNode node)
-        {
-            return $"{this.Visit(node.Left)} {this.Visit(node.Right)} /";
+            switch(node.Operation)
+            {
+                case Operations.ADDITION:
+                    return $"{this.Visit(node.Left)} {this.Visit(node.Right)} +";
+                case Operations.SUBTRACTION:
+                    return $"{this.Visit(node.Left)} {this.Visit(node.Right)} -";
+                case Operations.MULTIPLICATION:
+                    return $"{this.Visit(node.Left)} {this.Visit(node.Right)} *";
+                case Operations.DIVISION:
+                    return $"{this.Visit(node.Left)} {this.Visit(node.Right)} /";
+                case Operations.ASSIGNMENT:
+                    return $"{this.Visit(node.Left)} {this.Visit(node.Right)} =";
+                case Operations.POWER:
+                    return $"{this.Visit(node.Left)} {this.Visit(node.Right)} ^";
+                default:
+                    return "";
+            }
         }
 
         public string Visit(NegateNode node)
@@ -52,11 +53,6 @@ namespace Assignment.Implementation
         public string Visit(ValueNode node)
         {
             return node.Value.ToString();
-        }
-
-        public string Visit(AssignmentNode node)
-        {
-            return $"{this.Visit(node.Left)} {this.Visit(node.Right)} =";
         }
 
         public string Visit(VariableNode node)

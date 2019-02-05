@@ -16,8 +16,9 @@ identifier
 expr
     :   LPARA expr RPARA                      # parensExpr
     |   op=(PLUS|MINUS) expr                  # unaryExpr
+	|	left=expr op=POWER right=expr    # infixExpr
     |   left=expr op=(MULT|DIV) right=expr    # infixExpr
-    |   left=expr op=(PLUS|MINUS) right=expr  # infixExpr
+	|   left=expr op=(PLUS|MINUS) right=expr    # infixExpr
 	|   variable=VAR op=AssignOP right=expr   # assignmentExpr 
     |   func=ID LPARA expr RPARA              # funcExpr             
 	|	VARIABLEKEYWORD name=VAR 'as' type=(INTERGER|DECIMAL)			  # variableDeclarationExpr
@@ -28,6 +29,7 @@ PLUS    : '+' ;
 MINUS   : '-' ;
 MULT    : '*' ;
 DIV     : '/' ;
+POWER     : '^' ;
 LPARA   : '(' ;
 RPARA   : ')' ;
 AssignOP : ':=' ; 

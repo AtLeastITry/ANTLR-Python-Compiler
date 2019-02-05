@@ -21,42 +21,9 @@ namespace Assignment.Implementation.Visitors
             return temp;
         }
 
-        public string Visit(AdditionNode node, string tempIndent)
+        public string Visit(ExpressionNode node, string tempIndent)
         {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(AdditionNode)}";
-            tempIndent += IndentString;
-
-            temp += this.Visit(node.Left, tempIndent);
-            temp += this.Visit(node.Right, tempIndent);
-
-            return temp;
-        }
-
-        public string Visit(SubtractionNode node, string tempIndent)
-        {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(SubtractionNode)}";
-            tempIndent += IndentString;
-
-            temp += this.Visit(node.Left, tempIndent);
-            temp += this.Visit(node.Right, tempIndent);
-
-            return temp;
-        }
-
-        public string Visit(MultiplicationNode node, string tempIndent)
-        {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(MultiplicationNode)}";
-            tempIndent += IndentString;
-
-            temp += this.Visit(node.Left, tempIndent);
-            temp += this.Visit(node.Right, tempIndent);
-
-            return temp;
-        }
-
-        public string Visit(DivisionNode node, string tempIndent)
-        {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(DivisionNode)}";
+            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(ExpressionNode)}(operation: {node.Operation})";
             tempIndent += IndentString;
 
             temp += this.Visit(node.Left, tempIndent);
@@ -97,17 +64,6 @@ namespace Assignment.Implementation.Visitors
         {
             var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(VariableNode)}(value: {node.Value})";
             tempIndent += IndentString;
-
-            return temp;
-        }
-
-        public string Visit(AssignmentNode node, string tempIndent)
-        {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(AssignmentNode)}";
-            tempIndent += IndentString;
-
-            temp += this.Visit(node.Left, tempIndent);
-            temp += this.Visit(node.Right, tempIndent);
 
             return temp;
         }
