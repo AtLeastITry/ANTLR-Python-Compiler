@@ -134,6 +134,17 @@ public interface ILanguageListener : IParseTreeListener {
 	void ExitCompileUnit([NotNull] LanguageParser.CompileUnitContext context);
 
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="LanguageParser.identifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterIdentifier([NotNull] LanguageParser.IdentifierContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="LanguageParser.identifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitIdentifier([NotNull] LanguageParser.IdentifierContext context);
+
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="LanguageParser.expr"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

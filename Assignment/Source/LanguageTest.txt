@@ -1,6 +1,4 @@
-﻿VARIABLE test as INTEGER;
-VARIABLE newtest AS INTEGER;
-VARIABLE anothertest AS INTEGER;
-test := 1 + 1;
-newtest := test + 5;
-anothertest := newtest + 6;
+﻿VARIABLE inttest as INTEGER;
+VARIABLE decimaltest AS DECIMAL;
+inttest := 1;
+decimaltest := 10.5 + inttest;

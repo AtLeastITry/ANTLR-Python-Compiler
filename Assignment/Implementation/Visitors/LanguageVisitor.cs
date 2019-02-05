@@ -6,6 +6,7 @@ using Assignment.Implementation.Utils;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using static Assignment.Grammar.LanguageParser;
 
 namespace Assignment.Implementation
@@ -20,6 +21,11 @@ namespace Assignment.Implementation
 
             foreach(var expr in context.expr())
             {
+                if (expr.IsEmpty || string.IsNullOrEmpty(expr.ToString()))
+                {
+                    continue;
+                }
+
                 result.Body.Add(this.Visit(expr));
             }
 
@@ -49,15 +55,9 @@ namespace Assignment.Implementation
 
         public override INode VisitValueExpr([NotNull] ValueExprContext context)
         {
-            if (decimal.TryParse(context.value.Text, out decimal value))
-            {
-                return new ValueNode(value);
-            }
-            else
-            {
-                if (!_symbolTable.Contains(context.value.Text))
-                    throw new UndefinedVariableException($"Variable \"{context.value.Text}\" has not been defined");
-            }
+
+            if (new Regex("a-zA-Z").IsMatch(context.value.Text) && !_symbolTable.Contains(context.value.Text))
+                throw new UndefinedVariableException($"Variable \"{context.value.Text}\" has not been defined");
 
             return new ValueNode(context.value.Text);
         }
@@ -86,12 +86,42 @@ namespace Assignment.Implementation
 
         public override INode VisitAssignmentExpr([NotNull] AssignmentExprContext context)
         {
-            var name = context.VAR().GetText();
+            var name = context.variable.Text.Replace("\r", "").Replace("\n", "");
 
-            if (!_symbolTable.Contains(name))
+            if (!_symbolTable.TryGet(name, out var symbol))
                 throw new UndefinedVariableException($"Variable \"{name}\" has not been defined");
 
-            return new AssignmentNode(new VariableNode(name), this.Visit(context.right));
+            var right = this.Visit(context.right);
+
+            if (right.GetType() == typeof(ValueNode))
+            {
+                switch (symbol.Type)
+                {
+                    case DataTypes.INTEGER:
+                        if (int.TryParse(((ValueNode)right).Value.ToString(), out int intValue))
+                        {
+                            right = new ValueNode(intValue);
+                        }
+                        else
+                        {
+                            throw new IncorrectDataType($"{symbol.Name} was expecting data type of {DataTypes.INTEGER.ToString()}");
+                        }
+                        break;
+                    case DataTypes.DECIMAL:
+                        if (decimal.TryParse(((ValueNode)right).Value.ToString(), out decimal decimalValue))
+                        {
+                            right = new ValueNode(decimalValue);
+                        }
+                        else
+                        {
+                            throw new IncorrectDataType($"{symbol.Name} was expecting data type of {DataTypes.DECIMAL.ToString()}");
+                        }
+                        break;
+
+                }
+            }
+
+            return new AssignmentNode(new VariableNode(name), right);
         }
 
         public override INode VisitUnaryExpr([NotNull] UnaryExprContext context)

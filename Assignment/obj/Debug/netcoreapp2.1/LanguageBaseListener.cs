@@ -154,6 +154,19 @@ public partial class LanguageBaseListener : ILanguageListener {
 	public virtual void ExitCompileUnit([NotNull] LanguageParser.CompileUnitContext context) { }
 
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="LanguageParser.identifier"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterIdentifier([NotNull] LanguageParser.IdentifierContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="LanguageParser.identifier"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitIdentifier([NotNull] LanguageParser.IdentifierContext context) { }
+
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="LanguageParser.expr"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

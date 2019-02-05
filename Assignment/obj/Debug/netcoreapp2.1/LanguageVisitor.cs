@@ -96,6 +96,13 @@ public interface ILanguageVisitor<Result> : IParseTreeVisitor<Result> {
 	Result VisitCompileUnit([NotNull] LanguageParser.CompileUnitContext context);
 
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="LanguageParser.identifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIdentifier([NotNull] LanguageParser.IdentifierContext context);
+
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="LanguageParser.expr"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

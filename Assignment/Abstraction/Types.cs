@@ -3,6 +3,6 @@
     internal enum DataTypes
     {
         INTEGER,
-        STRING
+        DECIMAL
     }
 }
