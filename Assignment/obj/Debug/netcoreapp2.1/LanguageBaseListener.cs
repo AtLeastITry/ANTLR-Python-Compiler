@@ -111,6 +111,21 @@ public partial class LanguageBaseListener : ILanguageListener {
 	public virtual void ExitValueExpr([NotNull] LanguageParser.ValueExprContext context) { }
 
 	/// <summary>
+	/// Enter a parse tree produced by the <c>variableDeclarationExpr</c>
+	/// labeled alternative in <see cref="LanguageParser.expr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterVariableDeclarationExpr([NotNull] LanguageParser.VariableDeclarationExprContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>variableDeclarationExpr</c>
+	/// labeled alternative in <see cref="LanguageParser.expr"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitVariableDeclarationExpr([NotNull] LanguageParser.VariableDeclarationExprContext context) { }
+
+	/// <summary>
 	/// Enter a parse tree produced by the <c>parensExpr</c>
 	/// labeled alternative in <see cref="LanguageParser.expr"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -137,6 +152,19 @@ public partial class LanguageBaseListener : ILanguageListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitCompileUnit([NotNull] LanguageParser.CompileUnitContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="LanguageParser.identifier"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterIdentifier([NotNull] LanguageParser.IdentifierContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="LanguageParser.identifier"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitIdentifier([NotNull] LanguageParser.IdentifierContext context) { }
 
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="LanguageParser.expr"/>.

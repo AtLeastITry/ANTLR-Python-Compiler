@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Assignment.Grammar;
 using Assignment.Implementation;
+using Assignment.Services;
 using System;
 using System.IO;
 using System.Text;
@@ -11,23 +12,13 @@ namespace Assignment
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Please enter an infix expression");
-            var expression = Console.ReadLine();
-            byte[] bytes = Encoding.ASCII.GetBytes(expression);
-            var lexer = new LanguageLexer(new AntlrInputStream(new MemoryStream(bytes)));
-            var tokens = new CommonTokenStream(lexer);
-            var parser = new LanguageParser(tokens);
+            string[] files = Directory.GetFiles("./source/");
 
-            try
+            foreach(var file in files)
             {
-                var tree = new LanguageVisitor().VisitCompileUnit(parser.compileUnit());
-                var value = new PostFixVisitor().Visit(tree);
-
-                Console.WriteLine(value);
-            }
-            catch(Exception e)
-            {
-                throw e;
+                var expression = File.ReadAllText(file);
+                var tree = ASTService.CompileToAST(expression);
+                Console.WriteLine(ASTService.CompileToPostFix(tree));
             }
 
             Console.ReadLine();
