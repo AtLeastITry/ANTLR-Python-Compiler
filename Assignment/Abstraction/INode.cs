@@ -1,6 +1,6 @@
 ﻿namespace Assignment.Abstraction
 {
-    internal interface INode
+    public interface INode
     {
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Assignment.Implementation.Errors
 {
-    internal class UndefinedVariableException : Exception
+    public class UndefinedVariableException : Exception
     {
         public UndefinedVariableException(string message) : base(message)
         {
