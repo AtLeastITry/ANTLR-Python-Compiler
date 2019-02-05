@@ -1,4 +1,1 @@
-﻿VARIABLE inttest as INTEGER;
-VARIABLE decimaltest AS DECIMAL;
-inttest := 1;
-decimaltest := 10.5 + inttest;
+﻿inttest := 1;

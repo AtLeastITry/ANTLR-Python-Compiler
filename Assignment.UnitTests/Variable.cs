@@ -76,6 +76,28 @@ VARIABLE test as DECIMAL;
         }
 
         [Fact]
+        public void UndefinedVariableError()
+        {
+            bool hasError = true;
+            try
+            {
+                var tree = ASTService.CompileToAST("inttest := 1;");
+                var result = ASTService.CompileToPostFix(tree);
+                hasError = false;
+            }
+            catch (UndefinedVariableException)
+            {
+                hasError = true;
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            Assert.True(hasError);
+        }
+
+        [Fact]
         public void TypeErrorForDecimal()
         {            
             bool hasError = true;
