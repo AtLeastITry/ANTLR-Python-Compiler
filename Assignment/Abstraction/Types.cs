@@ -1,6 +1,6 @@
 ﻿namespace Assignment.Abstraction
 {
-    internal enum DataTypes
+    public enum DataTypes
     {
         INTEGER,
         DECIMAL

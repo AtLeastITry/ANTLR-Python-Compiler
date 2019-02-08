@@ -20,8 +20,7 @@ namespace Assignment.Services
 
             try
             {
-                var tree = new LanguageVisitor().VisitCompileUnit(parser.compileUnit());
-                return tree;
+                return new LanguageVisitor().VisitCompileUnit(parser.compileUnit());
             }
             catch (Exception e)
             {
@@ -33,8 +32,7 @@ namespace Assignment.Services
         {
             try
             {
-                var value = new PostFixVisitor().Visit(tree);
-                return value;
+                return new PostFixVisitor().Visit(tree);
             }
             catch (Exception e)
             {
