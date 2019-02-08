@@ -58,8 +58,12 @@ namespace Assignment.Implementation
 
         public override INode VisitValueExpr([NotNull] ValueExprContext context)
         {
+            if (_symbolTable.Contains(context.value.Text))
+            {
+                return new VariableNode(context.value.Text);
+            }
 
-            if (new Regex("a-zA-Z").IsMatch(context.value.Text) && !_symbolTable.Contains(context.value.Text))
+            if (new Regex("a-zA-Z").IsMatch(context.value.Text))
                 throw new UndefinedVariableException($"Variable \"{context.value.Text}\" has not been defined");
 
             return new ValueNode(context.value.Text);

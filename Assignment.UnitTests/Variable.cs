@@ -33,10 +33,10 @@ namespace Assignment.UnitTests
         {
             var tree = ASTService.CompileToAST(@"
 VARIABLE test as INTEGER;
-test := 1;
+test = 1;
 ");
             var result = ASTService.CompileToPostFix(tree);
-            Assert.True("VARIABLE test\r\ntest 1 =\r\n" == result);
+            Assert.True("VARIABLE test\r\n1 test !\r\n" == result);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ VARIABLE test as DECIMAL;
 test := 1.5;
 ");
             var result = ASTService.CompileToPostFix(tree);
-            Assert.True("VARIABLE test\r\ntest 1.5 =\r\n" == result);
+            Assert.True("VARIABLE test\r\n1.5 test !\r\n" == result);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ VARIABLE test as DECIMAL;
             bool hasError = true;
             try
             {
-                var tree = ASTService.CompileToAST("inttest := 1;");
+                var tree = ASTService.CompileToAST("inttest = 1;");
                 var result = ASTService.CompileToPostFix(tree);
                 hasError = false;
             }
@@ -105,7 +105,7 @@ VARIABLE test as DECIMAL;
             {
                 var tree = ASTService.CompileToAST(@"
 VARIABLE test as DECIMAL;
-test := asd;
+test = asd;
 ");
                 var result = ASTService.CompileToPostFix(tree);
                 hasError = false;
@@ -130,7 +130,7 @@ test := asd;
             {
                 var tree = ASTService.CompileToAST(@"
 VARIABLE test as INTEGER;
-test := 1.5;
+test = 1.5;
 ");
                 var result = ASTService.CompileToPostFix(tree);
                 hasError = false;

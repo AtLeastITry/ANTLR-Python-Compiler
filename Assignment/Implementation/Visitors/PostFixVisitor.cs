@@ -1,4 +1,5 @@
 ﻿using Assignment.Abstraction;
+using Assignment.Extensions;
 using System;
 using System.Text;
 
@@ -19,6 +20,21 @@ namespace Assignment.Implementation
             return sb.ToString();
         }
 
+        private bool ContainsVariable(INode tree, VariableNode variableNode)
+        {
+            if (tree.GetType() == typeof(VariableNode))
+            {
+                return ((VariableNode)tree).Value == variableNode.Value;
+            }
+
+            if (tree.GetType() == typeof(ExpressionNode))
+            {
+                return this.ContainsVariable(((ExpressionNode)tree).Left, variableNode) || this.ContainsVariable(((ExpressionNode)tree).Right, variableNode);
+            }
+
+            return false;
+        }
+
         public string Visit(ExpressionNode node)
         {
             switch(node.Operation)
@@ -32,7 +48,25 @@ namespace Assignment.Implementation
                 case Operations.DIVISION:
                     return $"{this.Visit(node.Left)} {this.Visit(node.Right)} /";
                 case Operations.ASSIGNMENT:
-                    return $"{this.Visit(node.Left)} {this.Visit(node.Right)} =";
+                    if (node.Right.GetType() == typeof(ExpressionNode))
+                    {
+                        if (this.ContainsVariable(node.Right, (VariableNode)node.Left))
+                        {
+                            var exprRight = (ExpressionNode)node.Right;
+
+                            if (exprRight.Left.GetType() == typeof(ValueNode))
+                            {
+                                return $"{this.Visit(exprRight.Left)} {this.Visit(node.Left)} {exprRight.Operation.GetDisplayName()}!";
+                            }
+
+                            if (exprRight.Right.GetType() == typeof(ValueNode))
+                            {
+                                return $"{this.Visit(exprRight.Right)} {this.Visit(node.Left)} {exprRight.Operation.GetDisplayName()}!";
+                            }
+                        }
+                    }
+
+                    return $"{this.Visit(node.Right)} {this.Visit(node.Left)} !";
                 case Operations.POWER:
                     return $"{this.Visit(node.Left)} {this.Visit(node.Right)} ^";
                 default:

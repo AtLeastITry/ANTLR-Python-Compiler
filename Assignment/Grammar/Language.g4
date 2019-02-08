@@ -32,7 +32,7 @@ DIV     : '/' ;
 POWER     : '^' ;
 LPARA   : '(' ;
 RPARA   : ')' ;
-AssignOP : ':=' ; 
+AssignOP : '=' ; 
 EndOfLine: ';';
 VAR     : ('a'..'z')+ ;
 INTERGER: 'INTEGER';
