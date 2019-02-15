@@ -12,5 +12,10 @@
         public Operations Operation { get; }
         public INode Left { get; }
         public INode Right { get; }
+
+        public string DisplayName()
+        {
+            return $"{nameof(ExpressionNode)}(operation: {this.Operation})";
+        }
     }
 }

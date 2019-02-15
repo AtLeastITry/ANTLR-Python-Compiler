@@ -23,7 +23,7 @@ namespace Assignment.Implementation.Visitors
 
         public string Visit(ExpressionNode node, string tempIndent)
         {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(ExpressionNode)}(operation: {node.Operation})";
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()})";
             tempIndent += IndentString;
 
             temp += this.Visit(node.Left, tempIndent);
@@ -34,7 +34,7 @@ namespace Assignment.Implementation.Visitors
 
         public string Visit(NegateNode node, string tempIndent)
         {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(NegateNode)}";
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()}";
             tempIndent += IndentString;
 
             temp += this.Visit(node.InnerNode, tempIndent);
@@ -44,7 +44,7 @@ namespace Assignment.Implementation.Visitors
 
         public string Visit(FunctionNode node, string tempIndent)
         {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(FunctionNode)}";
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()}";
             tempIndent += IndentString;
 
             temp += this.Visit(node.Argument, tempIndent);
@@ -54,7 +54,7 @@ namespace Assignment.Implementation.Visitors
 
         public string Visit(ValueNode node, string tempIndent)
         {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(ValueNode)}(value: {node.Value})";
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()})";
             tempIndent += IndentString;
 
             return temp;
@@ -62,7 +62,7 @@ namespace Assignment.Implementation.Visitors
 
         public string Visit(VariableNode node, string tempIndent)
         {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(VariableNode)}(value: {node.Value})";
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()})";
             tempIndent += IndentString;
 
             return temp;
@@ -70,7 +70,7 @@ namespace Assignment.Implementation.Visitors
 
         public string Visit(DeclarationNode node, string tempIndent)
         {
-            var temp = $"{Environment.NewLine}{tempIndent}+- {nameof(DeclarationNode)}(name: {node.Name})";
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()})";
             tempIndent += IndentString;
 
             return temp;
