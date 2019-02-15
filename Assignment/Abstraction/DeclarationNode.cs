@@ -8,5 +8,10 @@
         }
 
         public string Name { get; }
+
+        public string DisplayName()
+        {
+            return $"{nameof(DeclarationNode)}(name: {this.Name})";
+        }
     }
 }

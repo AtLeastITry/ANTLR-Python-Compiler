@@ -16,7 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Implementation\Extensions\" />
     <Folder Include="Implementation\Utils\Binders\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Assignment.Graphviz\Assignment.Graphviz.csproj" />
   </ItemGroup>
 
 </Project>

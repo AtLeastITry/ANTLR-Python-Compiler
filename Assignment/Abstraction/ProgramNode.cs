@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Assignment.Abstraction
 {
@@ -10,5 +11,10 @@ namespace Assignment.Abstraction
         }
 
         public List<INode> Children { get; }
+
+        public string DisplayName()
+        {
+            return nameof(ProgramNode);
+        }
     }
 }

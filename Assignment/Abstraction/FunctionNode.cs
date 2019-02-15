@@ -12,5 +12,10 @@ namespace Assignment.Abstraction
 
         public string Function { get; }
         public INode Argument { get; }
+
+        public string DisplayName()
+        {
+            return nameof(FunctionNode);
+        }
     }
 }

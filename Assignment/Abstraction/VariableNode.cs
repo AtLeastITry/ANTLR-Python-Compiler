@@ -8,5 +8,10 @@
         }
 
         public string Value { get; }
+
+        public string DisplayName()
+        {
+            return $"{nameof(VariableNode)}(value: {this.Value})";
+        }
     }
 }

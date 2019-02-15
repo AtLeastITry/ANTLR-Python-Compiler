@@ -44,5 +44,13 @@ namespace Assignment.Services
         {
             return new VisualizationVisitor().Visit(tree, indent);
         }
+
+        public static string CompileToDOT(INode tree)
+        {
+            var visitor = new DOTVisitor();
+            visitor.Visit(tree);
+
+            return visitor.CompileDOT("G");
+        }
     }
 }

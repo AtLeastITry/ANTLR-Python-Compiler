@@ -1,6 +1,9 @@
-﻿namespace Assignment.Abstraction
+﻿using System;
+
+namespace Assignment.Abstraction
 {
     public interface INode
     {
+        string DisplayName();
     }
 }

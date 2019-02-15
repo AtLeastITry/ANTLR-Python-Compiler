@@ -8,5 +8,10 @@
         }
 
         public INode InnerNode { get; }
+
+        public string DisplayName()
+        {
+            return nameof(NegateNode);
+        }
     }
 }
