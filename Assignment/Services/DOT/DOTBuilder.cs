@@ -1,4 +1,6 @@
 ﻿using Assignment.Abstraction;
+using Assignment.Abstraction.Expressions;
+using Assignment.Abstraction.Statements;
 using Assignment.Extensions;
 using System;
 using System.Collections.Generic;
@@ -88,6 +90,62 @@ digraph {graphName} {{
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
+        }
+
+        private void Visit(IfStatementNode node, DOTNode parent)
+        {
+            var childNode = new DOTNode(node.DisplayName());
+            _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
+
+            this.Visit(node.Expression, childNode);
+
+            foreach(var child in node.Body)
+            {
+                this.Visit(child, childNode);
+            }
+
+            if (node.Child != null)
+            {
+                this.Visit(node.Child, childNode);
+            }
+        }
+
+        private void Visit(ElseStatementNode node, DOTNode parent)
+        {
+            var childNode = new DOTNode(node.DisplayName());
+            _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
+
+            foreach (var child in node.Body)
+            {
+                this.Visit(child, childNode);
+            }
+        }
+
+        private void Visit(ElseIfStatementNode node, DOTNode parent)
+        {
+            var childNode = new DOTNode(node.DisplayName());
+            _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
+
+            this.Visit(node.Expression, childNode);
+
+            foreach (var child in node.Body)
+            {
+                this.Visit(child, childNode);
+            }
+
+            if (node.Child != null)
+            {
+                this.Visit(node.Child, childNode);
+            }
+        }
+
+        private void Visit(BooleanExpressionNode node, DOTNode parent)
+        {
+            var childNode = new DOTNode(node.DisplayName());
+            _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
+
+            this.Visit(node.Left, childNode);
+            this.Visit(node.Right, childNode);
         }
 
         private void Visit(INode node, DOTNode parent)

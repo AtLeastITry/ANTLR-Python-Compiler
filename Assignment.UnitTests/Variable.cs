@@ -44,7 +44,7 @@ test = 1;
         {
             var tree = ASTService.CompileToAST(@"
 DECIMAL test;
-test := 1.5;
+test = 1.5;
 ");
             var result = ASTService.CompileToPostFix(tree);
             Assert.True("VARIABLE test\r\n1.5 test !" == result);
