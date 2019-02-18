@@ -82,3 +82,40 @@ Scheme provided for indicative guidance only
 You may wish to start extending your expression analyser ready for the second assignment.
 - Add support for variables, and assignment statements that assign values to those variables. 
 - Add control flow for multiple statements, with Boolean expressions. 
+
+# Examples
+## Arithemtic
+### Input
+~~~~
+1 + 1;
+1 - 1;
+1 * 1;
+1 / 1;
+(2 + 1) * (3 + 4);
+1 + 2 * 3 + 4;
+~~~~
+
+### Output
+~~~~
+1 1 +
+1 1 -
+1 1 *
+1 1 /
+2 1 + 3 4 + *
+1 2 3 * + 4 +
+~~~~
+
+## Variable
+### Input
+~~~~
+INTEGER a;
+a = 50;
+a = a + 50;
+~~~~
+
+### Output
+~~~~
+VARIABLE a
+50 a !
+50 a +!
+~~~~
