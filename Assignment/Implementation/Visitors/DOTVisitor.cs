@@ -53,7 +53,16 @@ digraph {graphName} {{
             }
         }
 
-        public void Visit(ExpressionNode node, DOTNode parent)
+        public void Visit(BinaryExpressionNode node, DOTNode parent)
+        {
+            var childNode = new DOTNode(node.DisplayName());
+            _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
+
+            this.Visit(node.Left, childNode);
+            this.Visit(node.Right, childNode);
+        }
+
+        public void Visit(AssignmentNode node, DOTNode parent)
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));

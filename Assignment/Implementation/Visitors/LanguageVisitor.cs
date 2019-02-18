@@ -87,15 +87,15 @@ namespace Assignment.Implementation
             switch(context.op.Type)
             {
                 case LanguageLexer.PLUS:
-                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.ADDITION);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.ADDITION);
                 case LanguageLexer.MINUS:
-                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.SUBTRACTION);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.SUBTRACTION);
                 case LanguageLexer.MULT:
-                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.MULTIPLICATION);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.MULTIPLICATION);
                 case LanguageLexer.DIV:
-                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.DIVISION);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.DIVISION);
                 case LanguageLexer.POWER:
-                    return new ExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.POWER);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.POWER);
                 default:
                     // This occurs when a user has attempted to use an expression operator that is not supported.
                     throw new UnsupportedNodeException("Node is unsupported");
@@ -142,7 +142,7 @@ namespace Assignment.Implementation
                 }
             }
 
-            return new ExpressionNode(new VariableNode(name), right, Operations.ASSIGNMENT);
+            return new AssignmentNode(new VariableNode(name), right);
         }
 
         public override INode VisitUnaryExpr([NotNull] UnaryExprContext context)

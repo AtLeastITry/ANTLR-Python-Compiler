@@ -10,7 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Source\test1.txt">
+    <None Update="Source\example-arithmetic.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Source\example-variable.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

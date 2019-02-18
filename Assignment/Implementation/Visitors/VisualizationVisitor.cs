@@ -21,7 +21,18 @@ namespace Assignment.Implementation.Visitors
             return temp;
         }
 
-        public string Visit(ExpressionNode node, string tempIndent)
+        public string Visit(BinaryExpressionNode node, string tempIndent)
+        {
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()})";
+            tempIndent += IndentString;
+
+            temp += this.Visit(node.Left, tempIndent);
+            temp += this.Visit(node.Right, tempIndent);
+
+            return temp;
+        }
+
+        public string Visit(AssignmentNode node, string tempIndent)
         {
             var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()})";
             tempIndent += IndentString;

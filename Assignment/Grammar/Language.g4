@@ -6,8 +6,6 @@ compileUnit
 
 identifier
 	: Identifier
-	| 'as'
-	| 'VARIABLE'
 	| 'INTEGER'
 	| 'DECIMAL'
 	
@@ -15,13 +13,13 @@ identifier
 
 expr
     :   LPARA expr RPARA                      # parensExpr
+	|	type=(INTERGER|DECIMAL) name=VAR      # variableDeclarationExpr
     |   op=(PLUS|MINUS) expr                  # unaryExpr
-	|	left=expr op=POWER right=expr    # infixExpr
+	|	left=expr op=POWER right=expr         # infixExpr
     |   left=expr op=(MULT|DIV) right=expr    # infixExpr
-	|   left=expr op=(PLUS|MINUS) right=expr    # infixExpr
+	|   left=expr op=(PLUS|MINUS) right=expr  # infixExpr
 	|   variable=VAR op=AssignOP right=expr   # assignmentExpr 
-    |   func=ID LPARA expr RPARA              # funcExpr             
-	|	VARIABLEKEYWORD name=VAR 'as' type=(INTERGER|DECIMAL)			  # variableDeclarationExpr
+    |   func=ID LPARA expr RPARA              # funcExpr             	
 	|   value=(NUM|VAR)                       # valueExpr
 	;
 NUM :   [0-9]+ ('.' [0-9]+)? ([eE] [+-]? [0-9]+)?;
@@ -37,6 +35,5 @@ EndOfLine: ';';
 VAR     : ('a'..'z')+ ;
 INTERGER: 'INTEGER';
 DECIMAL: 'DECIMAL';
-VARIABLEKEYWORD : 'VARIABLE';
 WS  :   [ \t\r\n] -> channel(HIDDEN);
 

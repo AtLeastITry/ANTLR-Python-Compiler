@@ -1,6 +1,6 @@
 ﻿namespace Assignment.Abstraction
 {
-    internal interface IInfixNode: INode
+    internal interface IExpressionNode: INode
     {
         INode Left { get; }
         INode Right { get; }
