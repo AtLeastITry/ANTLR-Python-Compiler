@@ -1,4 +1,4 @@
-﻿namespace Assignment.Abstraction
+﻿namespace Assignment.Abstraction.Expressions
 {
     internal struct NegateNode: INode
     {

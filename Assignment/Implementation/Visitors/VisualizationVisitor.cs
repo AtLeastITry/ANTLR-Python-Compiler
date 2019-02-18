@@ -1,4 +1,6 @@
 ﻿using Assignment.Abstraction;
+using Assignment.Abstraction.Expressions;
+using Assignment.Abstraction.Statements;
 using System;
 
 namespace Assignment.Implementation.Visitors
@@ -83,6 +85,63 @@ namespace Assignment.Implementation.Visitors
         {
             var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()})";
             tempIndent += IndentString;
+
+            return temp;
+        }
+
+        public string Visit(IfStatementNode node, string tempIndent)
+        {
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()}";
+
+            tempIndent += IndentString;
+
+            temp += this.Visit(node.Expression, tempIndent);
+
+            foreach (var child in node.Body)
+            {
+                temp += this.Visit(child, tempIndent);
+            }
+
+            return temp;
+        }
+
+        public string Visit(ElseStatementNode node, string tempIndent)
+        {
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()}";
+
+            tempIndent += IndentString;
+
+            foreach (var child in node.Body)
+            {
+                temp += this.Visit(child, tempIndent);
+            }
+
+            return temp;
+        }
+
+        public string Visit(ElseIfStatementNode node, string tempIndent)
+        {
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()}";
+
+            tempIndent += IndentString;
+
+            temp += this.Visit(node.Expression, tempIndent);
+
+            foreach (var child in node.Body)
+            {
+                temp += this.Visit(child, tempIndent);
+            }
+
+            return temp;
+        }
+
+        public string Visit(BooleanExpressionNode node, string tempIndent)
+        {
+            var temp = $"{Environment.NewLine}{tempIndent}+- {node.DisplayName()})";
+            tempIndent += IndentString;
+
+            temp += this.Visit(node.Left, tempIndent);
+            temp += this.Visit(node.Right, tempIndent);
 
             return temp;
         }

@@ -1,11 +1,13 @@
 ﻿using Assignment.Abstraction;
+using Assignment.Abstraction.Expressions;
+using Assignment.Abstraction.Statements;
 using Assignment.Extensions;
 using System;
 using System.Linq;
 
 namespace Assignment.Implementation
 {
-    internal class PostFixVisitor : IASTVisitor<string>
+    internal class ForthVisitor : IASTVisitor<string>
     {
         public string Visit(ProgramNode node)
         {
@@ -38,15 +40,15 @@ namespace Assignment.Implementation
             // Check which operation is being used, and then build a string with the left node, right node and operator.
             switch(node.Operation)
             {
-                case Operations.ADDITION:
+                case ArithmeticOperations.ADDITION:
                     return $"{this.Visit(node.Left)} {this.Visit(node.Right)} +";
-                case Operations.SUBTRACTION:
+                case ArithmeticOperations.SUBTRACTION:
                     return $"{this.Visit(node.Left)} {this.Visit(node.Right)} -";
-                case Operations.MULTIPLICATION:
+                case ArithmeticOperations.MULTIPLICATION:
                     return $"{this.Visit(node.Left)} {this.Visit(node.Right)} *";
-                case Operations.DIVISION:
+                case ArithmeticOperations.DIVISION:
                     return $"{this.Visit(node.Left)} {this.Visit(node.Right)} /";
-                case Operations.POWER:
+                case ArithmeticOperations.POWER:
                     return $"{this.Visit(node.Left)} {this.Visit(node.Right)} ^";
                 default:
                     return "";
@@ -101,6 +103,26 @@ namespace Assignment.Implementation
         public string Visit(DeclarationNode node)
         {
             return $"VARIABLE {node.Name}";
+        }
+
+        public string Visit(IfStatementNode node)
+        {
+            return "";
+        }
+
+        public string Visit(ElseStatementNode node)
+        {
+            return "";
+        }
+
+        public string Visit(ElseIfStatementNode node)
+        {
+            return "";
+        }
+
+        public string Visit(BooleanExpressionNode node)
+        {
+            return "";
         }
 
         public string Visit(INode node)

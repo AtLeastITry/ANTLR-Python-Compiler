@@ -1,9 +1,12 @@
 ﻿using Antlr4.Runtime.Misc;
 using Assignment.Abstraction;
+using Assignment.Abstraction.Expressions;
+using Assignment.Abstraction.Statements;
 using Assignment.Grammar;
 using Assignment.Implementation.Errors;
 using Assignment.Implementation.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -17,15 +20,21 @@ namespace Assignment.Implementation
 
         public override INode VisitCompileUnit([NotNull] CompileUnitContext context)
         {
+            return this.Visit(context.statements());
+        }
+
+        public override INode VisitStatements([NotNull] StatementsContext context)
+        {
             var result = new ProgramNode();
+
             // Loop through each of the expressions the ANTLR parser finds
-            foreach(var expr in context.expr())
+            foreach (var statement in context.statement())
             {
-                if (expr.IsEmpty || string.IsNullOrEmpty(expr.ToString()))
+                if (statement.IsEmpty || string.IsNullOrEmpty(statement.ToString()))
                 {
                     continue;
                 }
-                var node = this.Visit(expr);
+                var node = this.Visit(statement);
 
                 // If the node is null then it was probably a new line
                 if (node != null)
@@ -35,7 +44,91 @@ namespace Assignment.Implementation
             return result;
         }
 
-        public override INode VisitVariableDeclarationExpr([NotNull] VariableDeclarationExprContext context)
+        public override INode VisitIfStatement([NotNull] IfStatementContext context)
+        {
+            var children = new List<INode>();
+            foreach (var statement in context.body.statement())
+            {
+                if (statement.IsEmpty || string.IsNullOrEmpty(statement.ToString()))
+                {
+                    continue;
+                }
+                var node = this.Visit(statement);
+
+                // If the node is null then it was probably a new line
+                if (node != null)
+                    children.Add(node);
+            }
+
+            return new IfStatementNode(children, this.Visit(context.expression));
+        }
+
+        public override INode VisitElseStatement([NotNull] ElseStatementContext context)
+        {
+            var children = new List<INode>();
+            foreach (var statement in context.body.statement())
+            {
+                if (statement.IsEmpty || string.IsNullOrEmpty(statement.ToString()))
+                {
+                    continue;
+                }
+                var node = this.Visit(statement);
+
+                // If the node is null then it was probably a new line
+                if (node != null)
+                    children.Add(node);
+            }
+
+            return new ElseStatementNode(children);
+        }
+
+        public override INode VisitElseIfStatement([NotNull] ElseIfStatementContext context)
+        {
+            var children = new List<INode>();
+            foreach (var statement in context.body.statement())
+            {
+                if (statement.IsEmpty || string.IsNullOrEmpty(statement.ToString()))
+                {
+                    continue;
+                }
+                var node = this.Visit(statement);
+
+                // If the node is null then it was probably a new line
+                if (node != null)
+                    children.Add(node);
+            }
+
+            return new ElseIfStatementNode(children, this.Visit(context.expression));
+        }
+
+        public override INode VisitBooleanExpr([NotNull] BooleanExprContext context)
+        {
+            // Check which type of expression has been declared using the type parsed by the ANTLR parser, then return the appropiate value
+            switch (context.op.Type)
+            {
+                case LanguageLexer.EQUALS:
+                    return new BooleanExpressionNode(this.Visit(context.left), this.Visit(context.right), BooleanOperations.EQUALS);
+                case LanguageLexer.NEGATIVEEQUALS:
+                    return new BooleanExpressionNode(this.Visit(context.left), this.Visit(context.right), BooleanOperations.NEGATIVEEQUALS);
+                case LanguageLexer.GREATERTHAN:
+                    return new BooleanExpressionNode(this.Visit(context.left), this.Visit(context.right), BooleanOperations.GREATERTHAN);
+                case LanguageLexer.LESSTHAN:
+                    return new BooleanExpressionNode(this.Visit(context.left), this.Visit(context.right), BooleanOperations.LESSTHAN);
+                case LanguageLexer.GREATERTHANEQUALS:
+                    return new BooleanExpressionNode(this.Visit(context.left), this.Visit(context.right), BooleanOperations.GREATERTHANEQUALS);
+                case LanguageLexer.LESSTHANEQUALS:
+                    return new BooleanExpressionNode(this.Visit(context.left), this.Visit(context.right), BooleanOperations.LESSTHANEQUALS);
+                case LanguageLexer.OR:
+                    return new BooleanExpressionNode(this.Visit(context.left), this.Visit(context.right), BooleanOperations.OR);
+                case LanguageLexer.AND:
+                    return new BooleanExpressionNode(this.Visit(context.left), this.Visit(context.right), BooleanOperations.AND);
+                default:
+                    // This occurs when a user has attempted to use an expression operator that is not supported.
+                    throw new UnsupportedNodeException("Node is unsupported");
+            }
+        }
+
+        public override INode VisitDeclaration([NotNull] DeclarationContext context)
         {
             var name = context.name.Text;
 
@@ -87,22 +180,22 @@ namespace Assignment.Implementation
             switch(context.op.Type)
             {
                 case LanguageLexer.PLUS:
-                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.ADDITION);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), ArithmeticOperations.ADDITION);
                 case LanguageLexer.MINUS:
-                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.SUBTRACTION);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), ArithmeticOperations.SUBTRACTION);
                 case LanguageLexer.MULT:
-                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.MULTIPLICATION);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), ArithmeticOperations.MULTIPLICATION);
                 case LanguageLexer.DIV:
-                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.DIVISION);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), ArithmeticOperations.DIVISION);
                 case LanguageLexer.POWER:
-                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), Operations.POWER);
+                    return new BinaryExpressionNode(this.Visit(context.left), this.Visit(context.right), ArithmeticOperations.POWER);
                 default:
                     // This occurs when a user has attempted to use an expression operator that is not supported.
                     throw new UnsupportedNodeException("Node is unsupported");
             }
         }
 
-        public override INode VisitAssignmentExpr([NotNull] AssignmentExprContext context)
+        public override INode VisitAssignment([NotNull] AssignmentContext context)
         {
             // Remove all new line characters
             var name = context.variable.Text.Replace("\r", "").Replace("\n", "");

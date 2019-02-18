@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assignment.Abstraction
+namespace Assignment.Abstraction.Expressions
 {
     internal struct FunctionNode: INode
     {

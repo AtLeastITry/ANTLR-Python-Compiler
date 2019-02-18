@@ -2,7 +2,7 @@
 
 namespace Assignment.Abstraction
 {
-    internal enum Operations
+    internal enum ArithmeticOperations
     {
         [DisplayName("+")]
         ADDITION,

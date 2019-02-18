@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assignment.Abstraction
+namespace Assignment.Abstraction.Expressions
 {
     internal class ProgramNode: INode
     {

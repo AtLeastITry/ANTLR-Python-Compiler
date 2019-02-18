@@ -33,7 +33,7 @@ namespace Assignment.Services
         {
             try
             {
-                return new PostFixVisitor().Visit(tree);
+                return new ForthVisitor().Visit(tree);
             }
             catch (Exception e)
             {
