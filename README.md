@@ -119,3 +119,22 @@ VARIABLE a
 50 a !
 50 a +!
 ~~~~
+
+## If Statements
+### Input
+~~~~
+INTEGER a;
+a = 50;
+
+if (a > 10) {
+	a = a + 10;
+} else if (a == 5) {
+	a = a + 5;
+} else if(a == 3) {
+	a = a + 2;
+} else {
+	a = 20;
+};
+
+a = 10 + 50;
+~~~~
