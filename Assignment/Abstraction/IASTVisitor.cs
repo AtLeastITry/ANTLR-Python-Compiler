@@ -3,7 +3,8 @@
     internal interface IASTVisitor<T>
     {
         T Visit(ProgramNode node);
-        T Visit(ExpressionNode node);
+        T Visit(BinaryExpressionNode node);
+        T Visit(AssignmentNode node);
         T Visit(NegateNode node);
         T Visit(FunctionNode node);
         T Visit(ValueNode node);

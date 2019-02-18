@@ -13,8 +13,6 @@ namespace Assignment.Abstraction
         [DisplayName("/")]
         DIVISION,
         [DisplayName("^")]
-        POWER,
-        [DisplayName("=")]
-        ASSIGNMENT
+        POWER
     }
 }

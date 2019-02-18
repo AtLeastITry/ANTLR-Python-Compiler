@@ -1,8 +1,8 @@
 ﻿namespace Assignment.Abstraction
 {
-    internal struct ExpressionNode : IInfixNode
+    internal struct BinaryExpressionNode : IExpressionNode
     {
-        public ExpressionNode(INode left, INode right, Operations operation)
+        public BinaryExpressionNode(INode left, INode right, Operations operation)
         {
             this.Left = left;
             this.Right = right;
@@ -15,7 +15,7 @@
 
         public string DisplayName()
         {
-            return $"{nameof(ExpressionNode)}(operation: {this.Operation})";
+            return $"{nameof(BinaryExpressionNode)}(operation: {this.Operation})";
         }
     }
 }

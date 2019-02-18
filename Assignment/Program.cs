@@ -18,6 +18,15 @@ namespace Assignment
             {
                 Directory.CreateDirectory(targetDirectory);
             }
+            else
+            {
+                string[] targetFiles = Directory.GetFiles(targetDirectory);
+
+                foreach(var file in targetFiles)
+                {
+                    File.Delete(file);
+                }
+            }
 
             foreach(var file in files)
             {

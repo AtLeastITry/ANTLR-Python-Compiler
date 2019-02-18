@@ -15,7 +15,7 @@ namespace Assignment.UnitTests
         [Fact]
         public void DeclarationForInteger()
         {
-            var tree = ASTService.CompileToAST("VARIABLE test as INTEGER;");
+            var tree = ASTService.CompileToAST("INTEGER test;");
             var result = this.Clean(ASTService.CompileToPostFix(tree));
             Assert.True("VARIABLE test" == result);
         }
@@ -23,7 +23,7 @@ namespace Assignment.UnitTests
         [Fact]
         public void DeclarationForDecimal()
         {
-            var tree = ASTService.CompileToAST("VARIABLE test as DECIMAL;");
+            var tree = ASTService.CompileToAST("DECIMAL test;");
             var result = this.Clean(ASTService.CompileToPostFix(tree));
             Assert.True("VARIABLE test" == result);
         }
@@ -32,7 +32,7 @@ namespace Assignment.UnitTests
         public void AssignmentForInteger()
         {
             var tree = ASTService.CompileToAST(@"
-VARIABLE test as INTEGER;
+INTEGER test;
 test = 1;
 ");
             var result = ASTService.CompileToPostFix(tree);
@@ -43,7 +43,7 @@ test = 1;
         public void AssignmentForDecimal()
         {
             var tree = ASTService.CompileToAST(@"
-VARIABLE test as DECIMAL;
+DECIMAL test;
 test := 1.5;
 ");
             var result = ASTService.CompileToPostFix(tree);
@@ -57,8 +57,8 @@ test := 1.5;
             try
             {
                 var tree = ASTService.CompileToAST(@"
-VARIABLE test as DECIMAL;
-VARIABLE test as DECIMAL;
+DECIMAL test;
+DECIMAL test;
 ");
                 var result = ASTService.CompileToPostFix(tree);
                 hasError = false;
@@ -104,7 +104,7 @@ VARIABLE test as DECIMAL;
             try
             {
                 var tree = ASTService.CompileToAST(@"
-VARIABLE test as DECIMAL;
+DECIMAL test;
 test = asd;
 ");
                 var result = ASTService.CompileToPostFix(tree);
@@ -129,7 +129,7 @@ test = asd;
             try
             {
                 var tree = ASTService.CompileToAST(@"
-VARIABLE test as INTEGER;
+INTEGER test;
 test = 1.5;
 ");
                 var result = ASTService.CompileToPostFix(tree);
