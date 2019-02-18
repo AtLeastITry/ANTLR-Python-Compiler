@@ -26,9 +26,13 @@ namespace Assignment.Implementation
             // Recursively check whether the children of the tree contain the specified variable node.
             if (tree.GetType() == typeof(BinaryExpressionNode))
             {
-                return this.ContainsVariable(((BinaryExpressionNode)tree).Left, variableNode) 
-                    || this.ContainsVariable(((AssignmentNode)tree).Left, variableNode) 
-                    || this.ContainsVariable(((BinaryExpressionNode)tree).Right, variableNode) 
+                return this.ContainsVariable(((BinaryExpressionNode)tree).Left, variableNode)
+                    || this.ContainsVariable(((BinaryExpressionNode)tree).Right, variableNode);
+            }
+
+            if (tree.GetType() == typeof(AssignmentNode))
+            {
+                return this.ContainsVariable(((AssignmentNode)tree).Left, variableNode)
                     || this.ContainsVariable(((AssignmentNode)tree).Right, variableNode);
             }
 
