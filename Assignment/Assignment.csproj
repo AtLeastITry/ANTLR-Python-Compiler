@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Antlr4 Remove="Implementation\Extensions\**" />
+    <Antlr4 Remove="Implementation\Utils\Binders\**" />
+    <Compile Remove="Implementation\Extensions\**" />
+    <Compile Remove="Implementation\Utils\Binders\**" />
+    <EmbeddedResource Remove="Implementation\Extensions\**" />
+    <EmbeddedResource Remove="Implementation\Utils\Binders\**" />
+    <None Remove="Implementation\Extensions\**" />
+    <None Remove="Implementation\Utils\Binders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Antlr4" Version="4.6.6" />
   </ItemGroup>
 
@@ -16,11 +27,6 @@
     <None Update="Source\example-variable.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Implementation\Extensions\" />
-    <Folder Include="Implementation\Utils\Binders\" />
   </ItemGroup>
 
   <ItemGroup>

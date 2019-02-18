@@ -1,58 +1,44 @@
 ﻿using Assignment.Abstraction;
+using Assignment.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Assignment.Implementation.Visitors
+namespace Assignment.Services.DOT
 {
-    internal class DOTVisitor
+    internal class DOTBuilder
     {
-        private readonly List<Tuple<DOTNode, DOTNode>> _connections = new List<Tuple<DOTNode, DOTNode>>();
-
         private const string labelParams = "shape=\"ellipse\" fontsize=8 width=5 height=1]";
 
+        private readonly List<Tuple<DOTNode, DOTNode>> _connections = new List<Tuple<DOTNode, DOTNode>>();
         private IEnumerable<string> _connectionsList => _connections.Select(a => $"\"{a.Item1}\" -> \"{a.Item2}\";");
-        private HashSet<string> _distinctDefinitions
+        private IEnumerable<string> _connectionDefinitions => _connections.Flatten()
+            .Distinct(new DOTNodeEqualityComparer())
+            .Select(dn => $"\"{dn}\" [label=\"{dn.Lable}\" {labelParams};");
+
+        public string Build(INode tree, string graphName)
         {
-            get
-            {
-                HashSet<string> temp = new HashSet<string>();
-                foreach (var (a, b) in _connections)
-                {
-                    var tempA = $"\"{a}\" [label=\"{a.Lable}\" {labelParams};";
-                    var tempB = $"\"{b}\" [label=\"{b.Lable}\" {labelParams};";
+            this.Visit(tree);
 
-                    if (!temp.Contains(tempA))
-                        temp.Add(tempA);
-
-                    if (!temp.Contains(tempB))
-                        temp.Add(tempB);
-                }
-
-                return temp;
-            }
-        }
-
-        public string CompileDOT(string graphName)
-        {
             return $@"
 digraph {graphName} {{
-    {string.Join(Environment.NewLine, _distinctDefinitions)}
+    {string.Join(Environment.NewLine, _connectionDefinitions)}
     {string.Join(Environment.NewLine, _connectionsList)}
 }}";
         }
 
-        public void Visit(ProgramNode node)
+        #region Helpers
+        private void Visit(ProgramNode node)
         {
             var parent = new DOTNode(node.DisplayName());
 
-            foreach(var child in node.Children)
+            foreach (var child in node.Children)
             {
                 this.Visit(child, parent);
             }
         }
 
-        public void Visit(BinaryExpressionNode node, DOTNode parent)
+        private void Visit(BinaryExpressionNode node, DOTNode parent)
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
@@ -61,7 +47,7 @@ digraph {graphName} {{
             this.Visit(node.Right, childNode);
         }
 
-        public void Visit(AssignmentNode node, DOTNode parent)
+        private void Visit(AssignmentNode node, DOTNode parent)
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
@@ -70,15 +56,15 @@ digraph {graphName} {{
             this.Visit(node.Right, childNode);
         }
 
-        public void Visit(NegateNode node, DOTNode parent)
+        private void Visit(NegateNode node, DOTNode parent)
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
 
-            this.Visit(node.InnerNode, childNode);            
+            this.Visit(node.InnerNode, childNode);
         }
 
-        public void Visit(FunctionNode node, DOTNode parent)
+        private void Visit(FunctionNode node, DOTNode parent)
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
@@ -86,32 +72,33 @@ digraph {graphName} {{
             this.Visit(node.Argument, childNode);
         }
 
-        public void Visit(ValueNode node, DOTNode parent)
+        private void Visit(ValueNode node, DOTNode parent)
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
         }
 
-        public void Visit(VariableNode node, DOTNode parent)
+        private void Visit(VariableNode node, DOTNode parent)
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
         }
 
-        public void Visit(DeclarationNode node, DOTNode parent)
+        private void Visit(DeclarationNode node, DOTNode parent)
         {
             var childNode = new DOTNode(node.DisplayName());
             _connections.Add(new Tuple<DOTNode, DOTNode>(parent, childNode));
         }
 
-        public void Visit(INode node, DOTNode parent)
+        private void Visit(INode node, DOTNode parent)
         {
             this.Visit((dynamic)node, parent);
         }
 
-        public void Visit(INode node)
+        private void Visit(INode node)
         {
             this.Visit((dynamic)node);
         }
+        #endregion
     }
 }

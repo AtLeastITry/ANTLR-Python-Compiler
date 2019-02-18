@@ -3,6 +3,7 @@ using Assignment.Abstraction;
 using Assignment.Grammar;
 using Assignment.Implementation;
 using Assignment.Implementation.Visitors;
+using Assignment.Services.DOT;
 using System;
 using System.IO;
 using System.Text;
@@ -47,10 +48,7 @@ namespace Assignment.Services
 
         public static string CompileToDOT(INode tree)
         {
-            var visitor = new DOTVisitor();
-            visitor.Visit(tree);
-
-            return visitor.CompileDOT("G");
+            return new DOTBuilder().Build(tree, "G");
         }
     }
 }

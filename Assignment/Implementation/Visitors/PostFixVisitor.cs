@@ -9,19 +9,25 @@ namespace Assignment.Implementation
     {
         public string Visit(ProgramNode node)
         {
+            // Visit each child and join them to a new line.
             return string.Join(Environment.NewLine, node.Children.Select(c => this.Visit(c)));
         }
 
         private bool ContainsVariable(INode tree, VariableNode variableNode)
         {
+            // Check whether node is a variable node, if so compare the values
             if (tree.GetType() == typeof(VariableNode))
             {
                 return ((VariableNode)tree).Value == variableNode.Value;
             }
 
+            // Recursively check whether the children of the tree contain the specified variable node.
             if (tree.GetType() == typeof(BinaryExpressionNode))
             {
-                return this.ContainsVariable(((BinaryExpressionNode)tree).Left, variableNode) || this.ContainsVariable(((AssignmentNode)tree).Left, variableNode) || this.ContainsVariable(((BinaryExpressionNode)tree).Right, variableNode) || this.ContainsVariable(((AssignmentNode)tree).Right, variableNode);
+                return this.ContainsVariable(((BinaryExpressionNode)tree).Left, variableNode) 
+                    || this.ContainsVariable(((AssignmentNode)tree).Left, variableNode) 
+                    || this.ContainsVariable(((BinaryExpressionNode)tree).Right, variableNode) 
+                    || this.ContainsVariable(((AssignmentNode)tree).Right, variableNode);
             }
 
             return false;
@@ -29,6 +35,7 @@ namespace Assignment.Implementation
 
         public string Visit(BinaryExpressionNode node)
         {
+            // Check which operation is being used, and then build a string with the left node, right node and operator.
             switch(node.Operation)
             {
                 case Operations.ADDITION:
@@ -48,8 +55,10 @@ namespace Assignment.Implementation
 
         public string Visit(AssignmentNode node)
         {
+            // Check to see if the right side is a binary expression
             if (node.Right.GetType() == typeof(BinaryExpressionNode))
             {
+                // Check whether the right node contains the variable being assigned to
                 if (this.ContainsVariable(node.Right, (VariableNode)node.Left))
                 {
                     var exprRight = (BinaryExpressionNode)node.Right;

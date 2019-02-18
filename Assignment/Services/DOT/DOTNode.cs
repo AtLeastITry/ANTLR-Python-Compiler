@@ -1,21 +1,21 @@
 ﻿using System;
 
-namespace Assignment.Implementation.Visitors
+namespace Assignment.Services.DOT
 {
     public struct DOTNode
     {
         public readonly string Lable;
-        private readonly Guid _id;
+        public readonly Guid Id;
 
         public DOTNode(string label)
         {
             Lable = label;
-            _id = Guid.NewGuid();
+            Id = Guid.NewGuid();
         }
 
         public override string ToString()
         {
-            return $"{_id}";
+            return $"{Id}";
         }
     }
 }

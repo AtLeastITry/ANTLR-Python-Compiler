@@ -36,7 +36,7 @@ INTEGER test;
 test = 1;
 ");
             var result = ASTService.CompileToPostFix(tree);
-            Assert.True("VARIABLE test\r\n1 test !\r\n" == result);
+            Assert.True("VARIABLE test\r\n1 test !" == result);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ DECIMAL test;
 test := 1.5;
 ");
             var result = ASTService.CompileToPostFix(tree);
-            Assert.True("VARIABLE test\r\n1.5 test !\r\n" == result);
+            Assert.True("VARIABLE test\r\n1.5 test !" == result);
         }
 
         [Fact]
