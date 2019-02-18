@@ -23,6 +23,11 @@ namespace Assignment.Implementation
             return this.Visit(context.statements());
         }
 
+        public override INode VisitStatement([NotNull] StatementContext context)
+        {
+            return base.VisitStatement(context);
+        }
+
         public override INode VisitStatements([NotNull] StatementsContext context)
         {
             var result = new ProgramNode();
