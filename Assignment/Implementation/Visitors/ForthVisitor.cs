@@ -124,9 +124,26 @@ namespace Assignment.Implementation
             return "";
         }
 
+        public string Visit(BooleanOperations operation)
+        {
+            switch(operation)
+            {
+                case BooleanOperations.AND:
+                    return "and";
+                case BooleanOperations.EQUALS:
+                    return "=";
+                case BooleanOperations.NEGATIVEEQUALS:
+                    return "invert =";
+                case BooleanOperations.OR:
+                    return "invert";
+                default:
+                    return operation.GetDisplayName();
+            }
+        }
+
         public string Visit(BooleanExpressionNode node)
         {
-            return "";
+            return $"{this.Visit(node.Left)} {this.Visit(node.Left)} {this.Visit(node.Operation)}";
         }
 
         public string Visit(INode node)
