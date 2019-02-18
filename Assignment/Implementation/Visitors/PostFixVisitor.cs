@@ -1,7 +1,7 @@
 ﻿using Assignment.Abstraction;
 using Assignment.Extensions;
 using System;
-using System.Text;
+using System.Linq;
 
 namespace Assignment.Implementation
 {
@@ -9,15 +9,7 @@ namespace Assignment.Implementation
     {
         public string Visit(ProgramNode node)
         {
-            var sb = new StringBuilder();
-
-            foreach(var line in node.Children)
-            {
-                if (line != null)
-                    sb.Append($"{this.Visit(line)}{Environment.NewLine}");
-            }
-
-            return sb.ToString();
+            return string.Join(Environment.NewLine, node.Children.Select(c => this.Visit(c)));
         }
 
         private bool ContainsVariable(INode tree, VariableNode variableNode)
