@@ -143,7 +143,7 @@ namespace Assignment.Implementation
 
         public string Visit(BooleanExpressionNode node)
         {
-            return $"{this.Visit(node.Left)} {this.Visit(node.Left)} {this.Visit(node.Operation)}";
+            return $"{this.Visit(node.Left)} {this.Visit(node.Right)} {this.Visit(node.Operation)}";
         }
 
         public string Visit(INode node)
