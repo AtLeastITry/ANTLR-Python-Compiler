@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Assignment.Implementation.Visitors
 {
@@ -10,7 +9,7 @@ namespace Assignment.Implementation.Visitors
     {
         private readonly List<Tuple<DOTNode, DOTNode>> _connections = new List<Tuple<DOTNode, DOTNode>>();
 
-        private const string labelParams = "shape=\"ellipse\" fontsize=8 width=4 height=1]";
+        private const string labelParams = "shape=\"ellipse\" fontsize=8 width=5 height=1]";
 
         private IEnumerable<string> _connectionsList => _connections.Select(a => $"\"{a.Item1}\" -> \"{a.Item2}\";");
         private HashSet<string> _distinctDefinitions

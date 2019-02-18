@@ -8,7 +8,6 @@ identifier
 	: Identifier
 	| 'INTEGER'
 	| 'DECIMAL'
-	
   ;
 
 expr
@@ -22,6 +21,7 @@ expr
     |   func=ID LPARA expr RPARA              # funcExpr             	
 	|   value=(NUM|VAR)                       # valueExpr
 	;
+
 NUM :   [0-9]+ ('.' [0-9]+)? ([eE] [+-]? [0-9]+)?;
 PLUS    : '+' ;
 MINUS   : '-' ;
