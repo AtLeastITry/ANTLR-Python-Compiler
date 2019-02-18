@@ -102,6 +102,11 @@ namespace Assignment.Implementation.Visitors
                 temp += this.Visit(child, tempIndent);
             }
 
+            if (node.Child != null)
+            {
+                temp += this.Visit(node.Child, tempIndent);
+            }
+
             return temp;
         }
 
@@ -130,6 +135,11 @@ namespace Assignment.Implementation.Visitors
             foreach (var child in node.Body)
             {
                 temp += this.Visit(child, tempIndent);
+            }
+
+            if (node.Child != null)
+            {
+                temp += this.Visit(node.Child, tempIndent);
             }
 
             return temp;

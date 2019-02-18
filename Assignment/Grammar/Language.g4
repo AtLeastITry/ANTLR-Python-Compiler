@@ -18,11 +18,13 @@ statements
 statement
 	: declaration
 	| assignment
-	| ifStatement
-	| elseIfStatement
-	| elseStatement
+	| ifElseStatement
 	| expr
 	;
+
+ifElseStatement
+    : ifStat = ifStatement elseIfStat = elseIfStatement*  elseStat = elseStatement?
+    ;
 
 ifStatement
 	: IF LPARA expression=expr RPARA LBRAC body=statements RBRAC

@@ -103,6 +103,11 @@ digraph {graphName} {{
             {
                 this.Visit(child, childNode);
             }
+
+            if (node.Child != null)
+            {
+                this.Visit(node.Child, childNode);
+            }
         }
 
         private void Visit(ElseStatementNode node, DOTNode parent)
@@ -126,6 +131,11 @@ digraph {graphName} {{
             foreach (var child in node.Body)
             {
                 this.Visit(child, childNode);
+            }
+
+            if (node.Child != null)
+            {
+                this.Visit(node.Child, childNode);
             }
         }
 

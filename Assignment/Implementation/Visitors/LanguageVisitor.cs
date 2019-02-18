@@ -44,6 +44,46 @@ namespace Assignment.Implementation
             return result;
         }
 
+        public override INode VisitIfElseStatement([NotNull] IfElseStatementContext context)
+        {
+            IfStatementNode ifStatement = (IfStatementNode)this.Visit(context.ifStat);
+            var elseIfStatements = context.elseIfStatement().Select(s => this.Visit(s)).ToList();
+            var elseStatement = this.Visit(context.elseStatement());
+
+            if (elseIfStatements != null && elseIfStatements.Count > 0)
+            {
+                for (int i = elseIfStatements.Count - 2; i >= 0; i--)
+                {
+                    ElseIfStatementNode current = (ElseIfStatementNode)elseIfStatements[i];
+                    ElseIfStatementNode sibling = (ElseIfStatementNode)elseIfStatements[i + 1];
+
+                    if (i == elseIfStatements.Count - 2)
+                    {
+                        if (elseStatement != null)
+                        {
+                            elseIfStatements[i + 1] = new ElseIfStatementNode(sibling.Body, sibling.Expression, elseStatement);
+                        }
+                    }
+
+
+                    elseIfStatements[i] = new ElseIfStatementNode(current.Body, current.Expression, elseIfStatements[i + 1]);
+                }
+
+                return new IfStatementNode(ifStatement.Body, ifStatement.Expression, elseIfStatements[0]);
+            }
+            else
+            {
+                if (elseStatement != null)
+                {
+                    return new IfStatementNode(ifStatement.Body, ifStatement.Expression, elseStatement);
+                }
+            }
+
+
+
+            return new IfStatementNode(ifStatement.Body, ifStatement.Expression, null);
+        }
+
         public override INode VisitIfStatement([NotNull] IfStatementContext context)
         {
             var children = new List<INode>();
@@ -60,7 +100,7 @@ namespace Assignment.Implementation
                     children.Add(node);
             }
 
-            return new IfStatementNode(children, this.Visit(context.expression));
+            return new IfStatementNode(children, this.Visit(context.expression), null);
         }
 
         public override INode VisitElseStatement([NotNull] ElseStatementContext context)
@@ -98,7 +138,7 @@ namespace Assignment.Implementation
                     children.Add(node);
             }
 
-            return new ElseIfStatementNode(children, this.Visit(context.expression));
+            return new ElseIfStatementNode(children, this.Visit(context.expression), null);
         }
 
         public override INode VisitBooleanExpr([NotNull] BooleanExprContext context)
