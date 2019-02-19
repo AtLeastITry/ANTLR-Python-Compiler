@@ -22,7 +22,7 @@ namespace Assignment.Services
             try
             {
                 var tree = new LanguageVisitor().VisitCompileUnit(parser.compileUnit());
-                new SemanticAnalyser().Visit(tree);
+                tree = new SemanticAnalyser().Visit(tree);
 
                 return tree;
             }
