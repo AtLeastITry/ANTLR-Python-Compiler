@@ -1,4 +1,6 @@
-﻿namespace Assignment.Abstraction
+﻿using Assignment.Abstraction.Utils;
+
+namespace Assignment.Abstraction
 {
     internal class Symbol
     {
@@ -10,6 +12,6 @@
 
         public string Name { get; }
         public DataTypes Type { get; }
-        public uint Scope { get; set; }
+        public Scope Scope { get; set; }
     }
 }

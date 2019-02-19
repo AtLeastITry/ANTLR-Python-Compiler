@@ -10,6 +10,11 @@ namespace Assignment.Abstraction.Expressions
             this.Children = new List<INode>();
         }
 
+        public ProgramNode(List<INode> nodes)
+        {
+            this.Children = nodes;
+        }
+
         public List<INode> Children { get; }
 
         public string DisplayName()

@@ -21,7 +21,10 @@ namespace Assignment.Services
 
             try
             {
-                return new LanguageVisitor().VisitCompileUnit(parser.compileUnit());
+                var tree = new LanguageVisitor().VisitCompileUnit(parser.compileUnit());
+                new SemanticAnalyser().Visit(tree);
+
+                return tree;
             }
             catch (Exception e)
             {

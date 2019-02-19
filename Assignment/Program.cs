@@ -36,9 +36,12 @@ namespace Assignment
                 var expression = File.ReadAllText(file);
                 var tree = BuildAST(expression);
 
-                VisualiseSourceFile(file, tree);
-                CompileFileToGraph(file, targetDirectory, tree);
-                CompileSourceFile(file, targetDirectory, tree);
+                if (tree != null)
+                {
+                    VisualiseSourceFile(file, tree);
+                    CompileFileToGraph(file, targetDirectory, tree);
+                    CompileSourceFile(file, targetDirectory, tree);
+                }                
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"END {Path.GetFileName(file)}");
@@ -54,10 +57,24 @@ namespace Assignment
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"    START Building AST");
-            var tree = ASTService.CompileToAST(expression);
-            Console.WriteLine($"    END Building AST");
 
-            return tree;
+            try
+            {
+                return ASTService.CompileToAST(expression);
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"        Error: {e.Message}");
+                Console.ResetColor();
+            }
+            finally
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"    END Building AST");
+            }
+
+            return null;
         }
 
         static void VisualiseSourceFile(string file, INode tree)
