@@ -77,8 +77,6 @@ namespace Assignment.Implementation
                 }
             }
 
-
-
             return new IfStatementNode(ifStatement.Body, ifStatement.Expression, null);
         }
 
