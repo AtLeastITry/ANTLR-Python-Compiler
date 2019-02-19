@@ -16,8 +16,6 @@ namespace Assignment.Implementation
 {
     internal class LanguageVisitor : LanguageBaseVisitor<INode>
     {
-        private readonly SymbolTable _symbolTable = new SymbolTable();
-
         public override INode VisitCompileUnit([NotNull] CompileUnitContext context)
         {
             return this.Visit(context.statements());
@@ -181,10 +179,7 @@ namespace Assignment.Implementation
             // Throw if an unsupported data type is attempted
             if (Enum.TryParse(context.type.Text, out DataTypes dataType))
             {
-                // keep track of the variable name and it's data type in the symbol table
-                _symbolTable.Add(new Symbol(name, dataType));
-
-                return new DeclarationNode(name);
+                return new DeclarationNode(name, dataType);
             }
             else
             {
@@ -194,18 +189,6 @@ namespace Assignment.Implementation
 
         public override INode VisitValueExpr([NotNull] ValueExprContext context)
         {
-            // If the value matches a variable in the symbol table then just return a variable node. 
-            // This occurs when a user references a varaible in an expression
-            if (_symbolTable.Contains(context.value.Text))
-            {
-                return new VariableNode(context.value.Text);
-            }
-
-            // if the value doesnt match a variable in the symbol table but is still an alpha set, throw an error.
-            // This occurs when a user attempts to reference an undefined variable
-            if (new Regex("a-zA-Z").IsMatch(context.value.Text))
-                throw new UndefinedVariableException($"Variable \"{context.value.Text}\" has not been defined");
-
             return new ValueNode(context.value.Text);
         }
 
@@ -239,43 +222,7 @@ namespace Assignment.Implementation
         {
             // Remove all new line characters
             var name = context.variable.Text.Replace("\r", "").Replace("\n", "");
-
-            // Throw if the variable being assigned to is undefined.
-            if (!_symbolTable.TryGet(name, out var symbol))
-                throw new UndefinedVariableException($"Variable \"{name}\" has not been defined");
-
-            var right = this.Visit(context.right);
-
-            // If the right side is a value node then attempt to parse the value to either an interger or decimal
-            if (right.GetType() == typeof(ValueNode))
-            {
-                switch (symbol.Type)
-                {
-                    case DataTypes.INTEGER:
-                        if (int.TryParse(((ValueNode)right).Value.ToString(), out int intValue))
-                        {
-                            right = new ValueNode(intValue);
-                        }
-                        else
-                        {
-                            throw new IncorrectDataType($"\"{symbol.Name}\" was expecting data type of {DataTypes.INTEGER.ToString()}");
-                        }
-                        break;
-                    case DataTypes.DECIMAL:
-                        if (decimal.TryParse(((ValueNode)right).Value.ToString(), out decimal decimalValue))
-                        {
-                            right = new ValueNode(decimalValue);
-                        }
-                        else
-                        {
-                            throw new IncorrectDataType($"\"{symbol.Name}\" was expecting data type of {DataTypes.DECIMAL.ToString()}");
-                        }
-                        break;
-
-                }
-            }
-
-            return new AssignmentNode(new VariableNode(name), right);
+            return new AssignmentNode(new VariableNode(name), this.Visit(context.right));
         }
 
         public override INode VisitUnaryExpr([NotNull] UnaryExprContext context)
