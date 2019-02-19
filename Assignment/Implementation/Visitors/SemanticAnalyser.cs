@@ -61,7 +61,7 @@ namespace Assignment.Implementation.Visitors
                 return new VariableNode(node.Value.ToString());
             }
 
-            if (new Regex("a-zA-Z").IsMatch(node.Value.ToString()))
+            if (new Regex("[A-Za-z]+").IsMatch(node.Value.ToString()))
                 throw new UndefinedVariableException($"Variable \"{node.Value}\" has not been defined in the current scope");
 
             return node;
