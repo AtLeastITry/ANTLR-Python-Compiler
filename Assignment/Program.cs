@@ -3,6 +3,7 @@ using Assignment.Graphviz;
 using Assignment.Services;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace Assignment
 {
@@ -12,7 +13,7 @@ namespace Assignment
         {
             string[] files = Directory.GetFiles(@".\source\");
 
-            var targetDirectory = Directory.GetCurrentDirectory() + @"\Target\";
+            var targetDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Target\";
 
             if (!Directory.Exists(targetDirectory))
             {

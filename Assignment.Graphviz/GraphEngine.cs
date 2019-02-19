@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace Assignment.Graphviz
 {
     public static class GraphEngine
     {
-        private const string _exePath = @".\Lib\dot.exe";
 
         private static Process BuildProcess(string filePath)
         {
@@ -14,7 +14,7 @@ namespace Assignment.Graphviz
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.FileName = _exePath;
+            process.StartInfo.FileName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Lib\dot.exe";
             process.StartInfo.Arguments = $"{filePath} -Tjpg -O";
 
             return process;
