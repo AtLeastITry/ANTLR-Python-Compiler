@@ -2,6 +2,7 @@ package ce305.implementation.visitors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
@@ -16,34 +17,41 @@ import ce305.implementation.errors.IncorrectDataType;
 import ce305.implementation.errors.UndefinedVariableException;
 import ce305.implementation.utils.*;
 
-public class SemanticAnalyser
+public class SemanticAnalyser extends ASTVisitor<INode>
 {
-    public INode visit(ProgramNode node) throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    private Stack<SymbolTable> _tableStack = new Stack<>();
+    private SymbolTable symbolTable() {
+        return _tableStack.peek();
+    }
+
+    @Override
+    public INode visit(ProgramNode node)
     {
-        SymbolTable symbolTable = new SymbolTable();
+        _tableStack.add(new SymbolTable());
         ArrayList<INode> children = new ArrayList<>();
 
         for (INode child : node.children) {
-            children.add(this.visit(child, symbolTable));
+            children.add(this.visit(child));
         }
 
         return new ProgramNode(children);
     }
 
-    public INode visit(BinaryExpressionNode node, SymbolTable symbolTable)
-            throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    @Override
+    public INode visit(BinaryExpressionNode node)
     {
-        return new BinaryExpressionNode(this.visit(node.left, symbolTable), this.visit(node.right, symbolTable), node.operation);
+        return new BinaryExpressionNode(this.visit(node.left), this.visit(node.right), node.operation);
     }
 
-    public INode visit(AssignmentNode node, SymbolTable symbolTable) throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    @Override
+    public INode visit(AssignmentNode node)
     {
-        INode left = this.visit(node.left, symbolTable);
-        INode right = this.visit(node.right, symbolTable);
+        INode left = this.visit(node.left);
+        INode right = this.visit(node.right);
 
         if (left instanceof VariableNode)
         {
-            Symbol temp = symbolTable.get(((VariableNode)left).value);
+            Symbol temp = this.symbolTable().get(((VariableNode)left).value);
             if (temp != null)
             {
                 if (!new DataTypeChecker(temp.dataType).visit(right))
@@ -58,20 +66,22 @@ public class SemanticAnalyser
         return new AssignmentNode(left, right);
     }
 
-    public INode visit(NegateNode node, SymbolTable symbolTable) throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    @Override
+    public INode visit(NegateNode node)
     {
-        return new NegateNode(this.visit(node.innerNode, symbolTable));
+        return new NegateNode(this.visit(node.innerNode));
     }
 
-    public INode visit(FunctionNode node, SymbolTable symbolTable)
-            throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    @Override
+    public INode visit(FunctionNode node)
     {
-        return new FunctionNode(node.function, this.visit(node.argument, symbolTable));
+        return new FunctionNode(node.function, this.visit(node.argument));
     }
 
-    public INode visit(ValueNode node, SymbolTable symbolTable) throws UndefinedVariableException
+    @Override
+    public INode visit(ValueNode node)
     {
-        if (symbolTable.contains(node.value.toString()))
+        if (this.symbolTable().contains(node.value.toString()))
         {
             return new VariableNode(node.value.toString());
         } 
@@ -86,132 +96,74 @@ public class SemanticAnalyser
         return node;
     }
 
-    public INode visit(VariableNode node, SymbolTable symbolTable) throws UndefinedVariableException
+    @Override
+    public INode visit(VariableNode node)
     {
-        if (!symbolTable.contains(node.value.toString()))
+        if (!this.symbolTable().contains(node.value.toString()))
             throw new UndefinedVariableException(String.format("Variable \"%\" has not been defined in the current scope", node.value));
 
         return node;
     }
 
-    public INode visit(DeclarationNode node, SymbolTable symbolTable) throws DuplicateDefinitionException
+    @Override
+    public INode visit(DeclarationNode node)
     {
-        if (symbolTable.contains(node.name))
+        if (this.symbolTable().contains(node.name))
             throw new DuplicateDefinitionException(String.format("\"%\" already exists in the current scope", node.name));
 
-        symbolTable.add(new Symbol(node.name, node.dataType));
+            this.symbolTable().add(new Symbol(node.name, node.dataType));
 
         return node;
     }
 
-    public INode visit(IfStatementNode node, SymbolTable symbolTable)
-            throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    @Override
+    public INode visit(IfStatementNode node)
     {
-        SymbolTable tempTable = new SymbolTable(symbolTable);
-
+        _tableStack.add(new SymbolTable(this.symbolTable()));
         ArrayList<INode> body = new ArrayList<>();
 
         for (INode child : node.body) {
-            body.add(this.visit(child, symbolTable));
+            body.add(this.visit(child));
         }
 
-        return new IfStatementNode(body, node.expression, node.child != null ? this.visit(node.child, tempTable) : node.child);
+        _tableStack.pop();
+
+        return new IfStatementNode(body, node.expression, node.child != null ? this.visit(node.child) : node.child);
     }
 
-    public INode visit(ElseStatementNode node, SymbolTable symbolTable)
-            throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    @Override
+    public INode visit(ElseStatementNode node)
     {
-        SymbolTable tempTable = new SymbolTable(symbolTable);
+        _tableStack.add(new SymbolTable(this.symbolTable()));
         ArrayList<INode> body = new ArrayList<>();
 
         for (INode child : node.body) {
-            body.add(this.visit(child, symbolTable));
+            body.add(this.visit(child));
         }
 
+        _tableStack.pop();
         return new ElseStatementNode(body);
     }
 
-    public INode visit(ElseIfStatementNode node, SymbolTable symbolTable)
-            throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    @Override
+    public INode visit(ElseIfStatementNode node)
     {
-        SymbolTable tempTable = new SymbolTable(symbolTable);
+        _tableStack.add(new SymbolTable(this.symbolTable()));
 
         ArrayList<INode> body = new ArrayList<>();
 
         for (INode child : node.body) {
-            body.add(this.visit(child, symbolTable));
+            body.add(this.visit(child));
         }
-
+        _tableStack.pop();
         return new ElseIfStatementNode(
-            body, node.expression, node.child != null ? this.visit(node.child, tempTable) : node.child
+            body, node.expression, node.child != null ? this.visit(node.child) : node.child
         );
     }
 
-    public INode visit(BooleanExpressionNode node, SymbolTable symbolTable)
-            throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
+    @Override
+    public INode visit(BooleanExpressionNode node)
     {
-        return new BooleanExpressionNode(this.visit(node.left, symbolTable), this.visit(node.right, symbolTable), node.operation);
-    }
-
-    public INode visit(INode node, SymbolTable symbolTable) throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
-    {
-        if (node instanceof ProgramNode) {
-            return this.visit((ProgramNode)node);
-        }
-
-        if (node instanceof BinaryExpressionNode) {
-            return this.visit((BinaryExpressionNode)node, symbolTable);
-        }
-
-        if (node instanceof AssignmentNode) {
-            return this.visit((AssignmentNode)node, symbolTable);
-        }
-
-        if (node instanceof NegateNode) {
-            return this.visit((NegateNode)node, symbolTable);
-        }
-
-        if (node instanceof FunctionNode) {
-            return this.visit((FunctionNode)node, symbolTable);
-        }
-
-        if (node instanceof ValueNode) {
-            return this.visit((ValueNode)node, symbolTable);
-        }
-
-        if (node instanceof VariableNode) {
-            return this.visit((VariableNode)node, symbolTable);
-        }
-
-        if (node instanceof DeclarationNode) {
-            return this.visit((DeclarationNode)node, symbolTable);
-        }
-
-        if (node instanceof IfStatementNode) {
-            return this.visit((IfStatementNode)node, symbolTable);
-        }
-
-        if (node instanceof ElseStatementNode) {
-            return this.visit((ElseStatementNode)node, symbolTable);
-        }
-
-        if (node instanceof ElseIfStatementNode) {
-            return this.visit((ElseIfStatementNode)node, symbolTable);
-        }
-
-        if (node instanceof BooleanExpressionNode) {
-            return this.visit((BooleanExpressionNode)node, symbolTable);
-        }
-
-        return null;
-    }
-
-    public INode visit(INode node) throws IncorrectDataType, UndefinedVariableException, DuplicateDefinitionException
-    {
-        if (node instanceof ProgramNode) {
-            return this.visit((ProgramNode)node);
-        }
-
-        return null;
+        return new BooleanExpressionNode(this.visit(node.left), this.visit(node.right), node.operation);
     }
 }
