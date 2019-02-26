@@ -68,7 +68,12 @@ expr
 	|   value=(NUM|VAR)                                                                                                 # valueExpr
 	|   NOT expr																										# notExpr
 	|   left=expr op=(EQUALS|NEGATIVEEQUALS|GREATERTHAN|LESSTHAN|GREATERTHANEQUALS|LESSTHANEQUALS|OR|AND) right=expr	# booleanExpr
+	|   name=VAR '(' params=functionCallParam* ')'                                                                      # functionCallExpr
 	;
+
+functionCallParam
+    : (expr | ',' expr)
+    ;
 
 // Binary operations
 PLUS    : '+' ;

@@ -124,10 +124,23 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBooleanExpr(LanguageParser.BooleanExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code functionCallExpr}
+	 * labeled alternative in {@link LanguageParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCallExpr(LanguageParser.FunctionCallExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code parensExpr}
 	 * labeled alternative in {@link LanguageParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParensExpr(LanguageParser.ParensExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LanguageParser#functionCallParam}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCallParam(LanguageParser.FunctionCallParamContext ctx);
 }

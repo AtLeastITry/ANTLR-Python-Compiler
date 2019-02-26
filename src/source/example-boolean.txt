@@ -1,12 +1,12 @@
 float a;
 a = 50;
 
-int something(int arg, float test) {
-    return 1;
+float something(float input) {
+    return input * 3;
 };
 
 if (a > 10) {
-	a = a + 10;
+	a = something(a);
 } 
 else if (a == 5) {
 	a = a + 5;

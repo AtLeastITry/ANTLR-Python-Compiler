@@ -5,10 +5,12 @@ import ce305.abstraction.expressions.AssignmentNode;
 import ce305.abstraction.expressions.BinaryExpressionNode;
 import ce305.abstraction.expressions.BooleanExpressionNode;
 import ce305.abstraction.expressions.DeclarationNode;
+import ce305.abstraction.expressions.FunctionCallNode;
 import ce305.abstraction.expressions.NegateNode;
 import ce305.abstraction.expressions.ProgramNode;
 import ce305.abstraction.expressions.ValueNode;
 import ce305.abstraction.expressions.VariableNode;
+import ce305.abstraction.functions.FunctionCallParamNode;
 import ce305.abstraction.functions.FunctionNode;
 import ce305.abstraction.functions.FunctionParamNode;
 import ce305.abstraction.statements.ElseIfStatementNode;
@@ -306,5 +308,28 @@ public class PythonVisitor extends ASTVisitor<String> {
         output.append(this.visit(node.expression));
 
         return output.toString();
+    }
+
+    @Override
+    public String visit(FunctionCallNode node) {
+        StringBuilder output = new StringBuilder();
+
+        output.append(node.name);
+        output.append("(");
+        for (int i = 0; i < node.params.size(); i++) {
+            if (i > 0) {
+                output.append(", ");
+            }
+
+            output.append(this.visit(node.params.get(i)));
+        }
+        output.append(")");
+
+        return output.toString();
+    }
+
+    @Override
+    public String visit(FunctionCallParamNode node) {
+        return this.visit(node.expression);
     }
 }

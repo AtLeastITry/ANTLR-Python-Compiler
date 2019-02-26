@@ -10,10 +10,12 @@ import ce305.abstraction.expressions.AssignmentNode;
 import ce305.abstraction.expressions.BinaryExpressionNode;
 import ce305.abstraction.expressions.BooleanExpressionNode;
 import ce305.abstraction.expressions.DeclarationNode;
+import ce305.abstraction.expressions.FunctionCallNode;
 import ce305.abstraction.expressions.NegateNode;
 import ce305.abstraction.expressions.ProgramNode;
 import ce305.abstraction.expressions.ValueNode;
 import ce305.abstraction.expressions.VariableNode;
+import ce305.abstraction.functions.FunctionCallParamNode;
 import ce305.abstraction.functions.FunctionNode;
 import ce305.abstraction.functions.FunctionParamNode;
 import ce305.abstraction.statements.ElseIfStatementNode;
@@ -59,7 +61,7 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
         if (left instanceof VariableNode) {
             Symbol temp = this.symbolTable().get(((VariableNode) left).value);
             if (temp != null) {
-                if (!new DataTypeChecker(temp.dataType).visit(right))
+                if (!new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right))
                     throw new IncorrectDataType(
                             String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
             } else {
@@ -78,6 +80,7 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
 
     @Override
     public INode visit(FunctionNode node) {
+        this.symbolTable().add(new Symbol(node.name, node.dataType, node.params));
         _tableStack.add(new SymbolTable(this.symbolTable()));
         ArrayList<INode> body = new ArrayList<>();
 
@@ -191,6 +194,16 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
 
     @Override
     public INode visit(FunctionReturnStatementNode node) {
+        return node;
+    }
+
+    @Override
+    public INode visit(FunctionCallNode node) {
+        return node;
+    }
+
+    @Override
+    public INode visit(FunctionCallParamNode node) {
         return node;
     }
 }

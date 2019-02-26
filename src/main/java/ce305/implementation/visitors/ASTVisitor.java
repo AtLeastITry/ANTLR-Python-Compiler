@@ -21,6 +21,8 @@ public abstract class ASTVisitor<T> {
     public abstract T visit(WhileStatementNode node);
     public abstract T visit(FunctionParamNode node);
     public abstract T visit(FunctionReturnStatementNode node);
+    public abstract T visit(FunctionCallNode node);
+    public abstract T visit(FunctionCallParamNode node);
 
     public T visit(INode node)
     {
@@ -82,6 +84,14 @@ public abstract class ASTVisitor<T> {
 
         if (node instanceof FunctionReturnStatementNode) {
             return this.visit((FunctionReturnStatementNode)node);
+        }
+
+        if (node instanceof FunctionCallNode) {
+            return this.visit((FunctionCallNode)node);
+        }
+
+        if (node instanceof FunctionCallParamNode) {
+            return this.visit((FunctionCallParamNode)node);
         }
 
         return null;

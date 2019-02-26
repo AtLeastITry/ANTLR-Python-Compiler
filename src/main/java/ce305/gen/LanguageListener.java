@@ -198,6 +198,18 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitBooleanExpr(LanguageParser.BooleanExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code functionCallExpr}
+	 * labeled alternative in {@link LanguageParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCallExpr(LanguageParser.FunctionCallExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code functionCallExpr}
+	 * labeled alternative in {@link LanguageParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCallExpr(LanguageParser.FunctionCallExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code parensExpr}
 	 * labeled alternative in {@link LanguageParser#expr}.
 	 * @param ctx the parse tree
@@ -209,4 +221,14 @@ public interface LanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParensExpr(LanguageParser.ParensExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LanguageParser#functionCallParam}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCallParam(LanguageParser.FunctionCallParamContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LanguageParser#functionCallParam}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCallParam(LanguageParser.FunctionCallParamContext ctx);
 }
