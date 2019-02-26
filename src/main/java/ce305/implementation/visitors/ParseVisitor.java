@@ -19,6 +19,7 @@ import ce305.abstraction.expressions.VariableNode;
 import ce305.abstraction.statements.ElseIfStatementNode;
 import ce305.abstraction.statements.ElseStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
+import ce305.abstraction.statements.WhileStatementNode;
 import ce305.abstraction.utils.KeyWords;
 import ce305.gen.*;
 import ce305.gen.LanguageParser.*;
@@ -68,6 +69,11 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         IfElseStatementContext ifElseStatement = context.ifElseStatement();
         if (ifElseStatement != null) {
             return this.visitIfElseStatement(ifElseStatement);
+        }
+
+        WhileStatementContext whileStatement = context.whileStatement();
+        if (whileStatement != null) {
+            return this.visitWhileStatement(whileStatement);
         }
 
         ExprContext expr = context.expr();
@@ -182,6 +188,21 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         }
 
         return new ElseIfStatementNode(children, this.visitExpr(context.expression), null);
+    }
+
+    @Override
+    public INode visitWhileStatement(WhileStatementContext context) {
+        List<INode> children = new ArrayList<>();
+        for (StatementContext statement: context.body.statement())
+        {
+            INode node = this.visitStatement(statement);
+
+            // If the node is null then it was probably a new line
+            if (node != null)
+                children.add(node);
+        }
+
+        return new WhileStatementNode(children, this.visitExpr(context.expression));
     }
 
     public INode visitBooleanExpr(BooleanExprContext context)

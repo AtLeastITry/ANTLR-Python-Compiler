@@ -1,4 +1,4 @@
-int a;
+float a;
 a = 50;
 
 if (a > 10) {

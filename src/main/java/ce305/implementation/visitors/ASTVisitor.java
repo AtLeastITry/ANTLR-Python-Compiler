@@ -17,6 +17,7 @@ public abstract class ASTVisitor<T> {
     public abstract T visit(ElseStatementNode node);
     public abstract T visit(ElseIfStatementNode node);
     public abstract T visit(BooleanExpressionNode node);
+    public abstract T visit(WhileStatementNode node);
 
     public T visit(INode node)
     {
@@ -66,6 +67,10 @@ public abstract class ASTVisitor<T> {
 
         if (node instanceof BooleanExpressionNode) {
             return this.visit((BooleanExpressionNode)node);
+        }
+
+        if (node instanceof WhileStatementNode) {
+            return this.visit((WhileStatementNode)node);
         }
 
         return null;

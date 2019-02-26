@@ -29,6 +29,30 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatement(LanguageParser.StatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LanguageParser#functionStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionStatement(LanguageParser.FunctionStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LanguageParser#functionReturnStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionReturnStatement(LanguageParser.FunctionReturnStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LanguageParser#functionParam}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionParam(LanguageParser.FunctionParamContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LanguageParser#whileStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileStatement(LanguageParser.WhileStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LanguageParser#ifElseStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

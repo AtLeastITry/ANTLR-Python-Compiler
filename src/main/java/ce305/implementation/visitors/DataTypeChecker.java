@@ -44,7 +44,7 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
                 case INTEGER:
                     Integer.parseInt(node.value.toString());
                     break;
-                case DECIMAL:
+                case FLOAT:
                     Float.parseFloat(node.value.toString());
                     break;
             }
@@ -84,5 +84,10 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
     @Override
     public Boolean visit(BooleanExpressionNode node) {
         return this.visit(node.left) && this.visit(node.right);
+    }
+
+    @Override
+    public Boolean visit(WhileStatementNode node) {
+        return node.body.stream().allMatch(c -> this.visit(c));
     }
 }

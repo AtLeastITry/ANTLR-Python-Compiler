@@ -9,11 +9,30 @@ statements
 	;
 
 statement
-	: declaration
+	: functionStatement
+	| functionReturnStatement
+	| declaration
 	| assignment
 	| ifElseStatement
+	| whileStatement
 	| expr
 	;
+
+functionStatement
+    : type=('int'|'float') name=VAR '(' params=functionParam* ')' '{' body=statements '}'
+    ;
+
+functionReturnStatement
+    : 'return' expression=expr
+    ;
+
+functionParam
+    : param=declaration | ',' param=declaration
+    ;
+
+whileStatement
+    : 'while' '(' expression=expr ')' '{' body=statements '}'
+    ;
 
 ifElseStatement
     : ifStat = ifStatement elseIfStat = elseIfStatement*  elseStat = elseStatement?
@@ -36,12 +55,12 @@ assignment
 	;
 
 declaration
-	: type=('int'|'decimal') name=VAR
+	: type=('int'|'float') name=VAR
 	;
 
 
 expr
-    :   '(' expr ')'                                                                                                # parensExpr
+    :   '(' expr ')'                                                                                                    # parensExpr
     |   op=(PLUS|MINUS) expr                                                                                            # unaryExpr
 	|	left=expr op=POWER right=expr                                                                                   # infixExpr
     |   left=expr op=(MULT|DIV) right=expr                                                                              # infixExpr

@@ -38,6 +38,46 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitStatement(LanguageParser.StatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LanguageParser#functionStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionStatement(LanguageParser.FunctionStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LanguageParser#functionStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionStatement(LanguageParser.FunctionStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LanguageParser#functionReturnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionReturnStatement(LanguageParser.FunctionReturnStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LanguageParser#functionReturnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionReturnStatement(LanguageParser.FunctionReturnStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LanguageParser#functionParam}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionParam(LanguageParser.FunctionParamContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LanguageParser#functionParam}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionParam(LanguageParser.FunctionParamContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LanguageParser#whileStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhileStatement(LanguageParser.WhileStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LanguageParser#whileStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhileStatement(LanguageParser.WhileStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LanguageParser#ifElseStatement}.
 	 * @param ctx the parse tree
 	 */

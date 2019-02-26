@@ -13,10 +13,11 @@ import ce305.abstraction.expressions.VariableNode;
 import ce305.abstraction.statements.ElseIfStatementNode;
 import ce305.abstraction.statements.ElseStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
+import ce305.abstraction.statements.WhileStatementNode;
 
 public class PythonVisitor extends ASTVisitor<String> {
     private int _numIndent;
-
+    private Boolean _needsNewLine = false;
     public PythonVisitor() {
         _numIndent = 0;
     }
@@ -24,9 +25,10 @@ public class PythonVisitor extends ASTVisitor<String> {
     private void addLine(StringBuilder output) {
         output.append("\r\n");
     }
+
     private void addIndent(StringBuilder output) {
         for (int i = 0; i < _numIndent; i++) {
-            output.append("\t");   
+            output.append("\t");
         }
     }
 
@@ -35,11 +37,22 @@ public class PythonVisitor extends ASTVisitor<String> {
         StringBuilder output = new StringBuilder();
 
         for (int i = 0; i < node.children.size(); i++) {
-            if (i > 0) {
+            INode child = node.children.get(i);
+
+            if (_needsNewLine) {
                 this.addLine(output);
             }
-            
-            String temp = this.visit(node.children.get(i));
+
+            // Python doesn't require declaration of nodes so we can skip any that appear.
+            if (child instanceof DeclarationNode) {
+                continue;
+            }
+
+            if (i > 0 && !_needsNewLine) {
+                _needsNewLine = true;
+            }
+
+            String temp = this.visit(child);
             output.append(temp);
         }
 
@@ -50,25 +63,24 @@ public class PythonVisitor extends ASTVisitor<String> {
     public String visit(BinaryExpressionNode node) {
         StringBuilder output = new StringBuilder();
         output.append(this.visit(node.left));
-        
-        switch(node.operation)
-        {
-            case ADDITION:
-                output.append(" + ");
-                break;
-            case SUBTRACTION:
-                output.append(" - ");
-                break;
-            case MULTIPLICATION:
-                output.append(" * ");
-                break;
-            case DIVISION:
-                output.append(" / ");
-                break;
-            case POWER:
-                output.append(" ^ ");
-                break;
-            default:
+
+        switch (node.operation) {
+        case ADDITION:
+            output.append(" + ");
+            break;
+        case SUBTRACTION:
+            output.append(" - ");
+            break;
+        case MULTIPLICATION:
+            output.append(" * ");
+            break;
+        case DIVISION:
+            output.append(" / ");
+            break;
+        case POWER:
+            output.append(" ^ ");
+            break;
+        default:
         }
 
         output.append(this.visit(node.right));
@@ -207,35 +219,55 @@ public class PythonVisitor extends ASTVisitor<String> {
 
         output.append(this.visit(node.left));
 
-        switch(node.operation)
-        {
-            case EQUALS:
-                output.append(" == ");
-                break;
-            case NEGATIVEEQUALS:
-                output.append(" != ");
-                break;
-            case GREATERTHAN:
-                output.append(" > ");
-                break;
-            case LESSTHAN:
-                output.append(" < ");
-                break;
-            case GREATERTHANEQUALS:
-                output.append(" >= ");
-                break;
-            case LESSTHANEQUALS:
-                output.append(" <= ");
-                break;
-            case OR:
-                output.append(" or ");
-                break;
-            case AND:
-                output.append(" and ");
-                break;
+        switch (node.operation) {
+        case EQUALS:
+            output.append(" == ");
+            break;
+        case NEGATIVEEQUALS:
+            output.append(" != ");
+            break;
+        case GREATERTHAN:
+            output.append(" > ");
+            break;
+        case LESSTHAN:
+            output.append(" < ");
+            break;
+        case GREATERTHANEQUALS:
+            output.append(" >= ");
+            break;
+        case LESSTHANEQUALS:
+            output.append(" <= ");
+            break;
+        case OR:
+            output.append(" or ");
+            break;
+        case AND:
+            output.append(" and ");
+            break;
         }
 
         output.append(this.visit(node.right));
+
+        return output.toString();
+    }
+
+    @Override
+    public String visit(WhileStatementNode node) {
+        StringBuilder output = new StringBuilder();
+
+        output.append("while ");
+        output.append(this.visit(node.expression));
+        output.append(":");
+
+        _numIndent++;
+
+        for (INode child : node.body) {
+            addLine(output);
+            addIndent(output);
+            output.append(this.visit(child));
+        }
+
+        _numIndent--;
 
         return output.toString();
     }
