@@ -1,4 +1,4 @@
-INTEGER a;
+int a;
 a = 50;
 
 if (a > 10) {

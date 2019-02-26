@@ -1,11 +1,5 @@
 grammar Language;
 
-
-identifier
-	: 'INTEGER'
-	| 'DECIMAL'
-	;
-
 compileUnit
     : statements
     ;
@@ -42,7 +36,7 @@ assignment
 	;
 
 declaration
-	: type=('INTEGER'|'DECIMAL') name=VAR
+	: type=('int'|'decimal') name=VAR
 	;
 
 

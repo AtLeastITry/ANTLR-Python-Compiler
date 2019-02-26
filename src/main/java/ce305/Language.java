@@ -24,7 +24,7 @@ public class Language {
                 System.in.read();
             }
         } catch(Exception e) {
-            
+            System.out.println(e.getMessage());
         }
     }
 

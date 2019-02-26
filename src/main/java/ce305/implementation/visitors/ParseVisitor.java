@@ -223,12 +223,13 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         }
 
         // Throw if an unsupported data type is attempted
-        try {
-            return new DeclarationNode(name, DataType.valueOf(context.type.getText()));
+        DataType dataType = KeyWords.getType(context.type.getText());
+
+        if (dataType == null) {
+            throw new UnsupportedDataTypeException(String.format("The data type: %s is currently unsupported", context.type.getText()));
         }
-        catch(Exception e) {
-            throw new UnsupportedDataTypeException(String.format("The data type: %s is currently unsupported", context.type.getText()));            
-        }
+        
+        return new DeclarationNode(name, dataType);
     }
 
     public INode visitValueExpr(ValueExprContext context)
