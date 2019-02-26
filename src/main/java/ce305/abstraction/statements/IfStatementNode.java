@@ -9,7 +9,7 @@ public class IfStatementNode implements INode {
     public final INode child;
     public final INode expression;
 
-    public IfStatementNode(Collection<INode> body, INode child, INode expression) {
+    public IfStatementNode(Collection<INode> body, INode expression, INode child) {
         super();
         this.body = body;
         this.child = child;

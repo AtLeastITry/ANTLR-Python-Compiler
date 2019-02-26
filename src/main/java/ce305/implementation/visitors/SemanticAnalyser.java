@@ -1,21 +1,28 @@
 package ce305.implementation.visitors;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import ce305.abstraction.*;
-import ce305.abstraction.expressions.*;
-import ce305.abstraction.statements.*;
+import ce305.abstraction.INode;
+import ce305.abstraction.expressions.AssignmentNode;
+import ce305.abstraction.expressions.BinaryExpressionNode;
+import ce305.abstraction.expressions.BooleanExpressionNode;
+import ce305.abstraction.expressions.DeclarationNode;
+import ce305.abstraction.expressions.FunctionNode;
+import ce305.abstraction.expressions.NegateNode;
+import ce305.abstraction.expressions.ProgramNode;
+import ce305.abstraction.expressions.ValueNode;
+import ce305.abstraction.expressions.VariableNode;
+import ce305.abstraction.statements.ElseIfStatementNode;
+import ce305.abstraction.statements.ElseStatementNode;
+import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.utils.Symbol;
 import ce305.implementation.errors.DuplicateDefinitionException;
 import ce305.implementation.errors.IncorrectDataType;
 import ce305.implementation.errors.UndefinedVariableException;
-import ce305.implementation.utils.*;
+import ce305.implementation.utils.SymbolTable;
 
 public class SemanticAnalyser extends ASTVisitor<INode>
 {
@@ -55,11 +62,11 @@ public class SemanticAnalyser extends ASTVisitor<INode>
             if (temp != null)
             {
                 if (!new DataTypeChecker(temp.dataType).visit(right))
-                    throw new IncorrectDataType(String.format("\"%\" was expecting data type of %", temp.name, temp.dataType));
+                    throw new IncorrectDataType(String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
             }
             else
             {
-                throw new UndefinedVariableException(String.format("Variable \"%\" has not been defined in the current scope", ((VariableNode)left).value));
+                throw new UndefinedVariableException(String.format("Variable \"%s\" has not been defined in the current scope", ((VariableNode)left).value));
             }
         }
 
@@ -90,7 +97,7 @@ public class SemanticAnalyser extends ASTVisitor<INode>
         Matcher m = p.matcher(node.value.toString());
 
         if (m.find()) {
-            throw new UndefinedVariableException(String.format("Variable \"%\" has not been defined in the current scope", node.value));
+            throw new UndefinedVariableException(String.format("Variable \"%s\" has not been defined in the current scope", node.value));
         }            
 
         return node;
@@ -100,7 +107,7 @@ public class SemanticAnalyser extends ASTVisitor<INode>
     public INode visit(VariableNode node)
     {
         if (!this.symbolTable().contains(node.value.toString()))
-            throw new UndefinedVariableException(String.format("Variable \"%\" has not been defined in the current scope", node.value));
+            throw new UndefinedVariableException(String.format("Variable \"%s\" has not been defined in the current scope", node.value));
 
         return node;
     }
@@ -109,7 +116,7 @@ public class SemanticAnalyser extends ASTVisitor<INode>
     public INode visit(DeclarationNode node)
     {
         if (this.symbolTable().contains(node.name))
-            throw new DuplicateDefinitionException(String.format("\"%\" already exists in the current scope", node.name));
+            throw new DuplicateDefinitionException(String.format("\"%s\" already exists in the current scope", node.name));
 
             this.symbolTable().add(new Symbol(node.name, node.dataType));
 

@@ -1,5 +1,5 @@
+// Generated from C:/Git/CE305/src/main/antlr4\Language.g4 by ANTLR 4.7.2
 package ce305.gen;
-// Generated from D:/Git/assignment/src/main/antlr4\Language.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -131,18 +131,6 @@ public interface LanguageListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnaryExpr(LanguageParser.UnaryExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code funcExpr}
-	 * labeled alternative in {@link LanguageParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterFuncExpr(LanguageParser.FuncExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code funcExpr}
-	 * labeled alternative in {@link LanguageParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitFuncExpr(LanguageParser.FuncExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code valueExpr}
 	 * labeled alternative in {@link LanguageParser#expr}.

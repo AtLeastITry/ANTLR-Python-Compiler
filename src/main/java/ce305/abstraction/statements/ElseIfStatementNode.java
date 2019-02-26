@@ -9,7 +9,7 @@ public class ElseIfStatementNode implements INode {
     public final INode child;
     public final INode expression;
 
-    public ElseIfStatementNode(List<INode> body, INode child, INode expression) {
+    public ElseIfStatementNode(List<INode> body, INode expression, INode child) {
         super();
         this.body = body;
         this.child = child;

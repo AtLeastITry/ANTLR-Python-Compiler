@@ -20,29 +20,13 @@ import ce305.abstraction.statements.ElseIfStatementNode;
 import ce305.abstraction.statements.ElseStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.utils.KeyWords;
-import ce305.gen.LanguageBaseVisitor;
-import ce305.gen.LanguageLexer;
-import ce305.gen.LanguageParser.AssignmentContext;
-import ce305.gen.LanguageParser.BooleanExprContext;
-import ce305.gen.LanguageParser.CompileUnitContext;
-import ce305.gen.LanguageParser.DeclarationContext;
-import ce305.gen.LanguageParser.ElseIfStatementContext;
-import ce305.gen.LanguageParser.ElseStatementContext;
-import ce305.gen.LanguageParser.IfElseStatementContext;
-import ce305.gen.LanguageParser.IfStatementContext;
-import ce305.gen.LanguageParser.InfixExprContext;
-import ce305.gen.LanguageParser.ParensExprContext;
-import ce305.gen.LanguageParser.StatementContext;
-import ce305.gen.LanguageParser.StatementsContext;
-import ce305.gen.LanguageParser.UnaryExprContext;
-import ce305.gen.LanguageParser.ValueExprContext;
+import ce305.gen.*;
+import ce305.gen.LanguageParser.*;
 import ce305.implementation.errors.KeywordException;
 import ce305.implementation.errors.UnsupportedDataTypeException;
 import ce305.implementation.errors.UnsupportedNodeException;
 
 public class ParseVisitor extends LanguageBaseVisitor<INode> {
-    public List<Exception> exceptions = new ArrayList<>();
-
     public INode visitCompileUnit(CompileUnitContext context)
     {
         return this.visitStatements(context.statements());
@@ -58,7 +42,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
             {
                 continue;
             }
-            INode node = this.visit(statement);
+            INode node = this.visitStatement(statement);
 
             // If the node is null then it was probably a new line
             if (node != null) {
@@ -67,6 +51,54 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         }
 
         return result;
+    }
+
+    @Override
+    public INode visitStatement(StatementContext context) {
+        DeclarationContext declaration = context.declaration();
+        if (declaration != null) {
+            return this.visitDeclaration(declaration);
+        }
+
+        AssignmentContext assignment = context.assignment();
+        if (assignment != null) {
+            return this.visitAssignment(assignment);
+        }
+
+        IfElseStatementContext ifElseStatement = context.ifElseStatement();
+        if (ifElseStatement != null) {
+            return this.visitIfElseStatement(ifElseStatement);
+        }
+
+        ExprContext expr = context.expr();
+        if (expr != null) {
+            return this.visitExpr(expr);
+        }
+
+        return null;
+    }
+
+    public INode visitExpr(ExprContext context) {
+        if (context instanceof ParensExprContext) {
+            return this.visitParensExpr((ParensExprContext)context);
+        }
+        if (context instanceof UnaryExprContext) {
+            return this.visitUnaryExpr((UnaryExprContext)context);
+        }
+        if (context instanceof InfixExprContext) {
+            return this.visitInfixExpr((InfixExprContext)context);
+        }
+        if (context instanceof ValueExprContext) {
+            return this.visitValueExpr((ValueExprContext)context);
+        }
+        if (context instanceof NotExprContext) {
+            return this.visitNotExpr((NotExprContext)context);
+        }
+        if (context instanceof BooleanExprContext) {
+            return this.visitBooleanExpr((BooleanExprContext)context);
+        }
+
+        return null;
     }
 
     public INode visitIfElseStatement(IfElseStatementContext context)
@@ -112,19 +144,14 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         List<INode> children = new ArrayList<>();
         for (StatementContext statement: context.body.statement())
         {
-            if (statement.toString() != null || statement.toString() != "")
-            {
-                continue;
-            }
-
-            INode node = this.visit(statement);
+            INode node = this.visitStatement(statement);
 
             // If the node is null then it was probably a new line
             if (node != null)
                 children.add(node);
         }
 
-        return new IfStatementNode(children, this.visit(context.expression), null);
+        return new IfStatementNode(children, this.visitExpr(context.expression), null);
     }
 
     public INode visitElseStatement(ElseStatementContext context)
@@ -132,12 +159,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         List<INode> children = new ArrayList<>();
         for (StatementContext statement: context.body.statement())
         {
-            if (statement.toString() != null || statement.toString() != "")
-            {
-                continue;
-            }
-
-            INode node = this.visit(statement);
+            INode node = this.visitStatement(statement);
 
             // If the node is null then it was probably a new line
             if (node != null)
@@ -152,19 +174,14 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         List<INode> children = new ArrayList<>();
         for (StatementContext statement: context.body.statement())
         {
-            if (statement.toString() != null || statement.toString() != "")
-            {
-                continue;
-            }
-
-            INode node = this.visit(statement);
+            INode node = this.visitStatement(statement);
 
             // If the node is null then it was probably a new line
             if (node != null)
                 children.add(node);
         }
 
-        return new ElseIfStatementNode(children, this.visit(context.expression), null);
+        return new ElseIfStatementNode(children, this.visitExpr(context.expression), null);
     }
 
     public INode visitBooleanExpr(BooleanExprContext context)
@@ -173,25 +190,24 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         switch (context.op.getType())
         {
             case LanguageLexer.EQUALS:
-                return new BooleanExpressionNode(this.visit(context.left), this.visit(context.right), BooleanOperation.EQUALS);
+                return new BooleanExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), BooleanOperation.EQUALS);
             case LanguageLexer.NEGATIVEEQUALS:
-                return new BooleanExpressionNode(this.visit(context.left), this.visit(context.right), BooleanOperation.NEGATIVEEQUALS);
+                return new BooleanExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), BooleanOperation.NEGATIVEEQUALS);
             case LanguageLexer.GREATERTHAN:
-                return new BooleanExpressionNode(this.visit(context.left), this.visit(context.right), BooleanOperation.GREATERTHAN);
+                return new BooleanExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), BooleanOperation.GREATERTHAN);
             case LanguageLexer.LESSTHAN:
-                return new BooleanExpressionNode(this.visit(context.left), this.visit(context.right), BooleanOperation.LESSTHAN);
+                return new BooleanExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), BooleanOperation.LESSTHAN);
             case LanguageLexer.GREATERTHANEQUALS:
-                return new BooleanExpressionNode(this.visit(context.left), this.visit(context.right), BooleanOperation.GREATERTHANEQUALS);
+                return new BooleanExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), BooleanOperation.GREATERTHANEQUALS);
             case LanguageLexer.LESSTHANEQUALS:
-                return new BooleanExpressionNode(this.visit(context.left), this.visit(context.right), BooleanOperation.LESSTHANEQUALS);
+                return new BooleanExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), BooleanOperation.LESSTHANEQUALS);
             case LanguageLexer.OR:
-                return new BooleanExpressionNode(this.visit(context.left), this.visit(context.right), BooleanOperation.OR);
+                return new BooleanExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), BooleanOperation.OR);
             case LanguageLexer.AND:
-                return new BooleanExpressionNode(this.visit(context.left), this.visit(context.right), BooleanOperation.AND);
+                return new BooleanExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), BooleanOperation.AND);
             default:
                 // This occurs when a user has attempted to use an expression operator that is not supported.
-                exceptions.add(new UnsupportedNodeException("Node is unsupported"));
-                return null;
+                throw new UnsupportedNodeException("Node is unsupported");
         }
     }
 
@@ -203,8 +219,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         if (KeyWords.check(name))
         {
             // This occurs when a user has attempted to use an expression operator that is not supported.
-            exceptions.add(new KeywordException(String.format("You cannot use the keyword % as an identifier", name)));
-            return null;
+            throw new KeywordException(String.format("You cannot use the keyword %s as an identifier", name));            
         }
 
         // Throw if an unsupported data type is attempted
@@ -212,8 +227,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
             return new DeclarationNode(name, DataType.valueOf(context.type.getText()));
         }
         catch(Exception e) {
-            exceptions.add(new UnsupportedDataTypeException(String.format("The data type: % is currently unsupported", context.type.getText())));
-            return null;
+            throw new UnsupportedDataTypeException(String.format("The data type: %s is currently unsupported", context.type.getText()));            
         }
     }
 
@@ -224,7 +238,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
 
     public INode visitParensExpr(ParensExprContext context)
     {
-        return this.visit(context.expr());
+        return this.visitExpr(context.expr());
     }
 
     public INode visitInfixExpr(InfixExprContext context)
@@ -233,19 +247,18 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         switch(context.op.getType())
         {
             case LanguageLexer.PLUS:
-                return new BinaryExpressionNode(this.visit(context.left), this.visit(context.right), ArithmeticOperation.ADDITION);
+                return new BinaryExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), ArithmeticOperation.ADDITION);
             case LanguageLexer.MINUS:
-                return new BinaryExpressionNode(this.visit(context.left), this.visit(context.right), ArithmeticOperation.SUBTRACTION);
+                return new BinaryExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), ArithmeticOperation.SUBTRACTION);
             case LanguageLexer.MULT:
-                return new BinaryExpressionNode(this.visit(context.left), this.visit(context.right), ArithmeticOperation.MULTIPLICATION);
+                return new BinaryExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), ArithmeticOperation.MULTIPLICATION);
             case LanguageLexer.DIV:
-                return new BinaryExpressionNode(this.visit(context.left), this.visit(context.right), ArithmeticOperation.DIVISION);
+                return new BinaryExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), ArithmeticOperation.DIVISION);
             case LanguageLexer.POWER:
-                return new BinaryExpressionNode(this.visit(context.left), this.visit(context.right), ArithmeticOperation.POWER);
+                return new BinaryExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right), ArithmeticOperation.POWER);
             default:
                 // This occurs when a user has attempted to use an expression operator that is not supported.
-                exceptions.add(new UnsupportedNodeException("Node is unsupported"));
-                return null;
+                throw new UnsupportedNodeException("Node is unsupported");
         }
     }
 
@@ -253,7 +266,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
     {
         // Remove all new line characters
         String name = context.variable.getText().replace("\r", "").replace("\n", "");
-        return new AssignmentNode(new VariableNode(name), this.visit(context.right));
+        return new AssignmentNode(new VariableNode(name), this.visitExpr(context.right));
     }
 
     public INode visitUnaryExpr(UnaryExprContext context)
@@ -262,12 +275,11 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         switch(context.op.getType())
         {
             case LanguageLexer.PLUS:
-                return this.visit(context.expr());
+                return this.visitExpr(context.expr());
             case LanguageLexer.MINUS:
-                return new NegateNode(this.visit(context.expr()));
+                return new NegateNode(this.visitExpr(context.expr()));
             default:
-            exceptions.add(new UnsupportedNodeException("Node is unsupported"));
-            return null;
+                throw new UnsupportedNodeException("Node is unsupported");
         }
     }
 

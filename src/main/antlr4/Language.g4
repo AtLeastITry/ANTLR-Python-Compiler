@@ -1,18 +1,17 @@
 grammar Language;
 
+
 identifier
-	: Identifier
-	| 'INTEGER'
+	: 'INTEGER'
 	| 'DECIMAL'
 	;
 
-
 compileUnit
-    :    statements EOF
+    : statements
     ;
 
 statements
-	: statement (EndOfLine statement)*
+	: (statement ';')*
 	;
 
 statement
@@ -27,15 +26,15 @@ ifElseStatement
     ;
 
 ifStatement
-	: IF LPARA expression=expr RPARA LBRAC body=statements RBRAC
+	: 'if' '(' expression=expr ')' '{' body=statements '}'
 	;
 
 elseIfStatement
-	: ELSE IF LPARA expression=expr RPARA LBRAC body=statements RBRAC
+	: 'else' 'if' '(' expression=expr ')' '{' body=statements '}'
 	;
 
 elseStatement
-	: ELSE LBRAC body=statements RBRAC
+	: 'else' '{' body=statements '}'
 	;
 
 assignment
@@ -43,28 +42,20 @@ assignment
 	;
 
 declaration
-	: type=(INTERGER|DECIMAL) name=VAR
+	: type=('INTEGER'|'DECIMAL') name=VAR
 	;
 
+
 expr
-    :   LPARA expr RPARA                                                                                                # parensExpr
+    :   '(' expr ')'                                                                                                # parensExpr
     |   op=(PLUS|MINUS) expr                                                                                            # unaryExpr
 	|	left=expr op=POWER right=expr                                                                                   # infixExpr
     |   left=expr op=(MULT|DIV) right=expr                                                                              # infixExpr
 	|   left=expr op=(PLUS|MINUS) right=expr                                                                            # infixExpr
-    |   func=ID LPARA expr RPARA                                                                                        # funcExpr
 	|   value=(NUM|VAR)                                                                                                 # valueExpr
 	|   NOT expr																										# notExpr
 	|   left=expr op=(EQUALS|NEGATIVEEQUALS|GREATERTHAN|LESSTHAN|GREATERTHANEQUALS|LESSTHANEQUALS|OR|AND) right=expr	# booleanExpr
 	;
-
-// Control operations
-IF      : 'if';
-ELSE    : 'else';
-FOR     : 'for';
-WHILE   : 'while';
-LBRAC   : '{';
-RBRAC   : '}';
 
 // Binary operations
 PLUS    : '+' ;
@@ -72,8 +63,6 @@ MINUS   : '-' ;
 MULT    : '*' ;
 DIV     : '/' ;
 POWER   : '^' ;
-LPARA   : '(' ;
-RPARA   : ')' ;
 
 // Boolean operations
 EQUALS			  : '==';
@@ -92,10 +81,6 @@ AssignOP : '=' ;
 // Alpha/Num
 VAR     : ('a'..'z')+ ;
 NUM     : [0-9]+ ('.' [0-9]+)? ([eE] [+-]? [0-9]+)?;
-
-// Keywords
-INTERGER : 'INTEGER';
-DECIMAL  : 'DECIMAL';
 
 // Misc
 EndOfLine : ';';

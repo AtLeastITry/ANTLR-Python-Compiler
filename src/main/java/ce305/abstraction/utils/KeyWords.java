@@ -8,7 +8,7 @@ public class KeyWords {
     public static final String DECIMAL = "DECIMAL";
 
     public static final boolean check(String input) {
-        Pattern p = Pattern.compile(String.format("(%|%)", KeyWords.INTEGER, KeyWords.DECIMAL));
+        Pattern p = Pattern.compile(String.format("(%s|%s)", KeyWords.INTEGER, KeyWords.DECIMAL));
         Matcher m = p.matcher(input);
         return m.find();
     }

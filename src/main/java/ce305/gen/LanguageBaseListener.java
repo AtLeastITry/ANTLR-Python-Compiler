@@ -1,5 +1,5 @@
+// Generated from C:/Git/CE305/src/main/antlr4\Language.g4 by ANTLR 4.7.2
 package ce305.gen;
-// Generated from D:/Git/assignment/src/main/antlr4\Language.g4 by ANTLR 4.7.2
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -155,18 +155,6 @@ public class LanguageBaseListener implements LanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnaryExpr(LanguageParser.UnaryExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFuncExpr(LanguageParser.FuncExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFuncExpr(LanguageParser.FuncExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

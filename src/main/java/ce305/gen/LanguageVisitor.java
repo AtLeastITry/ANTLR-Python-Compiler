@@ -1,5 +1,5 @@
+// Generated from C:/Git/CE305/src/main/antlr4\Language.g4 by ANTLR 4.7.2
 package ce305.gen;
-// Generated from D:/Git/assignment/src/main/antlr4\Language.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -84,13 +84,6 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnaryExpr(LanguageParser.UnaryExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code funcExpr}
-	 * labeled alternative in {@link LanguageParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFuncExpr(LanguageParser.FuncExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code valueExpr}
 	 * labeled alternative in {@link LanguageParser#expr}.
