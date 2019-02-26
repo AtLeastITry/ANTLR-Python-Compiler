@@ -232,6 +232,18 @@ public class LanguageBaseListener implements LanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFunctionCallExpr(LanguageParser.FunctionCallExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionCallExpr(LanguageParser.FunctionCallExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterParensExpr(LanguageParser.ParensExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -239,6 +251,18 @@ public class LanguageBaseListener implements LanguageListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParensExpr(LanguageParser.ParensExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunctionCallParam(LanguageParser.FunctionCallParamContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionCallParam(LanguageParser.FunctionCallParamContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

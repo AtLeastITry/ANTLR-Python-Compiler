@@ -17,6 +17,6 @@ public class BinaryExpressionNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return String.format("%(operation: %)", BinaryExpressionNode.class.getName(), this.operation);
+        return String.format("%s(operation: %s)", BinaryExpressionNode.class.getName(), this.operation);
     }
 }

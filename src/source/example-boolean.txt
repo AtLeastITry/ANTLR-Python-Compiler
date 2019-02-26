@@ -1,8 +1,12 @@
-float a;
+int a;
 a = 50;
 
+int something(int input) {
+    return input * 3;
+};
+
 if (a > 10) {
-	a = a + 10;
+	a = something(a);
 } 
 else if (a == 5) {
 	a = a + 5;

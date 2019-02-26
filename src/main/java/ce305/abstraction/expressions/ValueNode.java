@@ -12,6 +12,6 @@ public class ValueNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return String.format("%(value: %)", ValueNode.class.getName(), this.value);
+        return String.format("%s(value: %s)", ValueNode.class.getName(), this.value);
     }
 }
