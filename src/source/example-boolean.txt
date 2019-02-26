@@ -1,7 +1,7 @@
-float a;
+int a;
 a = 50;
 
-float something(float input) {
+int something(float input) {
     return input * 3;
 };
 

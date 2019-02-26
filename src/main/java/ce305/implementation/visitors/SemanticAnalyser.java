@@ -1,6 +1,7 @@
 package ce305.implementation.visitors;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +27,7 @@ import ce305.abstraction.statements.WhileStatementNode;
 import ce305.abstraction.utils.Symbol;
 import ce305.implementation.errors.DuplicateDefinitionException;
 import ce305.implementation.errors.IncorrectDataType;
+import ce305.implementation.errors.UndefinedFunctionException;
 import ce305.implementation.errors.UndefinedVariableException;
 import ce305.implementation.utils.SymbolTable;
 
@@ -199,11 +201,30 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
 
     @Override
     public INode visit(FunctionCallNode node) {
-        return node;
+        Symbol symbol = this.symbolTable().get(node.name);
+
+        if (symbol == null) {
+            throw new UndefinedFunctionException(String.format("Function \"%s\" has not been defined in the current scope", node.name));
+        }
+
+        List<FunctionParamNode> paramDefinitions = (List<FunctionParamNode>)symbol.value;
+        ArrayList<FunctionCallParamNode> params = new ArrayList<>();
+
+        for (int i = 0; i < node.params.size(); i++) {
+            FunctionCallParamNode param = (FunctionCallParamNode)this.visit(node.params.get(i));
+            FunctionParamNode paramDefinition = paramDefinitions.get(i);
+
+            if (!new DataTypeChecker(paramDefinition.dataType, this.symbolTable()).visit(param))
+                    throw new IncorrectDataType(
+                            String.format("Function \"%s\" was expecting data type of %s for \"%s\" param", node.name, paramDefinition.dataType, paramDefinition.name));
+            params.add(param);
+        }
+
+        return new FunctionCallNode(node.name, params);
     }
 
     @Override
     public INode visit(FunctionCallParamNode node) {
-        return node;
+        return new FunctionCallParamNode(this.visit(node.expression));
     }
 }
