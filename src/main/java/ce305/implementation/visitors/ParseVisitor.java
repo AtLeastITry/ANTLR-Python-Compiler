@@ -16,8 +16,11 @@ import ce305.abstraction.expressions.NegateNode;
 import ce305.abstraction.expressions.ProgramNode;
 import ce305.abstraction.expressions.ValueNode;
 import ce305.abstraction.expressions.VariableNode;
+import ce305.abstraction.functions.FunctionNode;
+import ce305.abstraction.functions.FunctionParamNode;
 import ce305.abstraction.statements.ElseIfStatementNode;
 import ce305.abstraction.statements.ElseStatementNode;
+import ce305.abstraction.statements.FunctionReturnStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
 import ce305.abstraction.utils.KeyWords;
@@ -56,6 +59,16 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
 
     @Override
     public INode visitStatement(StatementContext context) {
+        FunctionStatementContext functionStatement = context.functionStatement();
+        if (functionStatement != null) {
+            return this.visitFunctionStatement(functionStatement);
+        }
+
+        FunctionReturnStatementContext functionReturnStatement = context.functionReturnStatement();
+        if (functionReturnStatement != null) {
+            return this.visitFunctionReturnStatement(functionReturnStatement);
+        }
+
         DeclarationContext declaration = context.declaration();
         if (declaration != null) {
             return this.visitDeclaration(declaration);
@@ -203,6 +216,75 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         }
 
         return new WhileStatementNode(children, this.visitExpr(context.expression));
+    }
+
+    @Override
+    public INode visitFunctionStatement(FunctionStatementContext context) {
+        String name = context.name.getText();
+
+        // Throw if the name of the variable matches one of the predefined keywords
+        if (KeyWords.check(name))
+        {
+            // This occurs when a user has attempted to use an expression operator that is not supported.
+            throw new KeywordException(String.format("You cannot use the keyword %s as an identifier", name));            
+        }
+
+        // Throw if an unsupported data type is attempted
+        DataType dataType = KeyWords.getType(context.type.getText());
+
+        if (dataType == null) {
+            throw new UnsupportedDataTypeException(String.format("The data type: %s is currently unsupported", context.type.getText()));
+        }
+
+        List<INode> body = new ArrayList<>();
+        for (StatementContext statement: context.body.statement())
+        {
+            INode node = this.visitStatement(statement);
+
+            // If the node is null then it was probably a new line
+            if (node != null)
+                body.add(node);
+        }
+
+        List<FunctionParamNode> params = new ArrayList<>();
+
+        for (FunctionParamContext param: context.functionParam())
+        {
+            FunctionParamNode node = (FunctionParamNode)this.visitFunctionParam(param);
+
+            // If the node is null then it was probably a new line
+            if (node != null)
+                params.add(node);
+        }
+
+        return new FunctionNode(dataType, name, body, params);
+    }
+
+    @Override
+    public INode visitFunctionReturnStatement(FunctionReturnStatementContext context) {
+        return new FunctionReturnStatementNode(this.visitExpr(context.expr()));
+    }
+
+    @Override
+    public INode visitFunctionParam(FunctionParamContext context) {
+        DeclarationContext declaration = context.declaration();
+        String name = declaration.name.getText();
+
+        // Throw if the name of the variable matches one of the predefined keywords
+        if (KeyWords.check(name))
+        {
+            // This occurs when a user has attempted to use an expression operator that is not supported.
+            throw new KeywordException(String.format("You cannot use the keyword %s as an identifier", name));            
+        }
+
+        // Throw if an unsupported data type is attempted
+        DataType dataType = KeyWords.getType(declaration.type.getText());
+
+        if (dataType == null) {
+            throw new UnsupportedDataTypeException(String.format("The data type: %s is currently unsupported", declaration.type.getText()));
+        }
+        
+        return new FunctionParamNode(name, dataType);
     }
 
     public INode visitBooleanExpr(BooleanExprContext context)

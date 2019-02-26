@@ -2,6 +2,7 @@ package ce305.implementation.visitors;
 
 import ce305.abstraction.*;
 import ce305.abstraction.expressions.*;
+import ce305.abstraction.functions.*;
 import ce305.abstraction.statements.*;
 
 public class DataTypeChecker extends ASTVisitor<Boolean>
@@ -34,7 +35,7 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
 
     @Override
     public Boolean visit(FunctionNode node) {
-        return this.visit(node.argument);
+        return node.dataType == _type && node.body.stream().allMatch(c -> this.visit(c));
     }
 
     @Override
@@ -89,5 +90,15 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
     @Override
     public Boolean visit(WhileStatementNode node) {
         return node.body.stream().allMatch(c -> this.visit(c));
+    }
+
+    @Override
+    public Boolean visit(FunctionParamNode node) {
+        return true;
+    }
+
+    @Override
+    public Boolean visit(FunctionReturnStatementNode node) {
+        return this.visit(node.expression);
     }
 }

@@ -2,6 +2,7 @@ package ce305.implementation.visitors;
 
 import ce305.abstraction.*;
 import ce305.abstraction.expressions.*;
+import ce305.abstraction.functions.*;
 import ce305.abstraction.statements.*;
 
 public abstract class ASTVisitor<T> {
@@ -18,6 +19,8 @@ public abstract class ASTVisitor<T> {
     public abstract T visit(ElseIfStatementNode node);
     public abstract T visit(BooleanExpressionNode node);
     public abstract T visit(WhileStatementNode node);
+    public abstract T visit(FunctionParamNode node);
+    public abstract T visit(FunctionReturnStatementNode node);
 
     public T visit(INode node)
     {
@@ -71,6 +74,14 @@ public abstract class ASTVisitor<T> {
 
         if (node instanceof WhileStatementNode) {
             return this.visit((WhileStatementNode)node);
+        }
+
+        if (node instanceof FunctionParamNode) {
+            return this.visit((FunctionParamNode)node);
+        }
+
+        if (node instanceof FunctionReturnStatementNode) {
+            return this.visit((FunctionReturnStatementNode)node);
         }
 
         return null;

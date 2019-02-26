@@ -1,13 +1,13 @@
-package ce305.abstraction.expressions;
+package ce305.abstraction.functions;
 
 import ce305.abstraction.DataType;
 import ce305.abstraction.INode;
 
-public class DeclarationNode implements INode {
+public class FunctionParamNode implements INode {
     public final String name;
     public final DataType dataType;
 
-    public DeclarationNode(String name, DataType dataType) {
+    public FunctionParamNode(String name, DataType dataType) {
         super();
         this.name = name;
         this.dataType = dataType;
@@ -15,6 +15,6 @@ public class DeclarationNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return String.format("%s(name: %s)", DeclarationNode.class.getName(), this.name);
+        return String.format("%s(name: %s)", FunctionParamNode.class.getName(), this.name);
     }
 }

@@ -1,6 +1,10 @@
 float a;
 a = 50;
 
+int something(int arg, float test) {
+    return 1;
+};
+
 if (a > 10) {
 	a = a + 10;
 } 

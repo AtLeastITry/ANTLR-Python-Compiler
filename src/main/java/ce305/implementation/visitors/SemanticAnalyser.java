@@ -10,13 +10,15 @@ import ce305.abstraction.expressions.AssignmentNode;
 import ce305.abstraction.expressions.BinaryExpressionNode;
 import ce305.abstraction.expressions.BooleanExpressionNode;
 import ce305.abstraction.expressions.DeclarationNode;
-import ce305.abstraction.expressions.FunctionNode;
 import ce305.abstraction.expressions.NegateNode;
 import ce305.abstraction.expressions.ProgramNode;
 import ce305.abstraction.expressions.ValueNode;
 import ce305.abstraction.expressions.VariableNode;
+import ce305.abstraction.functions.FunctionNode;
+import ce305.abstraction.functions.FunctionParamNode;
 import ce305.abstraction.statements.ElseIfStatementNode;
 import ce305.abstraction.statements.ElseStatementNode;
+import ce305.abstraction.statements.FunctionReturnStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
 import ce305.abstraction.utils.Symbol;
@@ -76,7 +78,15 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
 
     @Override
     public INode visit(FunctionNode node) {
-        return new FunctionNode(node.function, this.visit(node.argument));
+        _tableStack.add(new SymbolTable(this.symbolTable()));
+        ArrayList<INode> body = new ArrayList<>();
+
+        for (INode child : node.body) {
+            body.add(this.visit(child));
+        }
+
+        _tableStack.pop();
+        return new FunctionNode(node.dataType, node.name, node.body, node.params);
     }
 
     @Override
@@ -172,5 +182,15 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
 
         _tableStack.pop();
         return new WhileStatementNode(body, node.expression);
+    }
+
+    @Override
+    public INode visit(FunctionParamNode node) {
+        return node;
+    }
+
+    @Override
+    public INode visit(FunctionReturnStatementNode node) {
+        return node;
     }
 }

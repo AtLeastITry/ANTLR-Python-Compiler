@@ -5,19 +5,22 @@ import ce305.abstraction.expressions.AssignmentNode;
 import ce305.abstraction.expressions.BinaryExpressionNode;
 import ce305.abstraction.expressions.BooleanExpressionNode;
 import ce305.abstraction.expressions.DeclarationNode;
-import ce305.abstraction.expressions.FunctionNode;
 import ce305.abstraction.expressions.NegateNode;
 import ce305.abstraction.expressions.ProgramNode;
 import ce305.abstraction.expressions.ValueNode;
 import ce305.abstraction.expressions.VariableNode;
+import ce305.abstraction.functions.FunctionNode;
+import ce305.abstraction.functions.FunctionParamNode;
 import ce305.abstraction.statements.ElseIfStatementNode;
 import ce305.abstraction.statements.ElseStatementNode;
+import ce305.abstraction.statements.FunctionReturnStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
 
 public class PythonVisitor extends ASTVisitor<String> {
     private int _numIndent;
     private Boolean _needsNewLine = false;
+
     public PythonVisitor() {
         _numIndent = 0;
     }
@@ -105,18 +108,6 @@ public class PythonVisitor extends ASTVisitor<String> {
 
         output.append("-");
         output.append(this.visit(node.innerNode));
-
-        return output.toString();
-    }
-
-    @Override
-    public String visit(FunctionNode node) {
-        StringBuilder output = new StringBuilder();
-
-        output.append(node.function);
-        output.append("(");
-        output.append(this.visit(node.argument));
-        output.append(")");
 
         return output.toString();
     }
@@ -268,6 +259,51 @@ public class PythonVisitor extends ASTVisitor<String> {
         }
 
         _numIndent--;
+
+        return output.toString();
+    }
+
+    @Override
+    public String visit(FunctionNode node) {
+        StringBuilder output = new StringBuilder();
+
+        output.append("def ");
+        output.append(node.name);
+        output.append("(");
+        for (int i = 0; i < node.params.size(); i++) {
+            if (i > 0) {
+                output.append(", ");
+            }
+
+            output.append(this.visit(node.params.get(i)));
+        }
+        output.append(")");
+        output.append(":");
+
+        _numIndent++;
+
+        for (INode child : node.body) {
+            addLine(output);
+            addIndent(output);
+            output.append(this.visit(child));
+        }
+
+        _numIndent--;
+
+        return output.toString();
+    }
+
+    @Override
+    public String visit(FunctionParamNode node) {
+        return node.name;
+    }
+
+    @Override
+    public String visit(FunctionReturnStatementNode node) {
+        StringBuilder output = new StringBuilder();
+
+        output.append("return ");
+        output.append(this.visit(node.expression));
 
         return output.toString();
     }
