@@ -63,7 +63,9 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
 
     @Override
     public Boolean visit(VariableNode node) {
-        return true;
+        Symbol symbol = _table.get(node.value);
+
+        return symbol.dataType == _type;
     }
 
     @Override
