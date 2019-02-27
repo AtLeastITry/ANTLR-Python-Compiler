@@ -1,12 +1,12 @@
 int a;
 a = 50;
 
-int something(int input) {
+int something(int input, int test, int arg) {
     return input * 3;
 };
 
 if (a > 10) {
-	a = something(a);
+	a = something(a, a, a);
 } 
 else if (a == 5) {
 	a = a + 5;

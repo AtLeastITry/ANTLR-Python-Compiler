@@ -27,6 +27,7 @@ import ce305.abstraction.statements.WhileStatementNode;
 import ce305.abstraction.utils.Symbol;
 import ce305.implementation.errors.DuplicateDefinitionException;
 import ce305.implementation.errors.IncorrectDataType;
+import ce305.implementation.errors.MissingParametersException;
 import ce305.implementation.errors.UndefinedFunctionException;
 import ce305.implementation.errors.UndefinedVariableException;
 import ce305.implementation.utils.SymbolTable;
@@ -210,7 +211,12 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
         List<FunctionParamNode> paramDefinitions = (List<FunctionParamNode>)symbol.value;
         ArrayList<FunctionCallParamNode> params = new ArrayList<>();
 
-        for (int i = 0; i < node.params.size(); i++) {
+        for (int i = 0; i < paramDefinitions.size(); i++) {
+
+            if (i >= node.params.size()) {
+                throw new MissingParametersException(String.format("Function \"%s\" was expecting %s parameters, but only %s %s provided", node.name, paramDefinitions.size(), node.params.size(), i > 1 ? "were" : "was"));
+            }
+
             FunctionCallParamNode param = (FunctionCallParamNode)this.visit(node.params.get(i));
             FunctionParamNode paramDefinition = paramDefinitions.get(i);
 
