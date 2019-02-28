@@ -1,10 +1,12 @@
 package ce305.abstraction.functions;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import ce305.abstraction.DataType;
 import ce305.abstraction.INode;
+import ce305.abstraction.statements.FunctionReturnStatementNode;
 
 public class FunctionNode implements INode {
     public DataType dataType;
@@ -15,7 +17,18 @@ public class FunctionNode implements INode {
     public FunctionNode(DataType dataType, String name, Collection<INode> body, List<FunctionParamNode> params) {
         this.dataType = dataType;
         this.name = name;
-        this.body = body;
+        ArrayList<INode> newBody = new ArrayList<>();
+
+        for (INode node : body) {
+            if (node instanceof FunctionReturnStatementNode) {
+                newBody.add(new FunctionReturnStatementNode(((FunctionReturnStatementNode)node).expression, this));
+            }
+            else {
+                newBody.add(node);
+            }
+        }
+
+        this.body = newBody;
         this.params = params;
     }
 

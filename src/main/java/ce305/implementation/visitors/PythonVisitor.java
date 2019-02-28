@@ -48,11 +48,6 @@ public class PythonVisitor extends ASTVisitor<String> {
                 this.addLine(output);
             }
 
-            // Python doesn't require declaration of nodes so we can skip any that appear.
-            if (child instanceof DeclarationNode) {
-                continue;
-            }
-
             if (i > 0 && !_needsNewLine) {
                 _needsNewLine = true;
             }
@@ -125,14 +120,9 @@ public class PythonVisitor extends ASTVisitor<String> {
     }
 
     @Override
-    public String visit(DeclarationNode node) {
-        StringBuilder output = new StringBuilder();
-
-        output.append(node.name);
-        output.append(" = ");
-        output.append("None");
-
-        return output.toString();
+    public String visit(DeclarationNode node) {        
+        // Python doesn't require declaration of nodes so we can skip any that appear.
+        return "";
     }
 
     @Override

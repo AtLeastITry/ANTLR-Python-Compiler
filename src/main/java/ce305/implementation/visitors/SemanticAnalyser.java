@@ -84,7 +84,15 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
     @Override
     public INode visit(FunctionNode node) {
         this.symbolTable().add(new Symbol(node.name, node.dataType, node.params));
-        _tableStack.add(new SymbolTable(this.symbolTable()));
+        // Need a brand new scope for function definitions.
+        _tableStack.add(new SymbolTable());
+
+        ArrayList<FunctionParamNode> params = new ArrayList<>();
+
+        for (FunctionParamNode param : node.params) {
+            params.add((FunctionParamNode)this.visit(param));
+        }
+
         ArrayList<INode> body = new ArrayList<>();
 
         for (INode child : node.body) {
@@ -92,7 +100,7 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
         }
 
         _tableStack.pop();
-        return new FunctionNode(node.dataType, node.name, node.body, node.params);
+        return new FunctionNode(node.dataType, node.name, body, params);
     }
 
     @Override
@@ -192,12 +200,18 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
 
     @Override
     public INode visit(FunctionParamNode node) {
+        this.symbolTable().add(new Symbol(node.name, node.dataType));
         return node;
     }
 
     @Override
     public INode visit(FunctionReturnStatementNode node) {
-        return node;
+        INode expression = this.visit(node.expression);
+        if (!new DataTypeChecker(node.parent.dataType, this.symbolTable()).visit(expression))
+                    throw new IncorrectDataType(
+                            String.format("Function \"%s\" was expecting a return of data type %s", node.parent.name, node.parent.dataType)); 
+                              
+        return new FunctionReturnStatementNode(expression, node.parent);
     }
 
     @Override
