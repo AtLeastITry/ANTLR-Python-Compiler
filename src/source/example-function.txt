@@ -1,0 +1,5 @@
+int something(int input, int test, int arg) {
+	int a;
+	a = 10;
+    return (test + 3) * input * 3;
+};
