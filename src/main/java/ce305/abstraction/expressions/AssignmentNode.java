@@ -14,6 +14,6 @@ public class AssignmentNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return AssignmentNode.class.getName();
+        return AssignmentNode.class.getSimpleName();
     }
 }

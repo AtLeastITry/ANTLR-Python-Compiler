@@ -18,6 +18,6 @@ public class IfStatementNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return IfStatementNode.class.getName();
+        return IfStatementNode.class.getSimpleName();
     }
 }

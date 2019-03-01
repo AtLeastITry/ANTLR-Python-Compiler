@@ -17,6 +17,6 @@ public class BooleanExpressionNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return String.format("%s(operation: %s)", BooleanExpressionNode.class.getName(), this.operation);
+        return String.format("%s(operation: %s)", BooleanExpressionNode.class.getSimpleName(), this.operation);
     }
 }

@@ -18,6 +18,6 @@ public class ElseIfStatementNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return ElseIfStatementNode.class.getName();
+        return ElseIfStatementNode.class.getSimpleName();
     }
 }

@@ -10,6 +10,7 @@ import ce305.gen.*;
 import ce305.implementation.visitors.ParseVisitor;
 import ce305.implementation.visitors.PythonVisitor;
 import ce305.implementation.visitors.SemanticAnalyser;
+import ce305.implementation.visitors.VisualizationVisitor;
 
 public class ASTService {
     public static INode CompileToAST(String source) {
@@ -25,6 +26,11 @@ public class ASTService {
 
     public static String CompileToPython(INode tree) {
         String result = new PythonVisitor().visit(tree);
+        return result;
+    }
+
+    public static String VisualizeTree(INode tree) {
+        String result = new VisualizationVisitor().visit(tree);
         return result;
     }
 }

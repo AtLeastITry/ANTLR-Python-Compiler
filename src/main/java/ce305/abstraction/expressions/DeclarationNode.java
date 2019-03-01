@@ -15,6 +15,6 @@ public class DeclarationNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return String.format("%s(name: %s)", DeclarationNode.class.getName(), this.name);
+        return String.format("%s(name: %s, type: %s)", DeclarationNode.class.getSimpleName(), this.name, this.dataType);
     }
 }

@@ -20,6 +20,6 @@ public class ProgramNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return ProgramNode.class.getName();
+        return ProgramNode.class.getSimpleName();
     }
 }

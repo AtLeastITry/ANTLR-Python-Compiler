@@ -34,6 +34,6 @@ public class FunctionNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return String.format("%s(name: %s type: %s)", FunctionNode.class.getName(), this.name, this.dataType);
+        return String.format("%s(name: %s type: %s)", FunctionNode.class.getSimpleName(), this.name, this.dataType);
     }
 }

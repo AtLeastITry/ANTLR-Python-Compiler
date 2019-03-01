@@ -12,6 +12,6 @@ public class NegateNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return NegateNode.class.getName();
+        return NegateNode.class.getSimpleName();
     }
 }

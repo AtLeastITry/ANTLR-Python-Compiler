@@ -11,6 +11,6 @@ public class FunctionCallParamNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return FunctionCallParamNode.class.getName();
+        return FunctionCallParamNode.class.getSimpleName();
     }
 }

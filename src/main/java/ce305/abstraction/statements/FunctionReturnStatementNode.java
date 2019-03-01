@@ -19,6 +19,6 @@ public class FunctionReturnStatementNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return FunctionReturnStatementNode.class.getName();
+        return FunctionReturnStatementNode.class.getSimpleName();
     }
 }

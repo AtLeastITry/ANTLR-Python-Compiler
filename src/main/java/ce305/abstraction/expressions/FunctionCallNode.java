@@ -16,6 +16,6 @@ public class FunctionCallNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return String.format("%s(name: %s)", FunctionCallNode.class.getName(), this.name);
+        return String.format("%s(name: %s)", FunctionCallNode.class.getSimpleName(), this.name);
     }
 }

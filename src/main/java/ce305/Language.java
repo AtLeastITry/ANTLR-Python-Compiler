@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import ce305.abstraction.INode;
+import ce305.implementation.utils.Console;
+import ce305.implementation.utils.ConsoleColor;
 import ce305.services.ASTService;
 
 /**
@@ -17,14 +19,95 @@ public class Language {
     public static void main(String[] args) {        
         try {
             for (File file : getSourceFiles()) {
+                Console.setColor(ConsoleColor.GREEN_BOLD);
+                Console.writeLine("START " + file.getName());
                 String contents = readFile(file.toPath());
-                INode tree = ASTService.CompileToAST(contents);
-                String python = ASTService.CompileToPython(tree);
-                System.out.print(python);
+                INode tree = buildAST(contents);
+                if (tree == null) {
+                    Console.setColor(ConsoleColor.GREEN_BOLD);
+                    Console.writeLine("Failed " + file.getName());
+                    continue;
+                }
+                visualize(tree);
+                String python = compileToPython(tree);
+
+                Console.setColor(ConsoleColor.GREEN_BOLD);
+                Console.writeLine("END " + file.getName());
                 System.in.read();
             }
         } catch(Exception e) {
-            System.out.println(e.getMessage());
+            Console.setColor(ConsoleColor.RED_BOLD);
+            Console.writeLine("        Error:" + e.getMessage());
+            Console.resetColor();
+        }
+    }
+
+    private static String compileToPython(INode tree) {
+        Console.setColor(ConsoleColor.CYAN_BOLD);
+        Console.writeLine();
+        Console.writeLine("    START Compiling file to python");
+
+        String result = "";
+
+        try {
+            result = ASTService.CompileToPython(tree); 
+        }
+        catch(Exception e) {
+            Console.setColor(ConsoleColor.RED_BOLD);
+            Console.writeLine("        Error:" + e.getMessage());
+            Console.resetColor();
+        }
+        finally {
+            Console.setColor(ConsoleColor.CYAN_BOLD);
+            Console.writeLine("    END Compiling file to python");
+        }
+
+        return result;
+    }
+
+    private static INode buildAST(String content) {
+        Console.setColor(ConsoleColor.CYAN_BOLD);
+        Console.writeLine("    START Building AST");
+        INode tree = null;
+        try
+        {
+            tree = ASTService.CompileToAST(content);
+        }
+        catch (Exception e)
+        {
+            Console.setColor(ConsoleColor.RED_BOLD);
+            Console.writeLine("        Error:" + e.getMessage());
+            Console.resetColor();
+        }
+        finally
+        {
+            Console.setColor(ConsoleColor.CYAN_BOLD);
+            Console.writeLine("    END Building AST");
+        }
+
+        return tree;
+    }
+
+    private static void visualize(INode tree) {
+        Console.setColor(ConsoleColor.CYAN_BOLD);
+        Console.writeLine();
+        Console.writeLine("    START Visualization");
+
+        try {
+            Console.resetColor();
+            String result = ASTService.VisualizeTree(tree);
+            Console.writeLine(result);
+        }
+        catch (Exception e)
+        {
+            Console.setColor(ConsoleColor.RED_BOLD);
+            Console.writeLine("        Error:" + e.getMessage());
+            Console.resetColor();
+        }
+        finally
+        {
+            Console.setColor(ConsoleColor.CYAN_BOLD);
+            Console.writeLine("    END Visualization");
         }
     }
 

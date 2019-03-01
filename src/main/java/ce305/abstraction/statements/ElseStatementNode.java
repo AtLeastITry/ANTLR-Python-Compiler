@@ -14,6 +14,6 @@ public class ElseStatementNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return ElseStatementNode.class.getName();
+        return ElseStatementNode.class.getSimpleName();
     }
 }

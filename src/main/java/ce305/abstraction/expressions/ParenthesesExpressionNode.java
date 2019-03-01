@@ -11,6 +11,6 @@ public class ParenthesesExpressionNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return ParenthesesExpressionNode.class.getName();
+        return ParenthesesExpressionNode.class.getSimpleName();
     }
 }

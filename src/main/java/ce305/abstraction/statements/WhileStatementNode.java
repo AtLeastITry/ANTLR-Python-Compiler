@@ -16,6 +16,6 @@ public class WhileStatementNode implements INode {
 
     @Override
     public String getDisplayName() {
-        return WhileStatementNode.class.getName();
+        return WhileStatementNode.class.getSimpleName();
     }
 }
