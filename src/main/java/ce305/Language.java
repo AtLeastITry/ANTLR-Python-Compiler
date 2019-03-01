@@ -144,7 +144,7 @@ public class Language {
     }
 
     private static void clearTargetFiles() {
-        File folder = new File("src/source");
+        File folder = new File("src/target");
         File[] files = folder.listFiles();
         for (int i = 0; i < files.length; i++) {
             files[i].delete();
