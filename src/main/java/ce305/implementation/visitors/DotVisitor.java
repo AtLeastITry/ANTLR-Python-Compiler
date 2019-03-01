@@ -30,7 +30,7 @@ import ce305.implementation.utils.DotHelper;
 
 public class DotVisitor extends ASTVisitor<String> {
 
-    private final static String _labelParams = "shape=\"ellipse\" fontsize=8 width=5 height=1]";
+    private final static String _labelParams = "shape=\"box\"]";
     private ArrayList<DotConnection> _connections = new ArrayList<>();
     private List<String> _connectionsList() {
         return _connections.stream().map(c -> String.format("\"%s\" -> \"%s\";", c.a, c.b)).collect(Collectors.toList());

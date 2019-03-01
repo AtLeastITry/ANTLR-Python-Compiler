@@ -19,6 +19,7 @@ import ce305.services.ASTService;
 public class Language {
     public static void main(String[] args) throws IOException {
         try {
+            clearTargetFiles();
             for (File file : getSourceFiles()) {
                 Console.setColor(ConsoleColor.GREEN_BOLD);
                 Console.writeLine("START " + file.getName());
@@ -140,6 +141,14 @@ public class Language {
     private static File[] getSourceFiles() {
         File folder = new File("src/source");
         return folder.listFiles();
+    }
+
+    private static void clearTargetFiles() {
+        File folder = new File("src/source");
+        File[] files = folder.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            files[i].delete();
+        }
     }
 
     private static String readFile(Path path) throws IOException 
