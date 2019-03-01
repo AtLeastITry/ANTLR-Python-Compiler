@@ -122,4 +122,9 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
     public Boolean visit(FunctionCallParamNode node) {
         return this.visit(node.expression);
     }
+
+    @Override
+    public Boolean visit(ParenthesesExpressionNode node) {
+        return this.visit(node.innerExpression);
+    }
 }

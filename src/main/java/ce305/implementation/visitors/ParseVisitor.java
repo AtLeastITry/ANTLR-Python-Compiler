@@ -14,6 +14,7 @@ import ce305.abstraction.expressions.BooleanExpressionNode;
 import ce305.abstraction.expressions.DeclarationNode;
 import ce305.abstraction.expressions.FunctionCallNode;
 import ce305.abstraction.expressions.NegateNode;
+import ce305.abstraction.expressions.ParenthesesExpressionNode;
 import ce305.abstraction.expressions.ProgramNode;
 import ce305.abstraction.expressions.ValueNode;
 import ce305.abstraction.expressions.VariableNode;
@@ -338,7 +339,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
     }
 
     public INode visitParensExpr(ParensExprContext context) {
-        return this.visitExpr(context.expr());
+        return new ParenthesesExpressionNode(this.visitExpr(context.expr()));
     }
 
     public INode visitInfixExpr(InfixExprContext context) {

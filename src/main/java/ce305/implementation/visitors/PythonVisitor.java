@@ -7,6 +7,7 @@ import ce305.abstraction.expressions.BooleanExpressionNode;
 import ce305.abstraction.expressions.DeclarationNode;
 import ce305.abstraction.expressions.FunctionCallNode;
 import ce305.abstraction.expressions.NegateNode;
+import ce305.abstraction.expressions.ParenthesesExpressionNode;
 import ce305.abstraction.expressions.ProgramNode;
 import ce305.abstraction.expressions.ValueNode;
 import ce305.abstraction.expressions.VariableNode;
@@ -120,7 +121,7 @@ public class PythonVisitor extends ASTVisitor<String> {
     }
 
     @Override
-    public String visit(DeclarationNode node) {        
+    public String visit(DeclarationNode node) {
         // Python doesn't require declaration of nodes so we can skip any that appear.
         return "";
     }
@@ -136,6 +137,9 @@ public class PythonVisitor extends ASTVisitor<String> {
         _numIndent++;
 
         for (INode child : node.body) {
+            if(child instanceof DeclarationNode) {
+                continue;
+            }
             addLine(output);
             addIndent(output);
             output.append(this.visit(child));
@@ -160,6 +164,9 @@ public class PythonVisitor extends ASTVisitor<String> {
         _numIndent++;
 
         for (INode child : node.body) {
+            if(child instanceof DeclarationNode) {
+                continue;
+            }
             addLine(output);
             addIndent(output);
             output.append(this.visit(child));
@@ -181,6 +188,9 @@ public class PythonVisitor extends ASTVisitor<String> {
         _numIndent++;
 
         for (INode child : node.body) {
+            if(child instanceof DeclarationNode) {
+                continue;
+            }
             addLine(output);
             addIndent(output);
             output.append(this.visit(child));
@@ -245,6 +255,9 @@ public class PythonVisitor extends ASTVisitor<String> {
         _numIndent++;
 
         for (INode child : node.body) {
+            if(child instanceof DeclarationNode) {
+                continue;
+            }
             addLine(output);
             addIndent(output);
             output.append(this.visit(child));
@@ -275,6 +288,10 @@ public class PythonVisitor extends ASTVisitor<String> {
         _numIndent++;
 
         for (INode child : node.body) {
+            if(child instanceof DeclarationNode) {
+                continue;
+            }
+
             addLine(output);
             addIndent(output);
             output.append(this.visit(child));
@@ -321,5 +338,16 @@ public class PythonVisitor extends ASTVisitor<String> {
     @Override
     public String visit(FunctionCallParamNode node) {
         return this.visit(node.expression);
+    }
+
+    @Override
+    public String visit(ParenthesesExpressionNode node) {
+        StringBuilder output = new StringBuilder();
+
+        output.append("(");
+        output.append(this.visit(node.innerExpression));
+        output.append(")");
+
+        return output.toString();
     }
 }

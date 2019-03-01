@@ -13,6 +13,7 @@ import ce305.abstraction.expressions.BooleanExpressionNode;
 import ce305.abstraction.expressions.DeclarationNode;
 import ce305.abstraction.expressions.FunctionCallNode;
 import ce305.abstraction.expressions.NegateNode;
+import ce305.abstraction.expressions.ParenthesesExpressionNode;
 import ce305.abstraction.expressions.ProgramNode;
 import ce305.abstraction.expressions.ValueNode;
 import ce305.abstraction.expressions.VariableNode;
@@ -90,7 +91,7 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
         ArrayList<FunctionParamNode> params = new ArrayList<>();
 
         for (FunctionParamNode param : node.params) {
-            params.add((FunctionParamNode)this.visit(param));
+            params.add((FunctionParamNode) this.visit(param));
         }
 
         ArrayList<INode> body = new ArrayList<>();
@@ -208,9 +209,9 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
     public INode visit(FunctionReturnStatementNode node) {
         INode expression = this.visit(node.expression);
         if (!new DataTypeChecker(node.parent.dataType, this.symbolTable()).visit(expression))
-                    throw new IncorrectDataType(
-                            String.format("Function \"%s\" was expecting a return of data type %s", node.parent.name, node.parent.dataType)); 
-                              
+            throw new IncorrectDataType(String.format("Function \"%s\" was expecting a return of data type %s",
+                    node.parent.name, node.parent.dataType));
+
         return new FunctionReturnStatementNode(expression, node.parent);
     }
 
@@ -219,24 +220,28 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
         Symbol symbol = this.symbolTable().get(node.name);
 
         if (symbol == null) {
-            throw new UndefinedFunctionException(String.format("Function \"%s\" has not been defined in the current scope", node.name));
+            throw new UndefinedFunctionException(
+                    String.format("Function \"%s\" has not been defined in the current scope", node.name));
         }
 
-        List<FunctionParamNode> paramDefinitions = (List<FunctionParamNode>)symbol.value;
+        List<FunctionParamNode> paramDefinitions = (List<FunctionParamNode>) symbol.value;
         ArrayList<FunctionCallParamNode> params = new ArrayList<>();
 
         for (int i = 0; i < paramDefinitions.size(); i++) {
 
             if (i >= node.params.size()) {
-                throw new MissingParametersException(String.format("Function \"%s\" was expecting %s parameters, but only %s %s provided", node.name, paramDefinitions.size(), node.params.size(), i > 1 ? "were" : "was"));
+                throw new MissingParametersException(
+                        String.format("Function \"%s\" was expecting %s parameters, but only %s %s provided", node.name,
+                                paramDefinitions.size(), node.params.size(), i > 1 ? "were" : "was"));
             }
 
-            FunctionCallParamNode param = (FunctionCallParamNode)this.visit(node.params.get(i));
+            FunctionCallParamNode param = (FunctionCallParamNode) this.visit(node.params.get(i));
             FunctionParamNode paramDefinition = paramDefinitions.get(i);
 
             if (!new DataTypeChecker(paramDefinition.dataType, this.symbolTable()).visit(param))
-                    throw new IncorrectDataType(
-                            String.format("Function \"%s\" was expecting data type of %s for \"%s\" param", node.name, paramDefinition.dataType, paramDefinition.name));
+                throw new IncorrectDataType(
+                        String.format("Function \"%s\" was expecting data type of %s for \"%s\" param", node.name,
+                                paramDefinition.dataType, paramDefinition.name));
             params.add(param);
         }
 
@@ -246,5 +251,10 @@ public class SemanticAnalyser extends ASTVisitor<INode> {
     @Override
     public INode visit(FunctionCallParamNode node) {
         return new FunctionCallParamNode(this.visit(node.expression));
+    }
+
+    @Override
+    public INode visit(ParenthesesExpressionNode node) {
+        return new ParenthesesExpressionNode(this.visit(node.innerExpression));
     }
 }
