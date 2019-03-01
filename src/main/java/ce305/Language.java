@@ -144,7 +144,7 @@ public class Language {
     }
 
     private static void clearTargetFiles() {
-        File folder = new File("src/target");
+        File folder = new File("src/output");
         File[] files = folder.listFiles();
         for (int i = 0; i < files.length; i++) {
             files[i].delete();
@@ -158,7 +158,7 @@ public class Language {
     }
 
     private static void writeFile(String directory, String fileName, String extension, String contents) throws IOException {
-        String filePath = String.format("src/target/%s/%s.%s", directory, fileName.replaceFirst("[.][^.]+$", ""), extension);
+        String filePath = String.format("src/output/%s/%s.%s", directory, fileName.replaceFirst("[.][^.]+$", ""), extension);
         File temp = new File(filePath);
         temp.createNewFile();
 
