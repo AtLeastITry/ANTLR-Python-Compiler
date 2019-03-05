@@ -1,4 +1,5 @@
-def something(input, test, arg):
-	a = 10
-	return (test + 3) * input * 3
-a = something(1, 2, 3)
+def something(a, b):
+	def innersomething(x, y):
+		return (x + 3) * y * 3
+	return innersomething(a, b)
+a = something(1, 2)

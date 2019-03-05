@@ -41,11 +41,13 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
     public INode visitStatements(StatementsContext context) {
         ProgramNode result = new ProgramNode();
 
-        // Loop through each of the expressions the ANTLR parser finds
+        // Loop through each of the statements the ANTLR parser finds
         for (StatementContext statement : context.statement()) {
+            // If the statement is empty or null, then just skip it.
             if (statement.toString() == null || statement.toString() == "") {
                 continue;
             }
+            
             INode node = this.visitStatement(statement);
 
             // If the node is null then it was probably a new line
@@ -59,6 +61,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
 
     @Override
     public INode visitStatement(StatementContext context) {
+        // Check which type of statement has been generated and call the appropiate function
         FunctionStatementContext functionStatement = context.functionStatement();
         if (functionStatement != null) {
             return this.visitFunctionStatement(functionStatement);
@@ -98,6 +101,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
     }
 
     public INode visitExpr(ExprContext context) {
+        // Check the instance type of the expression context and call the appropiate function.
         if (context instanceof ParensExprContext) {
             return this.visitParensExpr((ParensExprContext) context);
         }
@@ -125,25 +129,23 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
     }
 
     public INode visitIfElseStatement(IfElseStatementContext context) {
+        // Recursively get all of the if/else if/else statements up front
         IfStatementNode ifStatement = (IfStatementNode) this.visitIfStatement(context.ifStat);
         List<ElseIfStatementNode> elseIfStatements = context.elseIfStatement().stream()
                 .map(x -> (ElseIfStatementNode) this.visitElseIfStatement(x)).collect(Collectors.toList());
         ElseStatementNode elseStatement = (ElseStatementNode) this.visitElseStatement(context.elseStatement());
 
+        //Loop through the statements and chain them together, such that it will be "if statement" -> "if else" -> "else"
         if (elseIfStatements != null && elseIfStatements.size() > 0) {
             for (int i = elseIfStatements.size() - 2; i >= 0; i--) {
                 ElseIfStatementNode current = elseIfStatements.get(i);
                 ElseIfStatementNode sibling = elseIfStatements.get(i + 1);
 
-                if (i == elseIfStatements.size() - 2) {
-                    if (elseStatement != null) {
-                        elseIfStatements.set(i + 1,
-                                new ElseIfStatementNode(sibling.body, sibling.expression, elseStatement));
-                    }
+                if (i == elseIfStatements.size() - 2 && elseStatement != null) {
+                    elseIfStatements.set(i + 1, new ElseIfStatementNode(sibling.body, sibling.expression, elseStatement));
                 }
 
-                elseIfStatements.set(i,
-                        new ElseIfStatementNode(current.body, current.expression, elseIfStatements.get(i + 1)));
+                elseIfStatements.set(i, new ElseIfStatementNode(current.body, current.expression, elseIfStatements.get(i + 1)));
             }
 
             return new IfStatementNode(ifStatement.body, ifStatement.expression, elseIfStatements.get(0));
@@ -213,14 +215,13 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
     public INode visitFunctionStatement(FunctionStatementContext context) {
         String name = context.name.getText();
 
-        // Throw if the name of the variable matches one of the predefined keywords
+        // Throw if the name of the variable matches one of the predefined keywords.
         if (KeyWords.check(name)) {
-            // This occurs when a user has attempted to use an expression operator that is
-            // not supported.
+            // This occurs when a user has attempted to use an expression operator that is not supported.
             throw new KeywordException(String.format("You cannot use the keyword %s as an identifier", name));
         }
 
-        // Throw if an unsupported data type is attempted
+        // Throw if an unsupported data type is attempted.
         DataType dataType = KeyWords.getType(context.type.getText());
 
         if (dataType == null) {
@@ -232,7 +233,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         for (StatementContext statement : context.body.statement()) {
             INode node = this.visitStatement(statement);
 
-            // If the node is null then it was probably a new line
+            // If the node is null then it was probably a new line.
             if (node != null)
                 body.add(node);
         }
@@ -242,7 +243,7 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         for (FunctionParamContext param : context.functionParam()) {
             FunctionParamNode node = (FunctionParamNode) this.visitFunctionParam(param);
 
-            // If the node is null then it was probably a new line
+            // If the node is null then it was probably a new line.
             if (node != null)
                 params.add(node);
         }
@@ -402,22 +403,4 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
 
         return new FunctionCallNode(context.name.getText(), params);
     }
-
-    // public INode visitFuncExpr(FuncExprContext context)
-    // {
-    //     var funcName = context.func.Text;
-        
-    //     // Attempt to generate the mathmatical function
-    //     var func = typeof(Math)
-    //     .GetMethods(BindingFlags.Public | BindingFlags.Static)
-    //     .Where(m => m.ReturnType == typeof(double))
-    //     .Where(m => m.GetParameters().Select(p => p.ParameterType).SequenceEqual(new[] { typeof(double) }))
-    //     .FirstOrDefault(m => m.Name.Equals(funcName, StringComparison.OrdinalIgnoreCase));
-
-    //     // If unable to generate the function then throw an error
-    //     if (func == null)
-    //         throw new NotSupportedException(string.Format("Function {0} is not supported", funcName));
-
-    //     return new FunctionNode(funcName, this.visit(context.expr()));
-    // }
 }

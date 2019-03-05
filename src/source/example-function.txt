@@ -1,8 +1,10 @@
-int something(int input, int test, int arg) {
-	int a;
-	a = 10;
-    return (test + 3) * input * 3;
-};
-
 int a;
 a = something(1, 2, 3);
+
+int something(int a, int b) {
+	int innersomething(int x, int y) {
+        return (x + 3) * y * 3;
+    };
+
+    return innersomething(a, b);
+};
