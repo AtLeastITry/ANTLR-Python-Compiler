@@ -1,9 +1,13 @@
 package ce305.implementation.visitors;
 
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import ce305.abstraction.INode;
 import ce305.abstraction.INodeComparator;
+import ce305.abstraction.dependency.Dependency;
 import ce305.abstraction.dependency.DependencyGraph;
 import ce305.abstraction.expressions.AssignmentNode;
 import ce305.abstraction.expressions.BinaryExpressionNode;
@@ -33,6 +37,14 @@ public class ASTSorter extends ASTVisitor<INode> {
         DependencyGraphBinder dependencyGraphBinder = new DependencyGraphBinder();
         dependencyGraphBinder.bind(tree, BinderType.DeclarationOnly);
         DependencyGraph dependencyGraph = dependencyGraphBinder.bind(tree, BinderType.SyntaxOnly);
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("digraph g {\r\n\trankdir=lr\r\n");
+        Set<Map.Entry<Dependency, Set<Dependency>>> entries = dependencyGraph._dependencies.entrySet();
+        for (Map.Entry<Dependency, Set<Dependency>> entry : entries) {
+            
+        }
 
         _comparator = new INodeComparator(dependencyGraph);
     }

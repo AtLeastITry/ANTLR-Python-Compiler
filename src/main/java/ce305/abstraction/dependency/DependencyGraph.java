@@ -9,10 +9,14 @@ import java.util.UUID;
 import ce305.abstraction.INode;
 
 public final class DependencyGraph {
-    private final Map<UUID, Set<UUID>> _dependencies;
+    public final Map<Dependency, Set<Dependency>> _dependencies;
 
     public DependencyGraph() {
         _dependencies = new HashMap<>();
+    }
+
+    private Dependency buildDependency(INode node) {
+        return new Dependency(node.id, node.getDisplayName());
     }
 
     public boolean containsCycle(INode a, INode b) {
@@ -20,21 +24,24 @@ public final class DependencyGraph {
     }
 
     public boolean containsDependancy(INode parent, INode dependency) {
-        if (!_dependencies.containsKey(parent.id)) {
+        Dependency parentDependency = buildDependency(parent);
+        if (!_dependencies.containsKey(parentDependency)) {
             return false;
         }
 
-        return _dependencies.get(parent.id).contains(dependency.id);
+        return _dependencies.get(parentDependency).contains(buildDependency(dependency));
     }
 
     public void addDependancy(INode parent, INode dependency) {
-        if (_dependencies.containsKey(parent.id)) {
-            _dependencies.get(parent.id).add(dependency.id);
+        Dependency parentDependency = buildDependency(parent);
+
+        if (_dependencies.containsKey(parentDependency)) {
+            _dependencies.get(parentDependency).add(buildDependency(dependency));
         }
         else {
-            Set<UUID> scopedDependencies = new HashSet<>();
-            scopedDependencies.add(dependency.id);
-            _dependencies.put(parent.id, scopedDependencies);
+            Set<Dependency> scopedDependencies = new HashSet<>();
+            scopedDependencies.add(buildDependency(dependency));
+            _dependencies.put(parentDependency, scopedDependencies);
         }
     }
 }
