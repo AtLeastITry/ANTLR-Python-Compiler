@@ -1,13 +1,21 @@
 package ce305.abstraction.expressions;
 
+import java.util.UUID;
+
 import ce305.abstraction.INode;
 
-public class AssignmentNode implements INode {
+public class AssignmentNode extends INode {
     public final INode left;
     public final INode right;
 
     public AssignmentNode(INode left, INode right) {
         super();
+        this.left = left;
+        this.right = right;
+    }
+
+    public AssignmentNode(INode left, INode right, UUID id) {
+        super(id);
         this.left = left;
         this.right = right;
     }

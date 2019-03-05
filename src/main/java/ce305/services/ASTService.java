@@ -6,7 +6,9 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
 
 import ce305.abstraction.INode;
+import ce305.abstraction.expressions.ProgramNode;
 import ce305.gen.*;
+import ce305.implementation.visitors.ASTSorter;
 import ce305.implementation.visitors.DotVisitor;
 import ce305.implementation.visitors.ParseVisitor;
 import ce305.implementation.visitors.PythonVisitor;
@@ -19,8 +21,14 @@ public class ASTService {
         TokenStream tokenStream = new CommonTokenStream(lexer);
         LanguageParser parser = new LanguageParser(tokenStream);
 
-        INode tree = new ParseVisitor().visitCompileUnit(parser.compileUnit());
-        tree = new SemanticAnalyser().visit(tree);
+        // Generate AST
+        ProgramNode tree = (ProgramNode)new ParseVisitor().visitCompileUnit(parser.compileUnit());
+
+        // Do Semantics
+        tree = new SemanticAnalyser().analyse(tree);
+
+        //Re-order AST so that functions declarations are at the start of each body
+        tree = (ProgramNode)new ASTSorter(tree).visit(tree);
 
         return tree;
     }
