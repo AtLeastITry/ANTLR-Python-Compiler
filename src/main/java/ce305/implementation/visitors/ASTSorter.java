@@ -73,37 +73,52 @@ public class ASTSorter extends ASTVisitor<INode> {
 
     @Override
     public INode visit(ValueNode node) {
-        return null;
+        return node;
     }
 
     @Override
     public INode visit(VariableNode node) {
-        return null;
+        return node;
     }
 
     @Override
     public INode visit(DeclarationNode node) {
-        return null;
+        return node;
     }
 
     @Override
     public INode visit(IfStatementNode node) {
-        return null;
+        ArrayList<INode> body = Sorting.selectionSort(node.body, _comparator);
+        INode child = null;
+
+        if (node.child != null) {
+            child = this.visit(node.child);
+        }
+
+        return new IfStatementNode(body, node.expression, child, node.id);
     }
 
     @Override
     public INode visit(ElseStatementNode node) {
-        return null;
+        ArrayList<INode> body = Sorting.selectionSort(node.body, _comparator);
+        return new ElseStatementNode(body, node.id);
     }
 
     @Override
     public INode visit(ElseIfStatementNode node) {
-        return null;
+        ArrayList<INode> body = Sorting.selectionSort(node.body, _comparator);
+        INode child = null;
+
+        if (node.child != null) {
+            child = this.visit(node.child);
+        }
+
+        return new ElseIfStatementNode(body, node.expression, child, node.id);
     }
 
     @Override
     public INode visit(BooleanExpressionNode node) {
-        return null;
+        return node;
     }
 
     @Override
@@ -115,27 +130,27 @@ public class ASTSorter extends ASTVisitor<INode> {
 
     @Override
     public INode visit(FunctionParamNode node) {
-        return null;
+        return node;
     }
 
     @Override
     public INode visit(FunctionReturnStatementNode node) {
-        return null;
+        return node;
     }
 
     @Override
     public INode visit(FunctionCallNode node) {
-        return null;
+        return node;
     }
 
     @Override
     public INode visit(FunctionCallParamNode node) {
-        return null;
+        return node;
     }
 
     @Override
     public INode visit(ParenthesesExpressionNode node) {
-        return null;
+        return node;
     }
 
 }
