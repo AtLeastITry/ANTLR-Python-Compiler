@@ -114,9 +114,11 @@ public class SyntaxBinder extends Binder<INode> {
             }
 
             for (INode child : node.body) {
-                INode temp = this.bind(child, BinderType.DeclarationOnly);
-                temp = this.bind(temp, BinderType.SyntaxOnly);
-                body.add(temp);
+                this.bind(child, BinderType.DeclarationOnly);
+            }
+
+            for (INode child : node.body) {
+                body.add(this.bind(child, BinderType.SyntaxOnly));
             }
     
             _tableStack.pop();
@@ -181,7 +183,11 @@ public class SyntaxBinder extends Binder<INode> {
             ArrayList<INode> body = new ArrayList<>();
 
             for (INode child : node.body) {
-                body.add(this.bind(child, type));
+                this.bind(child, BinderType.DeclarationOnly);
+            }
+
+            for (INode child : node.body) {
+                body.add(this.bind(child, BinderType.SyntaxOnly));
             }
 
             _tableStack.pop();
@@ -200,7 +206,11 @@ public class SyntaxBinder extends Binder<INode> {
             ArrayList<INode> body = new ArrayList<>();
 
             for (INode child : node.body) {
-                body.add(this.bind(child, type));
+                this.bind(child, BinderType.DeclarationOnly);
+            }
+
+            for (INode child : node.body) {
+                body.add(this.bind(child, BinderType.SyntaxOnly));
             }
 
             _tableStack.pop();
@@ -219,7 +229,11 @@ public class SyntaxBinder extends Binder<INode> {
             ArrayList<INode> body = new ArrayList<>();
 
             for (INode child : node.body) {
-                body.add(this.bind(child, type));
+                this.bind(child, BinderType.DeclarationOnly);
+            }
+
+            for (INode child : node.body) {
+                body.add(this.bind(child, BinderType.SyntaxOnly));
             }
             _tableStack.pop();
             return new ElseIfStatementNode(body, node.expression, node.child != null ? this.bind(node.child, type) : node.child);
@@ -245,10 +259,11 @@ public class SyntaxBinder extends Binder<INode> {
             ArrayList<INode> body = new ArrayList<>();
 
             for (INode child : node.body) {
-                // Need to do both passes as while statements allow function declarations.
-                INode temp = this.bind(child, BinderType.DeclarationOnly);
-                temp = this.bind(temp, BinderType.SyntaxOnly);
-                body.add(temp);
+                this.bind(child, BinderType.DeclarationOnly);
+            }
+
+            for (INode child : node.body) {
+                body.add(this.bind(child, BinderType.SyntaxOnly));
             }
 
             _tableStack.pop();

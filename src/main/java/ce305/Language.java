@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import ce305.abstraction.INode;
 import ce305.implementation.utils.Console;
 import ce305.implementation.utils.ConsoleColor;
+import ce305.services.ASTResult;
 import ce305.services.ASTService;
 
 /**
@@ -24,15 +25,15 @@ public class Language {
                 Console.setColor(ConsoleColor.GREEN_BOLD);
                 Console.writeLine("START " + file.getName());
                 String contents = readFile(file.toPath());
-                INode tree = buildAST(contents);
-                if (tree == null) {
+                ASTResult result = buildAST(contents);
+                if (result.tree == null) {
                     Console.setColor(ConsoleColor.GREEN_BOLD);
                     Console.writeLine("Failed " + file.getName());
                     continue;
                 }
-                visualize(tree);
-                String dot = compileToDot(tree, file.getName());
-                String python = compileToPython(tree, file.getName());
+                visualize(result.tree);
+                compileToDot(result, file.getName());
+                compileToPython(result.tree, file.getName());
 
                 Console.setColor(ConsoleColor.GREEN_BOLD);
                 Console.writeLine("END " + file.getName());
@@ -53,7 +54,7 @@ public class Language {
 
         try {
             result = ASTService.compileToPython(tree); 
-            writeFile("python", fileName, "py", result);
+            writeFile("python", fileName, "py", result, "");
         }
         catch(Exception e) {
             Console.setColor(ConsoleColor.RED_BOLD);
@@ -68,16 +69,14 @@ public class Language {
         return result;
     }
 
-    private static String compileToDot(INode tree, String fileName) {
+    private static void compileToDot(ASTResult result, String fileName) {
         Console.setColor(ConsoleColor.CYAN_BOLD);
         Console.writeLine();
         Console.writeLine("    START Compiling file to DOT");
 
-        String result = "";
-
         try {
-            result = ASTService.compileToDot(tree);
-            writeFile("dot", fileName, "dot", result);     
+            writeFile("dot", fileName, "dot", ASTService.compileToDot(result.tree), "");  
+            writeFile("dot", fileName, "dot", result.dependencyGraph.buildGraph(), "_dependency_graph");     
         }
         catch(Exception e) {
             Console.setColor(ConsoleColor.RED_BOLD);
@@ -88,17 +87,15 @@ public class Language {
             Console.setColor(ConsoleColor.CYAN_BOLD);
             Console.writeLine("    END Compiling file to DOT");
         }
-
-        return result;
     }
 
-    private static INode buildAST(String content) {
+    private static ASTResult buildAST(String content) {
         Console.setColor(ConsoleColor.CYAN_BOLD);
         Console.writeLine("    START Building AST");
-        INode tree = null;
+        ASTResult result = null;
         try
         {
-            tree = ASTService.compileToAST(content);
+            result = ASTService.compileToAST(content);
         }
         catch (Exception e)
         {
@@ -112,7 +109,7 @@ public class Language {
             Console.writeLine("    END Building AST");
         }
 
-        return tree;
+        return result;
     }
 
     private static void visualize(INode tree) {
@@ -157,8 +154,8 @@ public class Language {
         return new String(encoded, StandardCharsets.UTF_8);
     }
 
-    private static void writeFile(String directory, String fileName, String extension, String contents) throws IOException {
-        String filePath = String.format("src/output/%s/%s.%s", directory, fileName.replaceFirst("[.][^.]+$", ""), extension);
+    private static void writeFile(String directory, String fileName, String extension, String contents, String afix) throws IOException {
+        String filePath = String.format("src/output/%s/%s%s.%s", directory, fileName.replaceFirst("[.][^.]+$", ""),afix, extension);
         File temp = new File(filePath);
         temp.createNewFile();
 

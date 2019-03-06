@@ -33,18 +33,33 @@ import ce305.implementation.utils.Sorting;
 
 public class ASTSorter extends ASTVisitor<INode> {
     private final INodeComparator _comparator;
+    private final DependencyGraph _dependencyGraph;
+
+    public DependencyGraph getDependencyGraph() {
+        return _dependencyGraph;
+    }
 
     public ASTSorter(INode tree) {
         DependencyGraphBinder dependencyGraphBinder = new DependencyGraphBinder();
-        dependencyGraphBinder.bind(tree, BinderType.DeclarationOnly);
-        DependencyGraph dependencyGraph = dependencyGraphBinder.bind(tree, BinderType.SyntaxOnly);
 
-        _comparator = new INodeComparator(dependencyGraph);
+        // First pass to allow declarations of functions and variables to be handled
+        dependencyGraphBinder.bind(tree, BinderType.DeclarationOnly);
+
+        // Second pass to build up the dependency graph
+        _dependencyGraph = dependencyGraphBinder.bind(tree, BinderType.SyntaxOnly);
+
+        // Create a comparator to be used through the service
+        _comparator = new INodeComparator(_dependencyGraph);
     }
 
     @Override
     public INode visit(ProgramNode node) {
-        ArrayList<INode> body = Sorting.selectionSort(node.children, _comparator);
+        // Re-order nodes based on the dependancy graph using a selection sort
+        ArrayList<INode> body = new ArrayList<>();
+
+        for (INode child : Sorting.selectionSort(node.children, _comparator)) {
+            body.add(this.visit(child));
+        }
 
         return new ProgramNode(body);
     }
@@ -66,7 +81,12 @@ public class ASTSorter extends ASTVisitor<INode> {
 
     @Override
     public INode visit(FunctionNode node) {
-        ArrayList<INode> body = Sorting.selectionSort(node.body, _comparator);
+        // Re-order nodes based on the dependancy graph using a selection sort
+        ArrayList<INode> body = new ArrayList<>();
+
+        for (INode child : Sorting.selectionSort(node.body, _comparator)) {
+            body.add(this.visit(child));
+        }
 
         return new FunctionNode(node.dataType, node.name, body, node.params);
     }
@@ -88,7 +108,13 @@ public class ASTSorter extends ASTVisitor<INode> {
 
     @Override
     public INode visit(IfStatementNode node) {
-        ArrayList<INode> body = Sorting.selectionSort(node.body, _comparator);
+        // Re-order nodes based on the dependancy graph using a selection sort
+        ArrayList<INode> body = new ArrayList<>();
+
+        for (INode child : Sorting.selectionSort(node.body, _comparator)) {
+            body.add(this.visit(child));
+        }
+
         INode child = null;
 
         if (node.child != null) {
@@ -100,13 +126,23 @@ public class ASTSorter extends ASTVisitor<INode> {
 
     @Override
     public INode visit(ElseStatementNode node) {
-        ArrayList<INode> body = Sorting.selectionSort(node.body, _comparator);
+        // Re-order nodes based on the dependancy graph using a selection sort
+        ArrayList<INode> body = new ArrayList<>();
+
+        for (INode child : Sorting.selectionSort(node.body, _comparator)) {
+            body.add(this.visit(child));
+        }
         return new ElseStatementNode(body, node.id);
     }
 
     @Override
     public INode visit(ElseIfStatementNode node) {
-        ArrayList<INode> body = Sorting.selectionSort(node.body, _comparator);
+        // Re-order nodes based on the dependancy graph using a selection sort
+        ArrayList<INode> body = new ArrayList<>();
+
+        for (INode child : Sorting.selectionSort(node.body, _comparator)) {
+            body.add(this.visit(child));
+        }
         INode child = null;
 
         if (node.child != null) {
@@ -123,7 +159,12 @@ public class ASTSorter extends ASTVisitor<INode> {
 
     @Override
     public INode visit(WhileStatementNode node) {
-        ArrayList<INode> body = Sorting.selectionSort(node.body, _comparator);
+        // Re-order nodes based on the dependancy graph using a selection sort
+        ArrayList<INode> body = new ArrayList<>();
+
+        for (INode child : Sorting.selectionSort(node.body, _comparator)) {
+            body.add(this.visit(child));
+        }
 
         return new WhileStatementNode(body, node.expression);
     }

@@ -64,14 +64,6 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
 
             _dependencyGraph.addDependancy(node, node.left);
             _dependencyGraph.addDependancy(node, node.right);
-
-            // for (INode dependency : this.getDependencies(node.left)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
-
-            // for (INode dependency : this.getDependencies(node.right)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
         }
 
         return _dependencyGraph;
@@ -80,16 +72,6 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
     @Override
     public DependencyGraph bind(AssignmentNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
-            // this.bind(node.left, type);
-            // this.bind(node.right, type);
-            // for (INode dependency : this.getDependencies(node.left)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
-    
-            // for (INode dependency : this.getDependencies(node.right)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
-
             this.bind(node.left, type);
             this.bind(node.right, type);
 
@@ -115,10 +97,8 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
             _functions.add(node);
         }        
 
-        if (type == BinderType.SyntaxOnly || type == BinderType.All) {
-            for (INode child: node.body) {
-                this.bind(child, type);
-            }
+        for (INode child: node.body) {
+            this.bind(child, type);
         }
 
         return _dependencyGraph;
@@ -161,16 +141,11 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
             this.bind(node.expression, type);
 
             _dependencyGraph.addDependancy(node, node.expression);
-
-            // for (INode dependency : this.getDependencies(node.expression)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
-
-            for (INode child: node.body) {
-                this.bind(child, type);
-            }
         }
 
+        for (INode child: node.body) {
+            this.bind(child, type);
+        }
         
         if (node.child != null) {
             this.bind(node.child, type);
@@ -194,19 +169,14 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
     @Override
     public DependencyGraph bind(ElseIfStatementNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
-            // for (INode dependency : this.getDependencies(node.expression)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
-
             this.bind(node.expression, type);
 
             _dependencyGraph.addDependancy(node, node.expression);
-
-            for (INode child: node.body) {
-                this.bind(child, type);
-            }
         }
 
+        for (INode child: node.body) {
+            this.bind(child, type);
+        }
         
         if (node.child != null) {
             this.bind(node.child, type);
@@ -218,14 +188,6 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
     @Override
     public DependencyGraph bind(BooleanExpressionNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
-            // for (INode dependency : this.getDependencies(node.left)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
-    
-            // for (INode dependency : this.getDependencies(node.right)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
-
             this.bind(node.left, type);
             this.bind(node.right, type);
 
@@ -239,17 +201,13 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
     @Override
     public DependencyGraph bind(WhileStatementNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
-            // for (INode dependency : this.getDependencies(node.expression)) {
-            //     _dependencyGraph.addDependancy(node, dependency);
-            // }
-
             this.bind(node.expression, type);
 
             _dependencyGraph.addDependancy(node, node.expression);
+        }
 
-            for (INode child: node.body) {
-                this.bind(child, type);
-            }
+        for (INode child: node.body) {
+            this.bind(child, type);
         }
 
         return _dependencyGraph;

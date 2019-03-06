@@ -6,14 +6,14 @@ a = something(1, 2, 3);
 b = test();
 
 int something(int c, int d) {
-    int a;
     a = 20;
-    
-	int innersomething(int x, int y) {
+    a = innersomething(c, d);
+
+    int innersomething(int x, int y) {
         return (x + 3) * y * 3;
     };
 
-    return innersomething(c, d);
+    return a;
 };
 
 int test() {

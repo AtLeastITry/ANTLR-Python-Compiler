@@ -16,7 +16,7 @@ import ce305.implementation.visitors.SemanticAnalyser;
 import ce305.implementation.visitors.VisualizationVisitor;
 
 public class ASTService {
-    public static INode compileToAST(String source) {
+    public static ASTResult compileToAST(String source) {
         Lexer lexer = new LanguageLexer(CharStreams.fromString(source));
         TokenStream tokenStream = new CommonTokenStream(lexer);
         LanguageParser parser = new LanguageParser(tokenStream);
@@ -27,10 +27,11 @@ public class ASTService {
         // Do Semantics
         tree = new SemanticAnalyser().analyse(tree);
 
-        //Re-order AST so that functions declarations are at the start of each body
-        tree = (ProgramNode)new ASTSorter(tree).visit(tree);
+        //Re-order AST based on dependencies of nodes. i.e. function definitions
+        ASTSorter sorter = new ASTSorter(tree);
+        tree = (ProgramNode)sorter.visit(tree);
 
-        return tree;
+        return new ASTResult(tree, sorter.getDependencyGraph());
     }
 
     public static String compileToPython(INode tree) {

@@ -1,0 +1,18 @@
+digraph g {
+	rankdir=LR
+		"id: b5fae66e-fb70-49a1-806b-309d6fce1afc, name: VariableNode(value: a)" -> "id: e59cb531-34b5-49b5-9938-3afc3a591481, name: DeclarationNode(name: a, type: INTEGER)"
+		"id: 705e04f5-742d-4e7d-83d4-f70cbcc6f162, name: AssignmentNode" -> "id: 18633670-fc20-4eae-8c10-f3c37e33094d, name: VariableNode(value: a)"
+		"id: 705e04f5-742d-4e7d-83d4-f70cbcc6f162, name: AssignmentNode" -> "id: e6e95368-1df6-4739-9f92-9859f864d702, name: BinaryExpressionNode(operation: SUBTRACTION)"
+		"id: 18633670-fc20-4eae-8c10-f3c37e33094d, name: VariableNode(value: a)" -> "id: e59cb531-34b5-49b5-9938-3afc3a591481, name: DeclarationNode(name: a, type: INTEGER)"
+		"id: e6e95368-1df6-4739-9f92-9859f864d702, name: BinaryExpressionNode(operation: SUBTRACTION)" -> "id: b717accb-fb33-435b-aadf-5683427b7f22, name: ValueNode(value: 1)"
+		"id: e6e95368-1df6-4739-9f92-9859f864d702, name: BinaryExpressionNode(operation: SUBTRACTION)" -> "id: ab794725-a592-4d00-8515-014f1696cbbe, name: VariableNode(value: a)"
+		"id: 8241f886-3c9f-45f3-be82-5ac09187d638, name: BooleanExpressionNode(operation: GREATERTHAN)" -> "id: 38d8fdb0-87df-43fc-bc52-4250aec5fc2e, name: ValueNode(value: 0)"
+		"id: 8241f886-3c9f-45f3-be82-5ac09187d638, name: BooleanExpressionNode(operation: GREATERTHAN)" -> "id: c1ebcc75-a5de-45ad-a86d-d4150f09ff6d, name: ValueNode(value: a)"
+		"id: 9ccc4c3f-990d-4e16-bbcf-7b3c0f02b2d5, name: AssignmentNode" -> "id: b5fae66e-fb70-49a1-806b-309d6fce1afc, name: VariableNode(value: a)"
+		"id: 9ccc4c3f-990d-4e16-bbcf-7b3c0f02b2d5, name: AssignmentNode" -> "id: 32e9c9bc-1471-4678-82bc-ce0ab251394f, name: ValueNode(value: 10)"
+		"id: 8ece86fc-ebe3-4d4e-b9cc-da0aaa0b73dc, name: WhileStatementNode" -> "id: 8241f886-3c9f-45f3-be82-5ac09187d638, name: BooleanExpressionNode(operation: GREATERTHAN)"
+		"id: ab794725-a592-4d00-8515-014f1696cbbe, name: VariableNode(value: a)" -> "id: e59cb531-34b5-49b5-9938-3afc3a591481, name: DeclarationNode(name: a, type: INTEGER)"
+		"id: 9da01c5f-1391-49f6-8bda-f21bf35c4870, name: ProgramNode" -> "id: 9ccc4c3f-990d-4e16-bbcf-7b3c0f02b2d5, name: AssignmentNode"
+		"id: 9da01c5f-1391-49f6-8bda-f21bf35c4870, name: ProgramNode" -> "id: 8ece86fc-ebe3-4d4e-b9cc-da0aaa0b73dc, name: WhileStatementNode"
+		"id: 9da01c5f-1391-49f6-8bda-f21bf35c4870, name: ProgramNode" -> "id: e59cb531-34b5-49b5-9938-3afc3a591481, name: DeclarationNode(name: a, type: INTEGER)"
+}
