@@ -1,7 +1,5 @@
 
 a = 10
-a = something(1, 2)
-b = test()
 def something(c, d):
 	a = 20
 	def innersomething(x, y):
@@ -9,3 +7,5 @@ def something(c, d):
 	return innersomething(c, d)
 def test():
 	return something(a, a)
+a = something(1, 2)
+b = test()

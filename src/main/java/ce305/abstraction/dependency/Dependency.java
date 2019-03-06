@@ -18,7 +18,7 @@ public final class Dependency {
 
         Dependency dependency = (Dependency) o;    
 
-        if (this.id.equals(dependency.id)) {
+        if (!this.id.toString().equals(dependency.id.toString())) {
             return false;
         }
         
@@ -26,12 +26,16 @@ public final class Dependency {
     }    
     @Override    
     public int hashCode() {        
-        int result = (this.id != null ? this.id.hashCode() : 0);
+        int result = (this.id != null ? this.id.toString().hashCode() : 0);
         return result;    
     }
 
     @Override
     public String toString() {
         return String.format("id: %s, name: %s", this.id, this.name);
+    }
+
+    public String toStringRandom() {
+        return String.format("temp id: %s, actual id: %s, name: %s", UUID.randomUUID(), this.id, this.name);
     }
 }

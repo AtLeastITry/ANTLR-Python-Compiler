@@ -2,6 +2,7 @@ package ce305.abstraction;
 
 import java.util.Comparator;
 
+import ce305.abstraction.dependency.Dependency;
 import ce305.abstraction.dependency.DependencyGraph;
 
 public class INodeComparator implements Comparator<INode> {
@@ -14,15 +15,18 @@ public class INodeComparator implements Comparator<INode> {
 
     @Override
     public int compare(INode a, INode b) {
-        if (_dependencyGraph.containsCycle(a, b)) {
+        Dependency aDependency = DependencyGraph.buildDependency(a);
+        Dependency bDependency = DependencyGraph.buildDependency(b);
+
+        if (_dependencyGraph.containsCycle(aDependency, bDependency)) {
             throw new RuntimeException("Dependency cycle detected");
         }
 
-        if (_dependencyGraph.containsDependancy(a, b)) {
+        if (_dependencyGraph.containsDependancy(aDependency, bDependency)) {
             return 1;
         }
 
-        if (_dependencyGraph.containsDependancy(b, a)) {
+        if (_dependencyGraph.containsDependancy(bDependency, aDependency)) {
             return -1;
         }
 
