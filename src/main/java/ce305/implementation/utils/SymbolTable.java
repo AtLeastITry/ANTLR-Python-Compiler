@@ -4,6 +4,7 @@ import java.util.Hashtable;
 import java.util.UUID;
 
 import ce305.abstraction.utils.Scope;
+import ce305.abstraction.utils.ScopeType;
 import ce305.abstraction.utils.Symbol;
 
 public class SymbolTable {
@@ -11,9 +12,9 @@ public class SymbolTable {
     public Scope scope;
     private Hashtable<String, Symbol> _table = new Hashtable<>();
 
-    public SymbolTable()
+    public SymbolTable(ScopeType type)
     {
-        this.scope = new Scope(UUID.randomUUID());
+        this.scope = new Scope(UUID.randomUUID(), type);
         this.parent = null;
     }
 
@@ -28,15 +29,27 @@ public class SymbolTable {
         this.parent = parent;
     }
 
-    public SymbolTable(SymbolTable parent)
+    public SymbolTable(SymbolTable parent, ScopeType type)
     {
-        this.scope = new Scope(UUID.randomUUID());
+        this.scope = new Scope(UUID.randomUUID(), type);
         this.parent = parent;
     }
 
     public void add(Symbol symbol) {
         symbol.scope = this.scope;
         _table.put(symbol.name, symbol);
+    }
+
+    public boolean containsDeclaration(String name) {
+        if (_table.containsKey(name)) {
+            return true;
+        }
+
+        if (this.scope.type != ScopeType.Function && this.parent != null) {
+            return this.parent.containsDeclaration(name);
+        }
+
+        return false;
     }
 
     public boolean contains(String name) {

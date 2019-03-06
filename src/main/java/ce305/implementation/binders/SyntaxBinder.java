@@ -25,6 +25,7 @@ import ce305.abstraction.statements.ElseStatementNode;
 import ce305.abstraction.statements.FunctionReturnStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
+import ce305.abstraction.utils.ScopeType;
 import ce305.abstraction.utils.Symbol;
 import ce305.implementation.errors.DuplicateDefinitionException;
 import ce305.implementation.errors.IncorrectDataType;
@@ -44,7 +45,7 @@ public class SyntaxBinder extends Binder<INode> {
 
     @Override
     public INode bind(ProgramNode node, BinderType type) {
-        _tableStack.add(new SymbolTable());
+        _tableStack.add(new SymbolTable(ScopeType.Program));
         return node;
     }
 
@@ -106,7 +107,7 @@ public class SyntaxBinder extends Binder<INode> {
             ArrayList<FunctionParamNode> params = new ArrayList<>();
 
             // Add a new top level scope.
-            _tableStack.add(new SymbolTable());
+            _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.Function));
 
             for (FunctionParamNode param : node.params) {
                 params.add((FunctionParamNode) this.bind(param, type));
@@ -162,7 +163,7 @@ public class SyntaxBinder extends Binder<INode> {
     public INode bind(DeclarationNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
             // Check to see variable already exists in the symbol table and throw if it does.
-            if (this.symbolTable().contains(node.name))
+            if (this.symbolTable().containsDeclaration(node.name))
             throw new DuplicateDefinitionException(
                     String.format("\"%s\" already exists in the current scope", node.name));
 
@@ -176,7 +177,7 @@ public class SyntaxBinder extends Binder<INode> {
     public INode bind(IfStatementNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
             // Add a new nested scope.
-            _tableStack.add(new SymbolTable(this.symbolTable()));
+            _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.If));
             ArrayList<INode> body = new ArrayList<>();
 
             for (INode child : node.body) {
@@ -195,7 +196,7 @@ public class SyntaxBinder extends Binder<INode> {
     public INode bind(ElseStatementNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
             // Add a new nested scope.
-            _tableStack.add(new SymbolTable(this.symbolTable()));
+            _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.If));
             ArrayList<INode> body = new ArrayList<>();
 
             for (INode child : node.body) {
@@ -213,7 +214,7 @@ public class SyntaxBinder extends Binder<INode> {
     public INode bind(ElseIfStatementNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
            // Add a new nested scope.
-            _tableStack.add(new SymbolTable(this.symbolTable()));
+            _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.If));
 
             ArrayList<INode> body = new ArrayList<>();
 
@@ -240,7 +241,7 @@ public class SyntaxBinder extends Binder<INode> {
     public INode bind(WhileStatementNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
             // Add a new nested scope.
-            _tableStack.add(new SymbolTable(this.symbolTable()));
+            _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.While));
             ArrayList<INode> body = new ArrayList<>();
 
             for (INode child : node.body) {

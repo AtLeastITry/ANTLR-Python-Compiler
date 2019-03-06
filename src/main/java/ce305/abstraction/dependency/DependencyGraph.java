@@ -4,37 +4,73 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import ce305.abstraction.INode;
 
 public final class DependencyGraph {
-    private final Map<UUID, Set<UUID>> _dependencies;
+    private final Map<Dependency, Set<Dependency>> _dependencies;
 
     public DependencyGraph() {
         _dependencies = new HashMap<>();
     }
 
-    public boolean containsCycle(INode a, INode b) {
+    public static Dependency buildDependency(INode node) {
+        return new Dependency(node.id, node.getDisplayName());
+    }
+
+    public boolean containsCycle(Dependency a, Dependency b) {
         return this.containsDependancy(a, b) && this.containsDependancy(b, a);
     }
 
-    public boolean containsDependancy(INode parent, INode dependency) {
-        if (!_dependencies.containsKey(parent.id)) {
+    public boolean containsDependancy(Dependency parent, Dependency dependency) {
+        if (!_dependencies.containsKey(parent)) {
             return false;
         }
+        Set<Dependency> dependencies = _dependencies.get(parent);
 
-        return _dependencies.get(parent.id).contains(dependency.id);
+        if (dependencies.stream().anyMatch(d -> d.equals(dependency))) {
+            return true;
+        }
+
+        for (Dependency temp : dependencies) {
+            if (this.containsDependancy(temp, dependency)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void addDependancy(INode parent, INode dependency) {
-        if (_dependencies.containsKey(parent.id)) {
-            _dependencies.get(parent.id).add(dependency.id);
+        Dependency parentDependency = buildDependency(parent);
+
+        if (_dependencies.containsKey(parentDependency)) {
+            _dependencies.get(parentDependency).add(buildDependency(dependency));
         }
         else {
-            Set<UUID> scopedDependencies = new HashSet<>();
-            scopedDependencies.add(dependency.id);
-            _dependencies.put(parent.id, scopedDependencies);
+            Set<Dependency> scopedDependencies = new HashSet<>();
+            scopedDependencies.add(buildDependency(dependency));
+            _dependencies.put(parentDependency, scopedDependencies);
         }
+    }
+
+    public String buildGraph() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("digraph g {\r\n\trankdir=LR");
+        Set<Map.Entry<Dependency, Set<Dependency>>> entries = this._dependencies.entrySet();
+        for (Map.Entry<Dependency, Set<Dependency>> entry : entries) {
+            for (Dependency dependency : entry.getValue()) {
+                sb.append("\r\n\t\t");
+                sb.append(String.format("\"%s\"", entry.getKey().toString()));
+                sb.append(" -> ");
+                sb.append(String.format("\"%s\"", dependency.toString()));
+            }
+            
+        }
+
+        sb.append("\r\n}");
+
+        return sb.toString();
     }
 }

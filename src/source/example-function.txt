@@ -1,10 +1,21 @@
 int a;
-a = something(1, 2, 3);
+int b;
+a = 10;
 
-int something(int a, int b) {
+a = something(1, 2, 3);
+b = test();
+
+int something(int c, int d) {
+    int a;
+    a = 20;
+    
 	int innersomething(int x, int y) {
         return (x + 3) * y * 3;
     };
 
-    return innersomething(a, b);
+    return innersomething(c, d);
+};
+
+int test() {
+    return something(a, a);
 };
