@@ -17,3 +17,6 @@ if a > 10:
 elif a < 10:
 	a = something(1, 2)
 	b = test()
+else:
+	a = something(1, 2)
+	b = test()

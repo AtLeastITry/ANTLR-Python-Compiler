@@ -22,6 +22,6 @@ public class AssignmentNode extends INode {
 
     @Override
     public String getDisplayName() {
-        return String.format("%s left(%s) right(%s)", AssignmentNode.class.getSimpleName(), this.left.getDisplayName(), this.right.getDisplayName());
+        return AssignmentNode.class.getSimpleName();
     }
 }

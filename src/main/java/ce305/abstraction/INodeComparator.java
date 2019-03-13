@@ -19,7 +19,7 @@ public class INodeComparator implements Comparator<INode> {
         Dependency bDependency = DependencyGraph.buildDependency(b);
 
         if (_dependencyGraph.containsCycle(aDependency, bDependency)) {
-            throw new RuntimeException("Dependency cycle detected");
+            throw new RuntimeException(String.format("Dependency cycle detected, a: %s, b: %s", aDependency.toString(), bDependency.toString()));
         }
 
         if (_dependencyGraph.containsDependancy(aDependency, bDependency)) {

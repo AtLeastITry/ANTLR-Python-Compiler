@@ -20,9 +20,6 @@ public final class DependencyGraph {
     }
 
     public boolean containsCycle(Dependency a, Dependency b) {
-        Console.writeLine("a: " + a.toString());
-        Console.writeLine("b: " + b.toString());
-
         return this.containsDependancy(a, b) && this.containsDependancy(b, a);
     }
 
