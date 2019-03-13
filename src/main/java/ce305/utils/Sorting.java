@@ -1,4 +1,4 @@
-package ce305.implementation.utils;
+package ce305.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;

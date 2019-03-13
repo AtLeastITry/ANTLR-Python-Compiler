@@ -32,7 +32,7 @@ import ce305.implementation.errors.IncorrectDataType;
 import ce305.implementation.errors.MissingParametersException;
 import ce305.implementation.errors.UndefinedFunctionException;
 import ce305.implementation.errors.UndefinedVariableException;
-import ce305.implementation.utils.SymbolTable;
+import ce305.utils.SymbolTable;
 import ce305.implementation.visitors.DataTypeChecker;
 
 public class SyntaxBinder extends Binder<INode> {

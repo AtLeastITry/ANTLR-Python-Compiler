@@ -26,7 +26,7 @@ import ce305.abstraction.statements.ElseStatementNode;
 import ce305.abstraction.statements.FunctionReturnStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
-import ce305.implementation.utils.DotHelper;
+import ce305.utils.DotHelper;
 
 public class DotVisitor extends ASTVisitor<String> {
 
@@ -52,7 +52,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(ProgramNode node) {
-        _nodeStack.add(new DotNode(node.getDisplayName()));
+        _nodeStack.add(new DotNode(node));
 
         for (INode child : node.children) {
             this.visit(child);
@@ -77,7 +77,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(BinaryExpressionNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -90,7 +90,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(AssignmentNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -103,7 +103,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(NegateNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -115,7 +115,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(FunctionNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -133,25 +133,25 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(ValueNode node) {
-        _connections.add(new DotConnection(this.getParent(), new DotNode(node.getDisplayName())));
+        _connections.add(new DotConnection(this.getParent(), new DotNode(node)));
         return null;
     }
 
     @Override
     public String visit(VariableNode node) {
-        _connections.add(new DotConnection(this.getParent(), new DotNode(node.getDisplayName())));
+        _connections.add(new DotConnection(this.getParent(), new DotNode(node)));
         return null;
     }
 
     @Override
     public String visit(DeclarationNode node) {
-        _connections.add(new DotConnection(this.getParent(), new DotNode(node.getDisplayName())));
+        _connections.add(new DotConnection(this.getParent(), new DotNode(node)));
         return null;
     }
 
     @Override
     public String visit(IfStatementNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -171,7 +171,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(ElseStatementNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -185,7 +185,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(ElseIfStatementNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -205,7 +205,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(BooleanExpressionNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -218,7 +218,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(WhileStatementNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -234,13 +234,13 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(FunctionParamNode node) {
-        _connections.add(new DotConnection(this.getParent(), new DotNode(node.getDisplayName())));
+        _connections.add(new DotConnection(this.getParent(), new DotNode(node)));
         return null;
     }
 
     @Override
     public String visit(FunctionReturnStatementNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -252,7 +252,7 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(FunctionCallNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);
@@ -266,13 +266,13 @@ public class DotVisitor extends ASTVisitor<String> {
 
     @Override
     public String visit(FunctionCallParamNode node) {
-        _connections.add(new DotConnection(this.getParent(), new DotNode(node.getDisplayName())));
+        _connections.add(new DotConnection(this.getParent(), new DotNode(node)));
         return null;
     }
 
     @Override
     public String visit(ParenthesesExpressionNode node) {
-        DotNode newParent = new DotNode(node.getDisplayName());
+        DotNode newParent = new DotNode(node);
         _connections.add(new DotConnection(this.getParent(), newParent));
 
         _nodeStack.add(newParent);

@@ -148,6 +148,12 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
                 elseIfStatements.set(i, new ElseIfStatementNode(current.body, current.expression, elseIfStatements.get(i + 1)));
             }
 
+            if (elseIfStatements.size() == 1) {
+                ElseIfStatementNode elseIfStatementNode = elseIfStatements.get(0);
+
+                elseIfStatements.set(0, new ElseIfStatementNode(elseIfStatementNode.body, elseIfStatementNode.expression, elseStatement));
+            }
+
             return new IfStatementNode(ifStatement.body, ifStatement.expression, elseIfStatements.get(0));
         } else {
             if (elseStatement != null) {

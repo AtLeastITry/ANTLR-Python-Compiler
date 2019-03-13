@@ -34,8 +34,4 @@ public final class Dependency {
     public String toString() {
         return String.format("id: %s, name: %s", this.id, this.name);
     }
-
-    public String toStringRandom() {
-        return String.format("temp id: %s, actual id: %s, name: %s", UUID.randomUUID(), this.id, this.name);
-    }
 }

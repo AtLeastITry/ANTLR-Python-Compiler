@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ce305.abstraction.INode;
+import ce305.utils.Console;
 
 public final class DependencyGraph {
     private final Map<Dependency, Set<Dependency>> _dependencies;

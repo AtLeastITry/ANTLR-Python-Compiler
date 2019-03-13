@@ -8,5 +8,15 @@ def something(c, d):
 		return (x + 3) * y * 3
 	a = innersomething(c, d)
 	return a
-a = something(1, 2)
-b = test()
+while a > 10:
+	a = something(1, 2)
+	b = test()
+if a > 10:
+	a = something(1, 2)
+	b = test()
+elif a < 10:
+	a = something(1, 2)
+	b = test()
+else:
+	a = something(1, 2)
+	b = test()
