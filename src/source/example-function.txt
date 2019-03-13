@@ -5,6 +5,10 @@ a = 10;
 a = something(1, 2, 3);
 b = test();
 
+int test() {
+    return something(a, a);
+};
+
 int something(int c, int d) {
     a = 20;
     a = innersomething(c, d);
@@ -14,8 +18,4 @@ int something(int c, int d) {
     };
 
     return a;
-};
-
-int test() {
-    return something(a, a);
 };

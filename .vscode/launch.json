@@ -2,9 +2,9 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - Language",
+            "name": "CodeLens (Launch) - Program",
             "request": "launch",
-            "mainClass": "ce305.Language",
+            "mainClass": "ce305.Program",
             "projectName": "assignment"
         }
     ]

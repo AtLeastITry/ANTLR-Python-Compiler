@@ -17,7 +17,7 @@ import ce305.services.ASTService;
  * Hello world!
  *
  */
-public class Language {
+public class Program {
     public static void main(String[] args) throws IOException {
         try {
             clearTargetFiles();
