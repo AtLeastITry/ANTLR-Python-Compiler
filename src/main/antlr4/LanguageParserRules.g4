@@ -1,7 +1,7 @@
 parser grammar LanguageParserRules;
 
 statements
-	: (statement SEMICOLON)*
+	: (statement EndOfLine)*
 	;
 
 statement
@@ -15,7 +15,8 @@ statement
 	;
 
 functionStatement
-    : type=(INT|FLOAT) name=VAR LPARA params=functionParam* RPARA LBRAC body=statements RBRAC
+    : type=FLOAT name=VAR LPARA params=functionParam* RPARA LBRAC body=statements RBRAC
+    | type=INT name=VAR LPARA params=functionParam* RPARA LBRAC body=statements RBRAC
     ;
 
 functionReturnStatement
@@ -51,7 +52,8 @@ assignment
 	;
 
 declaration
-	: type=(INT|FLOAT) name=VAR
+	: type=FLOAT name=VAR
+	| type=INT name=VAR
 	;
 
 

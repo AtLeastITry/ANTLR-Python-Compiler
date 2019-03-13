@@ -1,14 +1,14 @@
 lexer grammar LanguageLexerRules;
 
 // Binary operations
-PLUS    : '+' ;
-MINUS   : '-' ;
-MULT    : '*' ;
-DIV     : '/' ;
-POWER   : '^' ;
+PLUS              : '+' ;
+MINUS             : '-' ;
+MULT              : '*' ;
+DIV               : '/' ;
+POWER             : '^' ;
 
 // Boolean operations
-EQUALS			  : '==';
+EQUALS            : '==';
 NEGATIVEEQUALS    : '!=';
 NOT               : '!';
 GREATERTHAN       : '>';
@@ -18,28 +18,29 @@ LESSTHANEQUALS    : '<=';
 OR                : '||';
 AND               : '&&';
 
-//keywords
-INT : 'int';
-FLOAt: 'float';
-ELSE: 'else';
-IF: 'if';
-WHILE: 'while';
-RETURN: 'return';
-LPARA: '(';
-RPARA: ')';
-LBRAC: '{';
-RBRAC: '}';
-SEMICOLON: ';';
-COMMA: ',';
+// Keywords
+INT               : 'int';
+FLOAT             : 'float';
+ELSE              : 'else';
+IF                : 'if';
+WHILE             : 'while';
+RETURN            : 'return';
+
+// Flow Controls
+LPARA             : '(';
+RPARA             : ')';
+LBRAC             : '{';
+RBRAC             : '}';
+COMMA             : ',';
 
 // Assignment operation
-AssignOP : '=' ;
+AssignOP          : '=' ;
 
 // Alpha/Num
-VAR     : ('a'..'z')+ ;
-NUM     : [0-9]+ ('.' [0-9]+)? ([eE] [+-]? [0-9]+)?;
+VAR               : ('a'..'z')+ ;
+NUM               : [0-9]+ ('.' [0-9]+)? ([eE] [+-]? [0-9]+)?;
 
 // Misc
-EndOfLine : ';';
-WS        : [ \t\r\n] -> channel(HIDDEN);
+EndOfLine         : ';';
+WS                : [ \t\r\n] -> channel(HIDDEN);
 
