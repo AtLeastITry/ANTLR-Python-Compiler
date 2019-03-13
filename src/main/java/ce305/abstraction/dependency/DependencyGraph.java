@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ce305.abstraction.INode;
+import ce305.utils.Console;
 
 public final class DependencyGraph {
     private final Map<Dependency, Set<Dependency>> _dependencies;
@@ -19,6 +20,9 @@ public final class DependencyGraph {
     }
 
     public boolean containsCycle(Dependency a, Dependency b) {
+        Console.writeLine("a: " + a.toString());
+        Console.writeLine("b: " + b.toString());
+
         return this.containsDependancy(a, b) && this.containsDependancy(b, a);
     }
 

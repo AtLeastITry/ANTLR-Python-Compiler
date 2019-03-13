@@ -29,7 +29,8 @@ import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
 import ce305.implementation.binders.BinderType;
 import ce305.implementation.binders.DependencyGraphBinder;
-import ce305.implementation.utils.Sorting;
+import ce305.utils.FileHelper;
+import ce305.utils.Sorting;
 
 public class ASTSorter extends ASTVisitor<INode> {
     private final INodeComparator _comparator;
@@ -39,7 +40,7 @@ public class ASTSorter extends ASTVisitor<INode> {
         return _dependencyGraph;
     }
 
-    public ASTSorter(INode tree) {
+    public ASTSorter(INode tree, String fileName) {
         DependencyGraphBinder dependencyGraphBinder = new DependencyGraphBinder();
 
         // First pass to allow declarations of functions and variables to be handled
@@ -47,7 +48,7 @@ public class ASTSorter extends ASTVisitor<INode> {
 
         // Second pass to build up the dependency graph
         _dependencyGraph = dependencyGraphBinder.bind(tree, BinderType.SyntaxOnly);
-
+        FileHelper.generateGraphFile(_dependencyGraph, fileName);
         // Create a comparator to be used through the service
         _comparator = new INodeComparator(_dependencyGraph);
     }

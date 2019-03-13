@@ -19,7 +19,7 @@ import ce305.abstraction.statements.ElseStatementNode;
 import ce305.abstraction.statements.FunctionReturnStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
-import ce305.implementation.utils.ConsoleColor;
+import ce305.utils.ConsoleColor;
 
 public class VisualizationVisitor extends ASTVisitor<String> {
     private static final String IndentString = "|   ";

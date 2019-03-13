@@ -45,11 +45,24 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
 
     @Override
     public DependencyGraph bind(ProgramNode node, BinderType type) {
-        for (INode child : node.children) {
+        int childrenLength = node.children.size();
+        for (int i = 0; i < childrenLength; i++) {
+            INode child = node.children.get(i);
+
             this.bind(child, type);
 
             if (type == BinderType.SyntaxOnly || type == BinderType.All) {
                 _dependencyGraph.addDependancy(node, child);
+
+                if ((i + 1) < childrenLength) {
+                    INode nextChild = node.children.get(i + 1);
+
+                    if (child instanceof FunctionNode || nextChild instanceof FunctionNode) {
+                        continue;
+                    }
+
+                    _dependencyGraph.addDependancy(nextChild, child);
+                }
             }
         }
 
@@ -142,9 +155,26 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
 
             _dependencyGraph.addDependancy(node, node.expression);
         }
+        
+        int childrenLength = node.body.size();
+        for (int i = 0; i < childrenLength; i++) {
+            INode child = node.body.get(i);
 
-        for (INode child: node.body) {
             this.bind(child, type);
+
+            if (type == BinderType.SyntaxOnly || type == BinderType.All) {
+                _dependencyGraph.addDependancy(node, child);
+
+                if ((i + 1) < childrenLength) {
+                    INode nextChild = node.body.get(i + 1);
+
+                    if (child instanceof FunctionNode || nextChild instanceof FunctionNode) {
+                        continue;
+                    }
+
+                    _dependencyGraph.addDependancy(nextChild, child);
+                }
+            }
         }
         
         if (node.child != null) {
@@ -158,8 +188,25 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
     public DependencyGraph bind(ElseStatementNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
 
-            for (INode child: node.body) {
+            int childrenLength = node.body.size();
+            for (int i = 0; i < childrenLength; i++) {
+                INode child = node.body.get(i);
+    
                 this.bind(child, type);
+    
+                if (type == BinderType.SyntaxOnly || type == BinderType.All) {
+                    _dependencyGraph.addDependancy(node, child);
+    
+                    if ((i + 1) < childrenLength) {
+                        INode nextChild = node.body.get(i + 1);
+    
+                        if (child instanceof FunctionNode || nextChild instanceof FunctionNode) {
+                            continue;
+                        }
+    
+                        _dependencyGraph.addDependancy(nextChild, child);
+                    }
+                }
             }
         }
 
@@ -174,8 +221,25 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
             _dependencyGraph.addDependancy(node, node.expression);
         }
 
-        for (INode child: node.body) {
+        int childrenLength = node.body.size();
+        for (int i = 0; i < childrenLength; i++) {
+            INode child = node.body.get(i);
+
             this.bind(child, type);
+
+            if (type == BinderType.SyntaxOnly || type == BinderType.All) {
+                _dependencyGraph.addDependancy(node, child);
+
+                if ((i + 1) < childrenLength) {
+                    INode nextChild = node.body.get(i + 1);
+
+                    if (child instanceof FunctionNode || nextChild instanceof FunctionNode) {
+                        continue;
+                    }
+
+                    _dependencyGraph.addDependancy(nextChild, child);
+                }
+            }
         }
         
         if (node.child != null) {
@@ -206,8 +270,25 @@ public class DependencyGraphBinder extends Binder<DependencyGraph> {
             _dependencyGraph.addDependancy(node, node.expression);
         }
 
-        for (INode child: node.body) {
+        int childrenLength = node.body.size();
+        for (int i = 0; i < childrenLength; i++) {
+            INode child = node.body.get(i);
+
             this.bind(child, type);
+
+            if (type == BinderType.SyntaxOnly || type == BinderType.All) {
+                _dependencyGraph.addDependancy(node, child);
+
+                if ((i + 1) < childrenLength) {
+                    INode nextChild = node.body.get(i + 1);
+
+                    if (child instanceof FunctionNode || nextChild instanceof FunctionNode) {
+                        continue;
+                    }
+
+                    _dependencyGraph.addDependancy(nextChild, child);
+                }
+            }
         }
 
         return _dependencyGraph;

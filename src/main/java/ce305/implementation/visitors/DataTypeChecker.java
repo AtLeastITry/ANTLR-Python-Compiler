@@ -5,7 +5,7 @@ import ce305.abstraction.expressions.*;
 import ce305.abstraction.functions.*;
 import ce305.abstraction.statements.*;
 import ce305.abstraction.utils.Symbol;
-import ce305.implementation.utils.SymbolTable;
+import ce305.utils.SymbolTable;
 
 public class DataTypeChecker extends ASTVisitor<Boolean>
 {

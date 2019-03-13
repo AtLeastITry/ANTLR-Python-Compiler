@@ -2,13 +2,15 @@ package ce305.abstraction.dot;
 
 import java.util.UUID;
 
+import ce305.abstraction.INode;
+
 public class DotNode {
     public final String lable;
     public final UUID id;
 
-    public DotNode(String label) {
-        this.lable = label;
-        this.id = UUID.randomUUID();
+    public DotNode(INode node) {
+        this.lable = node.getDisplayName();
+        this.id = node.id;
     }
 
     @Override

@@ -2,8 +2,23 @@ int a;
 int b;
 a = 10;
 
-a = something(1, 2, 3);
-b = test();
+while(a > 10) {
+    a = something(1, 2, 3);
+    b = test();
+};
+
+if (a > 10) {
+    a = something(1, 2, 3);
+    b = test();
+}
+else if (a < 10) {
+    a = something(1, 2, 3);
+    b = test();
+}
+else {
+    a = something(1, 2, 3);
+    b = test();
+};
 
 int test() {
     return something(a, a);
