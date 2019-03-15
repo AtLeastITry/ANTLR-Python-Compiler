@@ -81,6 +81,9 @@ public class PythonVisitor extends ASTVisitor<String> {
         case POWER:
             output.append(" ^ ");
             break;
+        case MODULO:
+            output.append(" % ");
+            break;
         default:
         }
 

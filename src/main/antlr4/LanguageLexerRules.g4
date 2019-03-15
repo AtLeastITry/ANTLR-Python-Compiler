@@ -6,6 +6,7 @@ MINUS             : '-' ;
 MULT              : '*' ;
 DIV               : '/' ;
 POWER             : '^' ;
+MODULO            : '%' ;
 
 // Boolean operations
 EQUALS            : '==';

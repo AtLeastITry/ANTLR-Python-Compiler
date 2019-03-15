@@ -368,6 +368,9 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
         case LanguageLexer.POWER:
             return new BinaryExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right),
                     ArithmeticOperation.POWER);
+        case LanguageLexer.MODULO:
+            return new BinaryExpressionNode(this.visitExpr(context.left), this.visitExpr(context.right),
+                    ArithmeticOperation.MODULO);
         default:
             // This occurs when a user has attempted to use an expression operator that is
             // not supported.

@@ -6,7 +6,7 @@ odd = 0
 even = 0
 index = 1
 while index >= n:
-	if index / 2 == 0:
+	if index % 2 == 0:
 		even = even + index
 else:
 		odd = odd + index
