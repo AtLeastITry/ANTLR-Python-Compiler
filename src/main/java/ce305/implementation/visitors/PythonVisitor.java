@@ -22,14 +22,23 @@ import ce305.abstraction.statements.WhileStatementNode;
 
 public class PythonVisitor extends ASTVisitor<String> {
     private int _numIndent;
-    private Boolean _needsNewLine = false;
+    private Boolean _hasFirstLine = false;
 
     public PythonVisitor() {
         _numIndent = 0;
     }
 
-    private void addLine(StringBuilder output) {
-        output.append("\r\n");
+    private void addLine(StringBuilder output, INode node) {
+        if (node instanceof DeclarationNode) {
+            return;
+        }
+        
+        if (_hasFirstLine) {
+            output.append("\r\n");
+        }        
+        else {
+            _hasFirstLine = true;
+        }
     }
 
     private void addIndent(StringBuilder output) {
@@ -44,14 +53,7 @@ public class PythonVisitor extends ASTVisitor<String> {
 
         for (int i = 0; i < node.children.size(); i++) {
             INode child = node.children.get(i);
-
-            if (_needsNewLine) {
-                this.addLine(output);
-            }
-
-            if (i > 0 && !_needsNewLine) {
-                _needsNewLine = true;
-            }
+            this.addLine(output, child);
 
             String temp = this.visit(child);
             output.append(temp);
@@ -143,7 +145,7 @@ public class PythonVisitor extends ASTVisitor<String> {
             if(child instanceof DeclarationNode) {
                 continue;
             }
-            addLine(output);
+            addLine(output, child);
             addIndent(output);
             output.append(this.visit(child));
         }
@@ -151,7 +153,8 @@ public class PythonVisitor extends ASTVisitor<String> {
         _numIndent--;
 
         if (node.child != null) {
-            addLine(output);
+            addLine(output, node.child);
+            addIndent(output);
             output.append(this.visit(node.child));
         }
 
@@ -170,7 +173,7 @@ public class PythonVisitor extends ASTVisitor<String> {
             if(child instanceof DeclarationNode) {
                 continue;
             }
-            addLine(output);
+            addLine(output, child);
             addIndent(output);
             output.append(this.visit(child));
         }
@@ -194,7 +197,7 @@ public class PythonVisitor extends ASTVisitor<String> {
             if(child instanceof DeclarationNode) {
                 continue;
             }
-            addLine(output);
+            addLine(output, child);
             addIndent(output);
             output.append(this.visit(child));
         }
@@ -202,7 +205,8 @@ public class PythonVisitor extends ASTVisitor<String> {
         _numIndent--;
 
         if (node.child != null) {
-            addLine(output);
+            addLine(output, node.child);
+            addIndent(output);
             output.append(this.visit(node.child));
         }
 
@@ -261,7 +265,7 @@ public class PythonVisitor extends ASTVisitor<String> {
             if(child instanceof DeclarationNode) {
                 continue;
             }
-            addLine(output);
+            addLine(output, child);
             addIndent(output);
             output.append(this.visit(child));
         }
@@ -295,7 +299,7 @@ public class PythonVisitor extends ASTVisitor<String> {
                 continue;
             }
 
-            addLine(output);
+            addLine(output, child);
             addIndent(output);
             output.append(this.visit(child));
         }

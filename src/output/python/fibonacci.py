@@ -1,6 +1,3 @@
-
-
-
 n = 12
 previous = 0
 current = 1
