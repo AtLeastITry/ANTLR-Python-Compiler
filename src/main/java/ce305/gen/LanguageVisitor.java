@@ -83,6 +83,12 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignment(LanguageParser.AssignmentContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LanguageParser#binaryAssignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryAssignment(LanguageParser.BinaryAssignmentContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LanguageParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

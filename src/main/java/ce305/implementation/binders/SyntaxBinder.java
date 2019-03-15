@@ -80,7 +80,7 @@ public class SyntaxBinder extends Binder<INode> {
                 }
             }
     
-            return new AssignmentNode(left, right);
+            return new AssignmentNode(left, right, node.operation);
         }
 
         return node;

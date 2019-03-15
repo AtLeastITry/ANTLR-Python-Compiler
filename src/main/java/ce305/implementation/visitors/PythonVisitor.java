@@ -99,7 +99,30 @@ public class PythonVisitor extends ASTVisitor<String> {
         StringBuilder output = new StringBuilder();
 
         output.append(this.visit(node.left));
-        output.append(" = ");
+        switch (node.operation) {
+            case ASSIGN:
+                output.append(" = ");
+                break;
+            case ADDITION:
+                output.append(" += ");
+                break;
+            case SUBTRACTION:
+                output.append(" -= ");
+                break;
+            case MULTIPLICATION:
+                output.append(" *= ");
+                break;
+            case DIVISION:
+                output.append(" /= ");
+                break;
+            case POWER:
+                output.append(" ^= ");
+                break;
+            case MODULO:
+                output.append(" %= ");
+                break;
+            default:
+            }
         output.append(this.visit(node.right));
 
         return output.toString();

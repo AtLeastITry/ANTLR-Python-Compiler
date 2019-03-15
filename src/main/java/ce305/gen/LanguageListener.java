@@ -128,6 +128,16 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitAssignment(LanguageParser.AssignmentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LanguageParser#binaryAssignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinaryAssignment(LanguageParser.BinaryAssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LanguageParser#binaryAssignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinaryAssignment(LanguageParser.BinaryAssignmentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LanguageParser#declaration}.
 	 * @param ctx the parse tree
 	 */

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ce305.abstraction.ArithmeticOperation;
+import ce305.abstraction.AssignmentOperation;
 import ce305.abstraction.BooleanOperation;
 import ce305.abstraction.DataType;
 import ce305.abstraction.INode;
@@ -381,7 +382,24 @@ public class ParseVisitor extends LanguageBaseVisitor<INode> {
     public INode visitAssignment(AssignmentContext context) {
         // Remove all new line characters
         String name = context.variable.getText().replace("\r", "").replace("\n", "");
-        return new AssignmentNode(new VariableNode(name), this.visitExpr(context.right));
+        switch (context.op.getType()) {
+            case LanguageLexer.AssignOP:
+                return new AssignmentNode(new VariableNode(name), this.visitExpr(context.right), AssignmentOperation.ASSIGN);
+            case LanguageLexer.ASSIGNPLUS:
+                return new AssignmentNode(new VariableNode(name), this.visitExpr(context.right), AssignmentOperation.ADDITION);
+            case LanguageLexer.ASSIGNMINUS:
+                return new AssignmentNode(new VariableNode(name), this.visitExpr(context.right), AssignmentOperation.SUBTRACTION);
+            case LanguageLexer.ASSIGNMULT:
+                return new AssignmentNode(new VariableNode(name), this.visitExpr(context.right), AssignmentOperation.MULTIPLICATION);
+            case LanguageLexer.ASSIGNDIV:
+                return new AssignmentNode(new VariableNode(name), this.visitExpr(context.right), AssignmentOperation.DIVISION);
+            case LanguageLexer.ASSIGNPOWER:
+                return new AssignmentNode(new VariableNode(name), this.visitExpr(context.right), AssignmentOperation.POWER);
+            default:
+                // This occurs when a user has attempted to use an expression operator that is
+                // not supported.
+                throw new UnsupportedNodeException("Node is unsupported");
+            }
     }
 
     public INode visitUnaryExpr(UnaryExprContext context) {

@@ -48,7 +48,11 @@ elseStatement
 	;
 
 assignment
-	: variable=VAR op=AssignOP right=expr
+	: variable=VAR op=(AssignOP|ASSIGNPLUS|ASSIGNMINUS|ASSIGNMULT|ASSIGNDIV|ASSIGNPOWER|ASSIGNMODULO) right=expr
+	;
+
+binaryAssignment
+	: variable=VAR right=expr
 	;
 
 declaration

@@ -6,4 +6,4 @@ while index <= n:
 	temp = current
 	current = current + previous
 	previous = temp
-	index = index + 1
+	index += 1

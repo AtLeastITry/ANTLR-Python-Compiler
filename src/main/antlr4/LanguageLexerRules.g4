@@ -8,6 +8,14 @@ DIV               : '/' ;
 POWER             : '^' ;
 MODULO            : '%' ;
 
+// Binary assignment operations
+ASSIGNPLUS         : '+=' ;
+ASSIGNMINUS        : '-=' ;
+ASSIGNMULT         : '*=' ;
+ASSIGNDIV          : '/=' ;
+ASSIGNPOWER        : '^=' ;
+ASSIGNMODULO       : '%=' ;
+
 // Boolean operations
 EQUALS            : '==';
 NEGATIVEEQUALS    : '!=';
