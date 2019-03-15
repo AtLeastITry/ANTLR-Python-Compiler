@@ -1,6 +1,3 @@
-
-
-
 n = 100
 odd = 0
 even = 0
@@ -8,6 +5,6 @@ index = 1
 while index >= n:
 	if index % 2 == 0:
 		even = even + index
-else:
+	else:
 		odd = odd + index
 	index = index + 1

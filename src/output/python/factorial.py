@@ -1,5 +1,3 @@
-
-
 n = 8
 val = 1
 counter = 1
