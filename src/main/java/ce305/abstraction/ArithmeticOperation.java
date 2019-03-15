@@ -5,5 +5,6 @@ public enum ArithmeticOperation {
     SUBTRACTION,
     MULTIPLICATION,
     DIVISION,
-    POWER
+    POWER,
+    MODULO
 }

@@ -61,7 +61,7 @@ expr
     :   LPARA expr RPARA                                                                                                    # parensExpr
     |   op=(PLUS|MINUS) expr                                                                                            # unaryExpr
 	|	left=expr op=POWER right=expr                                                                                   # infixExpr
-    |   left=expr op=(MULT|DIV) right=expr                                                                              # infixExpr
+    |   left=expr op=(MULT|DIV|MODULO) right=expr                                                                              # infixExpr
 	|   left=expr op=(PLUS|MINUS) right=expr                                                                            # infixExpr
 	|   value=(NUM|VAR)                                                                                                 # valueExpr
 	|   NOT expr																										# notExpr
