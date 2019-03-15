@@ -2,5 +2,7 @@ package ce305.abstraction;
 
 public enum DataType {
     INTEGER,
-    FLOAT
+    FLOAT,
+    BOOL,
+    VOID
 }

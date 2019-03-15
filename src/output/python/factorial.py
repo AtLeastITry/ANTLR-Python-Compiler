@@ -1,3 +1,5 @@
+def functionTest():
+	a = 1
 n = 8
 val = 1
 counter = 1

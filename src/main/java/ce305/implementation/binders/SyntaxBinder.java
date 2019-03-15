@@ -6,6 +6,7 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ce305.abstraction.DataType;
 import ce305.abstraction.INode;
 import ce305.abstraction.expressions.AssignmentNode;
 import ce305.abstraction.expressions.BinaryExpressionNode;
@@ -71,9 +72,19 @@ public class SyntaxBinder extends Binder<INode> {
                 Symbol temp = this.symbolTable().get(((VariableNode) left).value);
                 if (temp != null) {
                     // Check that the correct data type is being assigned to this variable
-                    if (!new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right))
+                    if (temp.dataType == DataType.BOOL) {
+                        if(right instanceof VariableNode) {
+                            if (!new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right))
+                                throw new IncorrectDataType(String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
+                        }
+                        else if (!(right instanceof BooleanExpressionNode)) {
+                            throw new IncorrectDataType(String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
+                        }
+                    }                    
+                    else if (!new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right))
                         throw new IncorrectDataType(
                                 String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
+                    
                 } else {
                     throw new UndefinedVariableException(String.format(
                             "Variable \"%s\" has not been defined in the current scope", ((VariableNode) left).value));
