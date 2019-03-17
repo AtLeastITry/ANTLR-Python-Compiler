@@ -34,8 +34,10 @@ public class KeyWords {
     }
 
     public static final boolean check(String input) {
-        Pattern p = Pattern.compile(String.format("(%s|%s|%s|%s)", INTEGER, FLOAT, BOOL, VOID));
-        Matcher m = p.matcher(input);
-        return m.find();
+        if (input == INTEGER || input == FLOAT || input == BOOL || input == VOID || input == TRUE || input == FALSE) {
+            return true;
+        }
+
+        return false;
     }
 }
