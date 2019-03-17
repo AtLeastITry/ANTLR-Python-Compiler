@@ -9,6 +9,7 @@ current = 1;
 index = 1;
 
 while(index <= n) {
+    print(current);
     int temp;
     temp = current;
     current = current + previous;
