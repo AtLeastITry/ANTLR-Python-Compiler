@@ -33,10 +33,11 @@ import ce305.implementation.errors.DuplicateDefinitionException;
 import ce305.implementation.errors.IncorrectDataType;
 import ce305.implementation.errors.MissingParametersException;
 import ce305.implementation.errors.UndefinedFunctionException;
-import ce305.implementation.errors.UndefinedVariableException;
 import ce305.implementation.errors.UndefinedFunctionReturnStatementException;
-import ce305.utils.SymbolTable;
+import ce305.implementation.errors.UndefinedVariableException;
 import ce305.implementation.visitors.DataTypeChecker;
+import ce305.utils.FunctionNameDefinition;
+import ce305.utils.SymbolTable;
 
 public class SyntaxBinder extends Binder<INode> {
     private Stack<SymbolTable> _tableStack = new Stack<>();
@@ -108,7 +109,7 @@ public class SyntaxBinder extends Binder<INode> {
     public INode bind(FunctionNode node, BinderType type) {        
         if (type == BinderType.DeclarationOnly || type == BinderType.All) {
             // Add a new symbol to the table that references the function node
-            this.symbolTable().add(new Symbol(node.name, node.dataType, node.params));
+            this.symbolTable().add(new Symbol(new FunctionNameDefinition(node).toString(), node.dataType, node.params));
         }
 
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
@@ -327,34 +328,25 @@ public class SyntaxBinder extends Binder<INode> {
     @Override
     public INode bind(FunctionCallNode node, BinderType type) {
         if (type == BinderType.SyntaxOnly || type == BinderType.All) {
-                Symbol symbol = this.symbolTable().get(node.name);
+            
+            ArrayList<FunctionCallParamNode> params = new ArrayList<>();
+            for (FunctionCallParamNode param : node.params) {
+                params.add((FunctionCallParamNode)this.bind(param, type));
+            }
+
+            FunctionCallNode newNode = new FunctionCallNode(node.name, params);
+
+
+            FunctionNameDefinition functionBestMatch = new FunctionNameDefinition(newNode, this.symbolTable());
+            Symbol symbol = this.symbolTable().get(functionBestMatch.toString());
 
             if (symbol == null) {
-                throw new UndefinedFunctionException(String.format("Function \"%s\" has not been defined in the current scope", node.name));
+                throw new UndefinedFunctionException(String.format("Function \"%s(%s)\" has not been defined in the current scope", node.name, functionBestMatch.getDataTypeParams()));
             }
 
-            List<FunctionParamNode> paramDefinitions = (List<FunctionParamNode>) symbol.value;
-            ArrayList<FunctionCallParamNode> params = new ArrayList<>();
+            
 
-            for (int i = 0; i < paramDefinitions.size(); i++) {
-
-                if (i >= node.params.size()) {
-                    throw new MissingParametersException(
-                            String.format("Function \"%s\" was expecting %s parameters, but only %s %s provided", node.name,
-                                    paramDefinitions.size(), node.params.size(), i > 1 ? "were" : "was"));
-                }
-
-                FunctionCallParamNode param = (FunctionCallParamNode) this.bind(node.params.get(i), type);
-                FunctionParamNode paramDefinition = paramDefinitions.get(i);
-
-                if (!new DataTypeChecker(paramDefinition.dataType, this.symbolTable()).visit(param))
-                    throw new IncorrectDataType(
-                            String.format("Function \"%s\" was expecting data type of %s for \"%s\" param", node.name,
-                                    paramDefinition.dataType, paramDefinition.name));
-                params.add(param);
-            }
-
-            return new FunctionCallNode(node.name, params);
+            return newNode;
         }
 
         return node;
