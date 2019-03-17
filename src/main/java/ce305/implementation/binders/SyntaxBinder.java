@@ -33,6 +33,7 @@ import ce305.implementation.errors.IncorrectDataType;
 import ce305.implementation.errors.MissingParametersException;
 import ce305.implementation.errors.UndefinedFunctionException;
 import ce305.implementation.errors.UndefinedVariableException;
+import ce305.implementation.errors.UndefinedFunctionReturnStatementException;
 import ce305.utils.SymbolTable;
 import ce305.implementation.visitors.DataTypeChecker;
 
@@ -123,6 +124,10 @@ public class SyntaxBinder extends Binder<INode> {
             for (FunctionParamNode param : node.params) {
                 params.add((FunctionParamNode) this.bind(param, type));
             }
+            
+            if (node.dataType != DataType.VOID && !node.body.stream().anyMatch(c -> c instanceof FunctionReturnStatementNode)) {
+                throw new UndefinedFunctionReturnStatementException(String.format("function: \"%s\" is a non void type and must return a value", node.name));
+            }
 
             for (INode child : node.body) {
                 this.bind(child, BinderType.DeclarationOnly);
@@ -192,6 +197,11 @@ public class SyntaxBinder extends Binder<INode> {
             // Add a new nested scope.
             _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.If));
             ArrayList<INode> body = new ArrayList<>();
+            INode expression = this.bind(node.expression, BinderType.SyntaxOnly);
+
+            if (!(expression instanceof BooleanExpressionNode) && !new DataTypeChecker(DataType.BOOL, this.symbolTable()).visit(expression)) {
+                throw new IncorrectDataType("If statement expressions must be of data type BOOL");
+            } 
 
             for (INode child : node.body) {
                 this.bind(child, BinderType.DeclarationOnly);
@@ -203,7 +213,7 @@ public class SyntaxBinder extends Binder<INode> {
 
             _tableStack.pop();
 
-            return new IfStatementNode(body, node.expression, node.child != null ? this.bind(node.child, type) : node.child);
+            return new IfStatementNode(body, expression, node.child != null ? this.bind(node.child, type) : node.child);
         }
 
         return node;
@@ -238,6 +248,11 @@ public class SyntaxBinder extends Binder<INode> {
             _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.If));
 
             ArrayList<INode> body = new ArrayList<>();
+            INode expression = this.bind(node.expression, BinderType.SyntaxOnly);
+
+            if (!(expression instanceof BooleanExpressionNode) && !new DataTypeChecker(DataType.BOOL, this.symbolTable()).visit(expression)) {
+                throw new IncorrectDataType("If statement expressions must be of data type BOOL");
+            } 
 
             for (INode child : node.body) {
                 this.bind(child, BinderType.DeclarationOnly);
