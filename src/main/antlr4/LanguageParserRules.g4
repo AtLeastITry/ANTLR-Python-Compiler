@@ -17,6 +17,8 @@ statement
 functionStatement
     : type=FLOAT name=VAR LPARA params=functionParam* RPARA LBRAC body=statements RBRAC
     | type=INT name=VAR LPARA params=functionParam* RPARA LBRAC body=statements RBRAC
+    | type=BOOL name=VAR LPARA params=functionParam* RPARA LBRAC body=statements RBRAC
+    | type=VOID name=VAR LPARA params=functionParam* RPARA LBRAC body=statements RBRAC
     ;
 
 functionReturnStatement
@@ -58,6 +60,7 @@ binaryAssignment
 declaration
 	: type=FLOAT name=VAR
 	| type=INT name=VAR
+	| type=BOOL name=VAR
 	;
 
 

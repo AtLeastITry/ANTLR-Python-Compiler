@@ -1,3 +1,5 @@
+def test(test):
+	return test == 1
 n = 8
 val = 1
 counter = 1

@@ -8,6 +8,10 @@ import ce305.abstraction.DataType;
 public class KeyWords {
     public static final String INTEGER = "int";
     public static final String FLOAT = "float";
+    public static final String BOOL = "bool";
+    public static final String VOID = "void";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
 
     public static DataType getType(String input) {
         if (input.equals(INTEGER)) {
@@ -18,11 +22,19 @@ public class KeyWords {
             return DataType.FLOAT;
         }
 
+        if (input.equals(BOOL)) {
+            return DataType.BOOL;
+        }
+
+        if (input.equals(VOID)) {
+            return DataType.VOID;
+        }
+
         return null;
     }
 
     public static final boolean check(String input) {
-        Pattern p = Pattern.compile(String.format("(%s|%s)", INTEGER, FLOAT));
+        Pattern p = Pattern.compile(String.format("(%s|%s|%s|%s)", INTEGER, FLOAT, BOOL, VOID));
         Matcher m = p.matcher(input);
         return m.find();
     }

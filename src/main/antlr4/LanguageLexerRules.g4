@@ -27,9 +27,13 @@ LESSTHANEQUALS    : '<=';
 OR                : '||';
 AND               : '&&';
 
-// Keywords
+// Data types
 INT               : 'int';
 FLOAT             : 'float';
+BOOL              : 'bool';
+VOID              : 'void';
+
+// Keywords
 ELSE              : 'else';
 IF                : 'if';
 WHILE             : 'while';

@@ -6,6 +6,7 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ce305.abstraction.DataType;
 import ce305.abstraction.INode;
 import ce305.abstraction.expressions.AssignmentNode;
 import ce305.abstraction.expressions.BinaryExpressionNode;
@@ -25,6 +26,7 @@ import ce305.abstraction.statements.ElseStatementNode;
 import ce305.abstraction.statements.FunctionReturnStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
+import ce305.abstraction.utils.KeyWords;
 import ce305.abstraction.utils.ScopeType;
 import ce305.abstraction.utils.Symbol;
 import ce305.implementation.errors.DuplicateDefinitionException;
@@ -32,6 +34,7 @@ import ce305.implementation.errors.IncorrectDataType;
 import ce305.implementation.errors.MissingParametersException;
 import ce305.implementation.errors.UndefinedFunctionException;
 import ce305.implementation.errors.UndefinedVariableException;
+import ce305.implementation.errors.UndefinedFunctionReturnStatementException;
 import ce305.utils.SymbolTable;
 import ce305.implementation.visitors.DataTypeChecker;
 
@@ -71,9 +74,15 @@ public class SyntaxBinder extends Binder<INode> {
                 Symbol temp = this.symbolTable().get(((VariableNode) left).value);
                 if (temp != null) {
                     // Check that the correct data type is being assigned to this variable
-                    if (!new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right))
+                    if (temp.dataType == DataType.BOOL) {
+                        if (!(right instanceof BooleanExpressionNode) && !new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right)) {
+                            throw new IncorrectDataType(String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
+                        }
+                    }                    
+                    else if (!new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right))
                         throw new IncorrectDataType(
                                 String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
+                    
                 } else {
                     throw new UndefinedVariableException(String.format(
                             "Variable \"%s\" has not been defined in the current scope", ((VariableNode) left).value));
@@ -112,6 +121,10 @@ public class SyntaxBinder extends Binder<INode> {
             for (FunctionParamNode param : node.params) {
                 params.add((FunctionParamNode) this.bind(param, type));
             }
+            
+            if (node.dataType != DataType.VOID && !node.body.stream().anyMatch(c -> c instanceof FunctionReturnStatementNode)) {
+                throw new UndefinedFunctionReturnStatementException(String.format("function: \"%s\" is a non void type and must return a value", node.name));
+            }
 
             for (INode child : node.body) {
                 this.bind(child, BinderType.DeclarationOnly);
@@ -140,8 +153,11 @@ public class SyntaxBinder extends Binder<INode> {
             Pattern p = Pattern.compile("[A-Za-z]+");
             Matcher m = p.matcher(node.value.toString());
 
+            Pattern boolP = Pattern.compile(String.format("(%s|%s)", KeyWords.TRUE, KeyWords.FALSE));
+            Matcher boolM = p.matcher(node.value.toString());
+
             // Check whether the value is a string built up of aplha chars, and throw an error as the variable must have not been defined.
-            if (m.find()) {
+            if (m.find() && !boolM.find()) {
                 throw new UndefinedVariableException(
                         String.format("Variable \"%s\" has not been defined in the current scope", node.value));
             }
@@ -181,6 +197,11 @@ public class SyntaxBinder extends Binder<INode> {
             // Add a new nested scope.
             _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.If));
             ArrayList<INode> body = new ArrayList<>();
+            INode expression = this.bind(node.expression, BinderType.SyntaxOnly);
+
+            if (!(expression instanceof BooleanExpressionNode) && !new DataTypeChecker(DataType.BOOL, this.symbolTable()).visit(expression)) {
+                throw new IncorrectDataType("If statement expressions must be of data type BOOL");
+            } 
 
             for (INode child : node.body) {
                 this.bind(child, BinderType.DeclarationOnly);
@@ -192,7 +213,7 @@ public class SyntaxBinder extends Binder<INode> {
 
             _tableStack.pop();
 
-            return new IfStatementNode(body, node.expression, node.child != null ? this.bind(node.child, type) : node.child);
+            return new IfStatementNode(body, expression, node.child != null ? this.bind(node.child, type) : node.child);
         }
 
         return node;
@@ -227,6 +248,11 @@ public class SyntaxBinder extends Binder<INode> {
             _tableStack.add(new SymbolTable(this.symbolTable(), ScopeType.If));
 
             ArrayList<INode> body = new ArrayList<>();
+            INode expression = this.bind(node.expression, BinderType.SyntaxOnly);
+
+            if (!(expression instanceof BooleanExpressionNode) && !new DataTypeChecker(DataType.BOOL, this.symbolTable()).visit(expression)) {
+                throw new IncorrectDataType("If statement expressions must be of data type BOOL");
+            } 
 
             for (INode child : node.body) {
                 this.bind(child, BinderType.DeclarationOnly);

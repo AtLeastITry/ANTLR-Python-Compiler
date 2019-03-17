@@ -12,10 +12,10 @@ import ce305.abstraction.statements.FunctionReturnStatementNode;
 public class FunctionNode extends INode {
     public DataType dataType;
     public String name;    
-    public Collection<INode> body;
+    public List<INode> body;
     public List<FunctionParamNode> params;
 
-    public FunctionNode(DataType dataType, String name, Collection<INode> body, List<FunctionParamNode> params) {
+    public FunctionNode(DataType dataType, String name, List<INode> body, List<FunctionParamNode> params) {
         super();
         this.dataType = dataType;
         this.name = name;
