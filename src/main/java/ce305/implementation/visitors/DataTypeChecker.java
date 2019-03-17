@@ -1,9 +1,13 @@
 package ce305.implementation.visitors;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ce305.abstraction.*;
 import ce305.abstraction.expressions.*;
 import ce305.abstraction.functions.*;
 import ce305.abstraction.statements.*;
+import ce305.abstraction.utils.KeyWords;
 import ce305.abstraction.utils.Symbol;
 import ce305.utils.SymbolTable;
 
@@ -52,6 +56,15 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
                 case FLOAT:
                     Float.parseFloat(node.value.toString());
                     break;
+                case BOOL:
+                    Pattern p = Pattern.compile(String.format("(%s|%s)", KeyWords.TRUE, KeyWords.FALSE));
+                    Matcher m = p.matcher(node.value.toString());
+                    if (m.find()) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
             }
         }
         catch(Exception e) {
@@ -90,6 +103,10 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
 
     @Override
     public Boolean visit(BooleanExpressionNode node) {
+        if (_type == DataType.BOOL) {
+            return true;
+        }
+        
         return this.visit(node.left) && this.visit(node.right);
     }
 

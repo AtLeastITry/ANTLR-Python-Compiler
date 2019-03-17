@@ -26,6 +26,7 @@ import ce305.abstraction.statements.ElseStatementNode;
 import ce305.abstraction.statements.FunctionReturnStatementNode;
 import ce305.abstraction.statements.IfStatementNode;
 import ce305.abstraction.statements.WhileStatementNode;
+import ce305.abstraction.utils.KeyWords;
 import ce305.abstraction.utils.ScopeType;
 import ce305.abstraction.utils.Symbol;
 import ce305.implementation.errors.DuplicateDefinitionException;
@@ -74,11 +75,7 @@ public class SyntaxBinder extends Binder<INode> {
                 if (temp != null) {
                     // Check that the correct data type is being assigned to this variable
                     if (temp.dataType == DataType.BOOL) {
-                        if(right instanceof VariableNode) {
-                            if (!new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right))
-                                throw new IncorrectDataType(String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
-                        }
-                        else if (!(right instanceof BooleanExpressionNode)) {
+                        if (!(right instanceof BooleanExpressionNode) && !new DataTypeChecker(temp.dataType, this.symbolTable()).visit(right)) {
                             throw new IncorrectDataType(String.format("\"%s\" was expecting data type of %s", temp.name, temp.dataType));
                         }
                     }                    
@@ -156,8 +153,11 @@ public class SyntaxBinder extends Binder<INode> {
             Pattern p = Pattern.compile("[A-Za-z]+");
             Matcher m = p.matcher(node.value.toString());
 
+            Pattern boolP = Pattern.compile(String.format("(%s|%s)", KeyWords.TRUE, KeyWords.FALSE));
+            Matcher boolM = p.matcher(node.value.toString());
+
             // Check whether the value is a string built up of aplha chars, and throw an error as the variable must have not been defined.
-            if (m.find()) {
+            if (m.find() && !boolM.find()) {
                 throw new UndefinedVariableException(
                         String.format("Variable \"%s\" has not been defined in the current scope", node.value));
             }

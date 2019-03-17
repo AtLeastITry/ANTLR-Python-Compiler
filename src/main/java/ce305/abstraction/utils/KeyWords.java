@@ -10,6 +10,8 @@ public class KeyWords {
     public static final String FLOAT = "float";
     public static final String BOOL = "bool";
     public static final String VOID = "void";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
 
     public static DataType getType(String input) {
         if (input.equals(INTEGER)) {
