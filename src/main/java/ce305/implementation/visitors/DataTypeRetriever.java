@@ -45,6 +45,10 @@ public class DataTypeRetriever extends ASTVisitor<DataType> {
     }
 
     private boolean tryParseFloat(String value) {  
+        if (!value.contains(".")) {
+            return false;
+        }
+
         try {  
             Float.parseFloat(value);
             return true;  

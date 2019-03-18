@@ -1,0 +1,19 @@
+int b;
+b = factorial(8);
+
+int factorial(int n) {
+    int val;
+    int counter;
+    
+    val = 1;
+    counter = 1;
+
+    while(counter <= n) {
+        val = val * counter;
+        counter = counter + 1;
+    };
+
+    return val;
+};
+
+print(b);

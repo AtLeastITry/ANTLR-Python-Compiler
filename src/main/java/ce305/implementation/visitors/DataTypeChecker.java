@@ -9,6 +9,7 @@ import ce305.abstraction.functions.*;
 import ce305.abstraction.statements.*;
 import ce305.abstraction.utils.KeyWords;
 import ce305.abstraction.utils.Symbol;
+import ce305.utils.FunctionNameDefinition;
 import ce305.utils.SymbolTable;
 
 public class DataTypeChecker extends ASTVisitor<Boolean>
@@ -127,7 +128,7 @@ public class DataTypeChecker extends ASTVisitor<Boolean>
 
     @Override
     public Boolean visit(FunctionCallNode node) {
-        Symbol symbol = _table.get(node.name);
+        Symbol symbol = _table.get(new FunctionNameDefinition(node, _table).toString());
         if (symbol != null) {
             return symbol.dataType == _type;
         }
