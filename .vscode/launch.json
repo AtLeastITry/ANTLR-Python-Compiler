@@ -4,7 +4,7 @@
             "type": "java",
             "name": "CodeLens (Launch) - Program",
             "request": "launch",
-            "mainClass": "ce305.Program",
+            "mainClass": "compiler.Program",
             "projectName": "assignment"
         }
     ]
